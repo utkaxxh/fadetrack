@@ -1,5 +1,5 @@
 
-
+"use client";
 import React, { useState } from 'react';
 import TabNavigation from '../components/TabNavigation';
 import HaircutForm from '../components/HaircutForm';
