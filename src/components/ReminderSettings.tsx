@@ -3,12 +3,11 @@ import { saveReminder } from './remindersApi';
 
 const presetIntervals = [14, 21, 28, 35, 42, 49, 56]; // 2-8 weeks
 
-
 interface ReminderSettingsProps {
   user?: { id: string; email: string };
 }
 
-
+export default function ReminderSettings({ user }: ReminderSettingsProps) {
   const [customDays, setCustomDays] = useState('');
   const [loading, setLoading] = useState(false);
 
