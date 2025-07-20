@@ -2,12 +2,16 @@
 import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
 
+import type { Haircut } from '../app/page';
+import type { User } from '@supabase/supabase-js';
+
 interface HaircutFormProps {
-  onSubmit: (data: any) => void;
+  onSubmit: (data: Omit<Haircut, 'user_email'>) => void;
+  user: User | null;
 }
 
-export default function HaircutForm({ onSubmit }: HaircutFormProps) {
-  const [form, setForm] = useState({
+export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
+  const [form, setForm] = useState<Omit<Haircut, 'user_email'>>({
     date: '',
     barber: '',
     location: '',
@@ -19,11 +23,15 @@ export default function HaircutForm({ onSubmit }: HaircutFormProps) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!user || !user.email) {
+      alert('You must be logged in to log a haircut.');
+      return;
+    }
+    const haircutWithEmail: Haircut = { ...form, user_email: user.email };
     // Insert haircut into Supabase
-    const { data, error } = await supabase.from('haircuts').insert([form]);
+    const { error } = await supabase.from('haircuts').insert([haircutWithEmail]);
     if (error) {
       alert('Failed to log haircut: ' + error.message);
       return;

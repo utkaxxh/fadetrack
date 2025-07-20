@@ -1,9 +1,9 @@
 import { supabase } from './supabaseClient';
 
-export async function saveReminder(user_id: string, days: number, email: string) {
-  // Save reminder to Supabase
+export async function saveReminder(user_email: string, days: number) {
+  // Save reminder to Supabase with user_email as PK
   const { data, error } = await supabase.from('reminders').insert([
-    { user_id, days, email }
+    { user_email, days }
   ]);
   if (error) throw error;
   return data;
