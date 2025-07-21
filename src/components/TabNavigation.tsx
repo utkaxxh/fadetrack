@@ -18,7 +18,7 @@ export default function TabNavigation({ activeTab, setActiveTab }: TabNavigation
       {tabs.map((tab) => (
         <button
           key={tab.value}
-          className={`px-4 py-2 rounded-lg transition-all duration-200 font-semibold text-white bg-gradient-to-r from-indigo-700 to-purple-700 hover:from-indigo-500 hover:to-purple-500 ${activeTab === tab.value ? 'ring-2 ring-purple-400' : ''}`}
+          className={`px-4 py-2 rounded-lg transition-all duration-200 font-semibold text-white bg-gradient-to-r from-teal-900 to-teal-700 hover:from-teal-800 hover:to-teal-600 ${activeTab === tab.value ? 'ring-2 ring-teal-400' : ''}`}
           onClick={() => setActiveTab(tab.value)}
         >
           {tab.label}

@@ -24,6 +24,9 @@ export default function HaircutHistory({ haircuts, user }: HaircutHistoryProps) 
               <span className="text-white">{cut.barber} ({cut.location})</span>
               <span className="text-indigo-300">{cut.style}</span>
               <span className="text-green-400 font-bold">${cut.cost}</span>
+              {cut.notes && (
+                <div className="text-gray-300 text-sm mt-1">Notes: {cut.notes}</div>
+              )}
             </div>
           </li>
         ))}

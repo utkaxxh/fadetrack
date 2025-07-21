@@ -41,7 +41,7 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
         {presetIntervals.map((days) => (
           <button
             key={days}
-            className="px-3 py-1 rounded-lg bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold transition-all duration-200"
+            className="px-3 py-1 rounded-lg bg-gradient-to-r from-teal-900 to-teal-700 hover:from-teal-800 hover:to-teal-600 text-white font-semibold transition-all duration-200"
             onClick={() => handleSetReminder(days)}
             disabled={loading}
           >
@@ -59,7 +59,7 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
           className="input"
         />
         <button
-          className="px-3 py-1 rounded-lg bg-gradient-to-r from-indigo-700 to-purple-700 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold transition-all duration-200"
+          className="px-3 py-1 rounded-lg bg-gradient-to-r from-teal-900 to-teal-700 hover:from-teal-800 hover:to-teal-600 text-white font-semibold transition-all duration-200"
           onClick={() => {
             if (customDays) handleSetReminder(Number(customDays));
           }}
