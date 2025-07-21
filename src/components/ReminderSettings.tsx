@@ -1,6 +1,17 @@
+
 import React, { useState } from 'react';
 import { saveReminder, getReminders, deleteReminder } from './remindersApi';
 import type { User } from '@supabase/supabase-js';
+
+type Reminder = {
+  id: string;
+  user_email: string;
+  reminder_days: number;
+  is_active: boolean;
+  last_sent_at: string;
+  created_at?: string;
+  updated_at?: string;
+};
 
 const presetIntervals = [14, 21, 28, 35, 42, 49, 56]; // 2-8 weeks
 
@@ -11,7 +22,7 @@ interface ReminderSettingsProps {
 export default function ReminderSettings({ user }: ReminderSettingsProps) {
   const [customDays, setCustomDays] = useState('');
   const [loading, setLoading] = useState(false);
-  const [reminders, setReminders] = useState<any[]>([]);
+  const [reminders, setReminders] = useState<Reminder[]>([]);
 
   async function fetchReminders() {
     if (!user || !user.email) return;
