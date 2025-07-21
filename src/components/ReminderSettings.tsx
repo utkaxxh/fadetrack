@@ -74,57 +74,81 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-6 bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl shadow-lg animate-fade-in">
-      <h2 className="text-xl font-bold mb-4 text-white">Set Email Reminder</h2>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {presetIntervals.map((days) => (
-          <button
-            key={days}
-            className="px-3 py-1 rounded-lg bg-gradient-to-r from-teal-900 to-teal-700 hover:from-teal-800 hover:to-teal-600 text-white font-semibold transition-all duration-200"
-            onClick={() => handleSetReminder(days)}
-            disabled={loading}
-          >
-            {days / 7} weeks
-          </button>
-        ))}
-      </div>
-      <div className="flex gap-2 items-center mb-4">
-        <input
-          type="number"
-          min="1"
-          placeholder="Custom days"
-          value={customDays}
-          onChange={e => setCustomDays(e.target.value)}
-          className="input"
-        />
-        <button
-          className="px-3 py-1 rounded-lg bg-gradient-to-r from-teal-900 to-teal-700 hover:from-teal-800 hover:to-teal-600 text-white font-semibold transition-all duration-200"
-          onClick={() => {
-            if (customDays) handleSetReminder(Number(customDays));
-          }}
-          disabled={loading}
-        >
-          Set
-        </button>
-      </div>
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold text-white mb-2">Your Reminders</h3>
-        {reminders.length === 0 && <div className="text-gray-400">No reminders set.</div>}
-        <ul className="space-y-2">
-          {reminders.map((reminder) => (
-            <li key={reminder.id} className="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-2">
-              <span className="text-white">Every <b>{reminder.reminder_days}</b> days</span>
+    <div className="max-w-2xl mx-auto">
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Email Reminders</h2>
+        
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Quick Setup - Remind me every:
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {presetIntervals.map((days) => (
+                <button
+                  key={days}
+                  className="px-3 py-2 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  onClick={() => handleSetReminder(days)}
+                  disabled={loading}
+                >
+                  {days / 7} week{days > 7 ? 's' : ''}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="customDays" className="block text-sm font-medium text-gray-700 mb-2">
+              Custom interval (days):
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="customDays"
+                type="number"
+                min="1"
+                placeholder="30"
+                value={customDays}
+                onChange={e => setCustomDays(e.target.value)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
               <button
-                className="ml-4 px-3 py-1 rounded bg-red-700 hover:bg-red-600 text-white text-sm font-semibold"
-                onClick={() => handleDeleteReminder(reminder.id)}
-                disabled={loading}
+                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+                onClick={() => {
+                  if (customDays) handleSetReminder(Number(customDays));
+                }}
+                disabled={loading || !customDays}
               >
-                Delete
+                Set
               </button>
-            </li>
-          ))}
-        </ul>
+            </div>
+          </div>
+        </div>
       </div>
+
+      {reminders.length > 0 && (
+        <div className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Active Reminders</h3>
+          <div className="space-y-3">
+            {reminders.map((reminder) => (
+              <div key={reminder.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-gray-900 font-medium">
+                    Every {reminder.reminder_days} day{reminder.reminder_days > 1 ? 's' : ''}
+                  </span>
+                </div>
+                <button
+                  className="px-3 py-1 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors duration-200"
+                  onClick={() => handleDeleteReminder(reminder.id)}
+                  disabled={loading}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -13,24 +13,51 @@ export default function HaircutHistory({ haircuts, user }: HaircutHistoryProps) 
   const filteredHaircuts = user && user.email
     ? haircuts.filter((cut) => cut.user_email === user.email)
     : haircuts;
+
+  if (filteredHaircuts.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-gray-400 text-lg mb-2">No haircuts logged yet</div>
+        <div className="text-gray-500 text-sm">Start by logging your first haircut!</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-2xl mx-auto mt-6 animate-fade-in">
-      <h2 className="text-xl font-bold mb-4 text-white">Haircut History</h2>
-      <ul className="space-y-4">
+    <div className="max-w-3xl mx-auto">
+      <div className="space-y-4">
         {filteredHaircuts.map((cut, i) => (
-          <li key={i} className="p-4 rounded-lg bg-gradient-to-r from-gray-800 to-gray-700 shadow hover:shadow-lg transition-all duration-200">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-              <span className="font-semibold text-purple-300">{cut.date}</span>
-              <span className="text-white">{cut.barber} ({cut.location})</span>
-              <span className="text-indigo-300">{cut.style}</span>
-              <span className="text-green-400 font-bold">${cut.cost}</span>
-              {cut.notes && (
-                <div className="text-gray-300 text-sm mt-1">Notes: {cut.notes}</div>
-              )}
+          <div key={i} className="bg-gray-50 border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-lg font-semibold text-gray-900">{cut.barber}</span>
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                    {cut.style}
+                  </span>
+                </div>
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div>📍 {cut.location}</div>
+                  <div>📅 {new Date(cut.date).toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}</div>
+                  {cut.notes && (
+                    <div className="mt-2 text-gray-700">
+                      <span className="font-medium">Notes:</span> {cut.notes}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-green-600">${cut.cost}</div>
+              </div>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

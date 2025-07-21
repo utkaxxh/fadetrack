@@ -44,15 +44,108 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto bg-gradient-to-br from-gray-900 to-gray-800 p-6 rounded-xl shadow-lg animate-fade-in">
-      <label className="text-white font-semibold">Date</label>
-      <input name="date" type="date" value={form.date} onChange={handleChange} required className="input" />
-      <input name="barber" value={form.barber} onChange={handleChange} required placeholder="Barber/Salon Name" className="input" />
-      <input name="location" value={form.location} onChange={handleChange} required placeholder="Location" className="input" />
-      <input name="style" value={form.style} onChange={handleChange} required placeholder="Style" className="input" />
-      <input name="cost" type="number" value={form.cost} onChange={handleChange} required placeholder="Cost" className="input" />
-      <textarea name="notes" value={form.notes} onChange={handleChange} placeholder="Notes (optional)" className="input min-h-[60px]" />
-      <button type="submit" className="mt-2 py-2 px-6 rounded-lg bg-gradient-to-r from-teal-900 to-teal-700 hover:from-teal-800 hover:to-teal-600 text-white font-bold transition-all duration-200">Log Haircut</button>
-    </form>
+    <div className="max-w-lg mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
+              Date
+            </label>
+            <input 
+              id="date"
+              name="date" 
+              type="date" 
+              value={form.date} 
+              onChange={handleChange} 
+              required 
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="cost" className="block text-sm font-medium text-gray-700 mb-2">
+              Cost
+            </label>
+            <input 
+              id="cost"
+              name="cost" 
+              type="number" 
+              value={form.cost} 
+              onChange={handleChange} 
+              required 
+              placeholder="25.00" 
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="barber" className="block text-sm font-medium text-gray-700 mb-2">
+            Barber/Salon Name
+          </label>
+          <input 
+            id="barber"
+            name="barber" 
+            value={form.barber} 
+            onChange={handleChange} 
+            required 
+            placeholder="John's Barbershop" 
+            className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+            Location
+          </label>
+          <input 
+            id="location"
+            name="location" 
+            value={form.location} 
+            onChange={handleChange} 
+            required 
+            placeholder="Downtown SF" 
+            className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="style" className="block text-sm font-medium text-gray-700 mb-2">
+            Style
+          </label>
+          <input 
+            id="style"
+            name="style" 
+            value={form.style} 
+            onChange={handleChange} 
+            required 
+            placeholder="Fade, Buzz Cut, etc." 
+            className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
+            Notes (optional)
+          </label>
+          <textarea 
+            id="notes"
+            name="notes" 
+            value={form.notes} 
+            onChange={handleChange} 
+            placeholder="Any additional notes..." 
+            rows={3}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+        >
+          Log Haircut
+        </button>
+      </form>
+    </div>
   );
 }
