@@ -31,7 +31,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-950 via-purple-900 to-indigo-900 text-white">
+    <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
       <div className="container mx-auto py-8 px-2">
         <h1 className="text-3xl font-extrabold text-center mb-6 bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent animate-fade-in">Fadetrack</h1>
         <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
