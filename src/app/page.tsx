@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '../components/supabaseClient';
 import TabNavigation from '../components/TabNavigation';
@@ -26,6 +26,23 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'log' | 'history' | 'reminders'>('log');
   const [haircuts, setHaircuts] = useState<Haircut[]>([]);
   const user = useSupabaseUser();
+
+  // Fetch haircuts from Supabase when user logs in
+  useEffect(() => {
+    async function fetchHaircuts() {
+      if (!user || !user.email) {
+        setHaircuts([]);
+        return;
+      }
+      const { data, error } = await supabase
+        .from('haircuts')
+        .select('*')
+        .eq('user_email', user.email)
+        .order('date', { ascending: false });
+      if (!error && data) setHaircuts(data);
+    }
+    fetchHaircuts();
+  }, [user]);
 
   function handleLogHaircut(data: Omit<Haircut, 'user_email'>) {
     if (!user || !user.email) return;
