@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
-import { saveReminder } from './remindersApi';
+import { saveReminder, getReminders, deleteReminder } from './remindersApi';
 import type { User } from '@supabase/supabase-js';
 
 const presetIntervals = [14, 21, 28, 35, 42, 49, 56]; // 2-8 weeks
-
 
 interface ReminderSettingsProps {
   user: User | null;
 }
 
-
 export default function ReminderSettings({ user }: ReminderSettingsProps) {
   const [customDays, setCustomDays] = useState('');
   const [loading, setLoading] = useState(false);
+  const [reminders, setReminders] = useState<any[]>([]);
+
+  async function fetchReminders() {
+    if (!user || !user.email) return;
+    try {
+      const data = await getReminders(user.email);
+      setReminders(data || []);
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  React.useEffect(() => {
+    fetchReminders();
+    // eslint-disable-next-line
+  }, [user]);
 
   async function handleSetReminder(days: number) {
     if (!user || !user.email) {
@@ -23,12 +37,26 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
     try {
       await saveReminder(user.email, days);
       alert(`Reminder set for ${days} days!`);
+      await fetchReminders();
     } catch (e) {
       if (e instanceof Error) {
         alert('Failed to set reminder: ' + e.message);
       } else {
         alert('Failed to set reminder.');
       }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDeleteReminder(id: string) {
+    if (!user || !user.email) return;
+    setLoading(true);
+    try {
+      await deleteReminder(id, user.email);
+      await fetchReminders();
+    } catch (e) {
+      alert('Failed to delete reminder.');
     } finally {
       setLoading(false);
     }
@@ -49,7 +77,7 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
           </button>
         ))}
       </div>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center mb-4">
         <input
           type="number"
           min="1"
@@ -67,6 +95,24 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
         >
           Set
         </button>
+      </div>
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold text-white mb-2">Your Reminders</h3>
+        {reminders.length === 0 && <div className="text-gray-400">No reminders set.</div>}
+        <ul className="space-y-2">
+          {reminders.map((reminder) => (
+            <li key={reminder.id} className="flex justify-between items-center bg-gray-800 rounded-lg px-4 py-2">
+              <span className="text-white">Every <b>{reminder.reminder_days}</b> days</span>
+              <button
+                className="ml-4 px-3 py-1 rounded bg-red-700 hover:bg-red-600 text-white text-sm font-semibold"
+                onClick={() => handleDeleteReminder(reminder.id)}
+                disabled={loading}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
