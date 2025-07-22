@@ -1,8 +1,24 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 w-10 h-10">
+        <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+      </div>
+    );
+  }
 
   return (
     <button
