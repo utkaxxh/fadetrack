@@ -29,8 +29,9 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
     try {
       const data = await getReminders(user.email);
       setReminders(data || []);
-    } catch (e) {
-      // ignore
+    } catch (error) {
+      // Silently handle error - reminders list will remain empty
+      console.error('Failed to fetch reminders:', error);
     }
   }
 
@@ -66,7 +67,8 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
     try {
       await deleteReminder(id, user.email);
       await fetchReminders();
-    } catch (e) {
+    } catch (error) {
+      console.error('Failed to delete reminder:', error);
       alert('Failed to delete reminder.');
     } finally {
       setLoading(false);
@@ -75,19 +77,19 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Email Reminders</h2>
+      <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Email Reminders</h2>
         
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
               Quick Setup - Remind me every:
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {presetIntervals.map((days) => (
                 <button
                   key={days}
-                  className="px-3 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                  className="px-3 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-900 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
                   onClick={() => handleSetReminder(days)}
                   disabled={loading}
                 >
@@ -98,7 +100,7 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
           </div>
 
           <div>
-            <label htmlFor="customDays" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="customDays" className="block text-sm font-medium text-gray-700 mb-2">
               Custom interval (days):
             </label>
             <div className="flex gap-2">
@@ -109,10 +111,10 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
                 placeholder="30"
                 value={customDays}
                 onChange={e => setCustomDays(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="flex-1 px-3 py-2 border border-gray-300 bg-white text-gray-900 placeholder-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
               <button
-                className="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors duration-200"
+                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
                 onClick={() => {
                   if (customDays) handleSetReminder(Number(customDays));
                 }}
@@ -126,19 +128,19 @@ export default function ReminderSettings({ user }: ReminderSettingsProps) {
       </div>
 
       {reminders.length > 0 && (
-        <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Active Reminders</h3>
+        <div className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Active Reminders</h3>
           <div className="space-y-3">
             {reminders.map((reminder) => (
-              <div key={reminder.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div key={reminder.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full"></div>
-                  <span className="text-gray-900 dark:text-gray-100 font-medium">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-gray-900 font-medium">
                     Every {reminder.reminder_days} day{reminder.reminder_days > 1 ? 's' : ''}
                   </span>
                 </div>
                 <button
-                  className="px-3 py-1 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors duration-200"
+                  className="px-3 py-1 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors duration-200"
                   onClick={() => handleDeleteReminder(reminder.id)}
                   disabled={loading}
                 >
