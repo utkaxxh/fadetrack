@@ -12,6 +12,7 @@ import ReminderSettings from '../components/ReminderSettings';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 
 export type Haircut = {
+  id?: number; // Add id field for deletion
   user_email: string;
   date: string;
   barber: string;
@@ -49,6 +50,34 @@ export default function HomePage() {
     if (!user || !user.email) return;
     const haircutWithEmail: Haircut = { ...data, user_email: user.email };
     setHaircuts([haircutWithEmail, ...haircuts]);
+  }
+
+  async function handleDeleteHaircut(haircutId: number) {
+    if (!user || !user.email || !haircutId) return;
+
+    try {
+      const response = await fetch('/api/deleteHaircut', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: haircutId,
+          user_email: user.email,
+        }),
+      });
+
+      if (response.ok) {
+        // Remove the deleted haircut from the local state
+        setHaircuts(haircuts.filter(cut => cut.id !== haircutId));
+      } else {
+        const errorData = await response.json();
+        alert('Failed to delete haircut: ' + errorData.error);
+      }
+    } catch (error) {
+      console.error('Error deleting haircut:', error);
+      alert('Failed to delete haircut. Please try again.');
+    }
   }
 
   return (
@@ -91,7 +120,7 @@ export default function HomePage() {
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
           <div className="p-6">
             {activeTab === 'log' && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
-            {activeTab === 'history' && <HaircutHistory haircuts={haircuts} user={user} />}
+            {activeTab === 'history' && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
             {activeTab === 'reminders' && <ReminderSettings user={user} />}
           </div>
         </div>

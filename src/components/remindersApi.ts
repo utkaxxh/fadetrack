@@ -1,10 +1,13 @@
 import { supabase } from './supabaseClient';
 
 export async function saveReminder(user_email: string, days: number) {
-  // Save reminder to Supabase with correct schema, set last_sent_at to today
-  const today = new Date().toISOString();
+  // Set last_sent_at to a date in the past so the reminder can be sent based on the interval
+  // This allows the first reminder to be sent after 'days' from when it was created
+  const pastDate = new Date();
+  pastDate.setDate(pastDate.getDate() - days); // Set to 'days' ago so next reminder is due today
+  
   const { data, error } = await supabase.from('reminders').insert([
-    { user_email, reminder_days: days, is_active: true, last_sent_at: today }
+    { user_email, reminder_days: days, is_active: true, last_sent_at: pastDate.toISOString() }
   ]);
   if (error) throw error;
   return data;
