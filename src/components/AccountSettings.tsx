@@ -18,7 +18,7 @@ export default function AccountSettings({ user }: AccountSettingsProps) {
     }
 
     if (confirmationText !== 'DELETE MY ACCOUNT') {
-      alert('Please type "DELETE MY ACCOUNT" exactly to confirm.');
+      alert(`Please type "DELETE MY ACCOUNT" exactly to confirm.`);
       return;
     }
 
@@ -105,7 +105,7 @@ export default function AccountSettings({ user }: AccountSettingsProps) {
             <div className="space-y-4">
               <div>
                 <label htmlFor="confirmation" className="block text-sm font-medium text-red-900 mb-2">
-                  Type "DELETE MY ACCOUNT" to confirm:
+                  Type &quot;DELETE MY ACCOUNT&quot; to confirm:
                 </label>
                 <input
                   id="confirmation"
