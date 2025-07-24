@@ -9,6 +9,8 @@ import TabNavigation from '../components/TabNavigation';
 import HaircutForm from '../components/HaircutForm';
 import HaircutHistory from '../components/HaircutHistory';
 import ReminderSettings from '../components/ReminderSettings';
+import AccountSettings from '../components/AccountSettings';
+import AccountDropdown from '../components/AccountDropdown';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 
 export type Haircut = {
@@ -26,8 +28,23 @@ export type Haircut = {
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<'log' | 'history' | 'reminders'>('log');
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
   const [haircuts, setHaircuts] = useState<Haircut[]>([]);
   const user = useSupabaseUser();
+
+  // Handle escape key to close account settings modal
+  useEffect(() => {
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.key === 'Escape' && showAccountSettings) {
+        setShowAccountSettings(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [showAccountSettings]);
 
   // Fetch haircuts from Supabase when user logs in
   useEffect(() => {
@@ -80,6 +97,10 @@ export default function HomePage() {
     }
   }
 
+  function handleOpenAccountSettings() {
+    setShowAccountSettings(true);
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -98,12 +119,7 @@ export default function HomePage() {
             </div>
             <div className="flex items-center gap-3">
               {user ? (
-                <button
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-                  onClick={async () => { await supabase.auth.signOut(); }}
-                >
-                  Logout
-                </button>
+                <AccountDropdown user={user} onAccountSettings={handleOpenAccountSettings} />
               ) : (
                 <Link href="/login" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200">
                   Login / Signup
@@ -125,6 +141,35 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+
+      {/* Account Settings Modal */}
+      {showAccountSettings && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowAccountSettings(false);
+            }
+          }}
+        >
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-gray-900">Account Settings</h2>
+              <button
+                onClick={() => setShowAccountSettings(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6">
+              <AccountSettings user={user} />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-50 border-t border-gray-200 mt-16">
