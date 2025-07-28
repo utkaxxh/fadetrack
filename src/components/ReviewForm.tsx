@@ -678,7 +678,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
                 <option value="Boise, ID">Boise</option>
                 <option value="Caldwell, ID">Caldwell</option>
                 <option value="Chubbuck, ID">Chubbuck</option>
-                <option value="Coeur d'Alene, ID">Coeur d'Alene</option>
+                <option value="Coeur d&apos;Alene, ID">Coeur d&apos;Alene</option>
                 <option value="Eagle, ID">Eagle</option>
                 <option value="Garden City, ID">Garden City</option>
                 <option value="Hayden, ID">Hayden</option>
