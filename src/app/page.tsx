@@ -5,16 +5,51 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '../components/supabaseClient';
-import TabNavigation from '../components/TabNavigation';
+import TabNavigation, { TabType } from '../components/TabNavigation';
 import HaircutForm from '../components/HaircutForm';
 import HaircutHistory from '../components/HaircutHistory';
 import ReminderSettings from '../components/ReminderSettings';
 import AccountSettings from '../components/AccountSettings';
 import AccountDropdown from '../components/AccountDropdown';
+import ReviewForm from '../components/ReviewForm';
+import PublicReviews from '../components/PublicReviews';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 
+export type Barber = {
+  id?: number;
+  name: string;
+  shop_name: string;
+  location: string;
+  phone?: string;
+  instagram?: string;
+  average_rating?: number;
+  total_reviews?: number;
+  created_at?: string;
+};
+
+export type Review = {
+  id?: number;
+  user_email: string;
+  user_name?: string;
+  barber_id: number;
+  barber_name: string;
+  shop_name: string;
+  location: string;
+  service_type: string; // haircut, beard trim, etc.
+  rating: number; // 1-5 stars
+  cost: string;
+  date: string;
+  title: string;
+  review_text: string;
+  photos?: string[]; // URLs to uploaded photos
+  is_public: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+// Keep for backward compatibility during migration
 export type Haircut = {
-  id?: number; // Add id field for deletion
+  id?: number;
   user_email: string;
   date: string;
   barber: string;
@@ -27,9 +62,10 @@ export type Haircut = {
 
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<'log' | 'history' | 'reminders'>('log');
+  const [activeTab, setActiveTab] = useState<TabType>('log');
   const [showAccountSettings, setShowAccountSettings] = useState(false);
   const [haircuts, setHaircuts] = useState<Haircut[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const user = useSupabaseUser();
 
   // Handle escape key to close account settings modal
@@ -63,10 +99,58 @@ export default function HomePage() {
     fetchHaircuts();
   }, [user]);
 
+  // Fetch reviews for the directory/browse functionality
+  useEffect(() => {
+    async function fetchReviews() {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('is_public', true)
+        .order('created_at', { ascending: false });
+      if (!error && data) setReviews(data);
+    }
+    fetchReviews();
+  }, []);
+
   function handleLogHaircut(data: Omit<Haircut, 'user_email'>) {
     if (!user || !user.email) return;
     const haircutWithEmail: Haircut = { ...data, user_email: user.email };
     setHaircuts([haircutWithEmail, ...haircuts]);
+  }
+
+  function handleReviewSubmitted(data: Omit<Review, 'user_email'>) {
+    if (!user || !user.email) return;
+    const reviewWithEmail: Review = { ...data, user_email: user.email };
+    if (reviewWithEmail.is_public) {
+      setReviews([reviewWithEmail, ...reviews]);
+    }
+  }
+
+  async function handleDeleteReview(reviewId: number) {
+    if (!user || !user.email || !reviewId) return;
+
+    try {
+      const response = await fetch('/api/deleteReview', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: reviewId,
+          user_email: user.email,
+        }),
+      });
+
+      if (response.ok) {
+        setReviews(reviews.filter(review => review.id !== reviewId));
+      } else {
+        const errorData = await response.json();
+        alert('Failed to delete review: ' + errorData.error);
+      }
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      alert('Failed to delete review. Please try again.');
+    }
   }
 
   async function handleDeleteHaircut(haircutId: number) {
@@ -138,6 +222,8 @@ export default function HomePage() {
             {activeTab === 'log' && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
             {activeTab === 'history' && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
             {activeTab === 'reminders' && <ReminderSettings user={user} />}
+            {activeTab === 'reviews' && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
+            {activeTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
           </div>
         </div>
       </main>

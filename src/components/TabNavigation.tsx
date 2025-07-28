@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type TabType = 'log' | 'history' | 'reminders'; 
+export type TabType = 'log' | 'history' | 'reminders' | 'reviews' | 'directory'; 
 interface TabNavigationProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
@@ -10,6 +10,8 @@ const tabs: { label: string; value: TabType }[] = [
   { label: 'Log Haircut', value: 'log' },
   { label: 'History', value: 'history' },
   { label: 'Reminders', value: 'reminders' },
+  { label: 'Post Review', value: 'reviews' },
+  { label: 'Browse Reviews', value: 'directory' },
 ];
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
