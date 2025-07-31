@@ -185,10 +185,218 @@ export default function HomePage() {
     setShowAccountSettings(true);
   }
 
+  if (!user) {
+    // Landing page for non-authenticated users
+    return (
+      <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #F7F0DE, #faf5e4, #F7F0DE)'}}>
+        {/* Header */}
+        <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center gap-3">
+                <Image 
+                  src="/fadetrack-logo.svg" 
+                  alt="Fadetrack Logo" 
+                  width={32} 
+                  height={32}
+                  className="transition-transform hover:scale-105"
+                />
+                <h1 className="text-2xl font-bold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
+                  Fadetrack
+                </h1>
+              </div>
+              <Link 
+                href="/login" 
+                className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
+              >
+                Get Started
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto text-center">
+            <div className="animate-fade-in">
+              <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight" style={{color: '#114B5F'}}>
+                Track Your Perfect
+                <span className="block" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
+                  Haircut Journey
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
+                Never forget a great cut again. Log your haircuts, discover top barbers, 
+                and get reminders when it's time for your next fresh look.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link 
+                  href="/login" 
+                  className="px-8 py-4 text-lg font-semibold text-white rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105"
+                  style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', boxShadow: '0 25px 50px -12px rgba(17, 75, 95, 0.25)'}}
+                >
+                  Start Tracking Free
+                </Link>
+                <a 
+                  href="#features" 
+                  className="px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
+                  style={{color: '#114B5F', backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+                >
+                  Learn More
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          {/* Floating elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl" style={{background: 'radial-gradient(circle, rgba(17, 75, 95, 0.2), transparent)'}}></div>
+            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl" style={{background: 'radial-gradient(circle, rgba(247, 240, 222, 0.3), transparent)'}}></div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="py-24 px-4 sm:px-6 lg:px-8" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)'}}>
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{color: '#114B5F'}}>
+                Everything You Need to Track Your Style
+              </h2>
+              <p className="text-xl max-w-2xl mx-auto" style={{color: '#114B5F'}}>
+                Comprehensive tools to help you maintain your perfect look and discover amazing barbers
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: "�",
+                  title: "Haircut History",
+                  description: "Keep detailed records of every haircut including style, cost, and notes"
+                },
+                {
+                  icon: "🔔",
+                  title: "Smart Reminders",
+                  description: "Get notified when it's time for your next cut based on your schedule"
+                },
+                {
+                  icon: "✂️",
+                  title: "Barber Reviews",
+                  description: "Rate and review barbers, discover top-rated professionals near you"
+                },
+                {
+                  icon: "📱",
+                  title: "Mobile Friendly",
+                  description: "Access your haircut history and reminders from any device, anywhere"
+                },
+                {
+                  icon: "🏪",
+                  title: "Barber Directory",
+                  description: "Browse verified barber shops and read authentic customer reviews"
+                },
+                {
+                  icon: "💰",
+                  title: "Cost Tracking",
+                  description: "Monitor your grooming expenses and find the best value for money"
+                }
+              ].map((feature, index) => (
+                <div 
+                  key={index}
+                  className="backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                  style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+                >
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-bold mb-3" style={{color: '#114B5F'}}>{feature.title}</h3>
+                  <p className="leading-relaxed" style={{color: '#114B5F'}}>{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-12" style={{color: '#114B5F'}}>
+              Join Thousands of Happy Users
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { number: "10,000+", label: "Haircuts Logged" },
+                { number: "5,000+", label: "Active Users" },
+                { number: "1,200+", label: "Barber Reviews" }
+              ].map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold mb-2" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
+                    {stat.number}
+                  </div>
+                  <div className="text-lg" style={{color: '#114B5F'}}>{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+              Ready to Track Your Perfect Cut?
+            </h2>
+            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#F7F0DE'}}>
+              Join thousands of users who never miss their perfect haircut timing again
+            </p>
+            <Link 
+              href="/login" 
+              className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105"
+              style={{color: '#114B5F', backgroundColor: '#F7F0DE'}}
+            >
+              Get Started for Free
+            </Link>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="py-12" style={{backgroundColor: '#114B5F', color: '#F7F0DE'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-3">
+                <Image 
+                  src="/fadetrack-logo.svg" 
+                  alt="Fadetrack Logo" 
+                  width={24} 
+                  height={24}
+                />
+                <span className="text-lg font-semibold">Fadetrack</span>
+              </div>
+              <p className="text-sm flex items-center gap-1" style={{color: '#F7F0DE', opacity: 0.8}}>
+                Made with 
+                <span className="mx-1" style={{color: '#F7F0DE'}}>♥</span> 
+                in San Francisco
+              </p>
+              <a 
+                href="https://www.x.com/utkaxxh" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm transition-colors duration-200"
+                style={{color: '#F7F0DE', opacity: 0.8}}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                @utkaxxh
+              </a>
+            </div>
+          </div>
+        </footer>
+    </div>
+  );
+}  // Authenticated user dashboard
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #F7F0DE, #faf5e4, #F7F0DE)'}}>
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm bg-white/95">
+      <header className="sticky top-0 z-50 backdrop-blur-sm" style={{backgroundColor: 'rgba(247, 240, 222, 0.95)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
@@ -199,16 +407,10 @@ export default function HomePage() {
                 height={32}
                 className="transition-transform hover:scale-105"
               />
-              <h1 className="text-2xl font-semibold text-gray-900">Fadetrack</h1>
+              <h1 className="text-2xl font-semibold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Fadetrack</h1>
             </div>
             <div className="flex items-center gap-3">
-              {user ? (
-                <AccountDropdown user={user} onAccountSettings={handleOpenAccountSettings} />
-              ) : (
-                <Link href="/login" className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                  Login / Signup
-                </Link>
-              )}
+              <AccountDropdown user={user} onAccountSettings={handleOpenAccountSettings} />
             </div>
           </div>
         </div>
@@ -216,9 +418,9 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-          <div className="p-6">
+          <div className="p-6" style={{backgroundColor: 'rgba(247, 240, 222, 0.3)'}}>
             {activeTab === 'log' && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
             {activeTab === 'history' && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
             {activeTab === 'reminders' && <ReminderSettings user={user} />}
@@ -238,19 +440,20 @@ export default function HomePage() {
             }
           }}
         >
-          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">Account Settings</h2>
+          <div className="rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" style={{backgroundColor: '#F7F0DE', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+            <div className="flex items-center justify-between p-6" style={{borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
+              <h2 className="text-xl font-semibold" style={{color: '#114B5F'}}>Account Settings</h2>
               <button
                 onClick={() => setShowAccountSettings(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                className="p-2 rounded-lg transition-colors duration-200"
+                style={{color: '#114B5F', opacity: 0.7}}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <div className="p-6">
+            <div className="p-6" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)'}}>
               <AccountSettings user={user} />
             </div>
           </div>
@@ -258,19 +461,20 @@ export default function HomePage() {
       )}
 
       {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 mt-16">
+      <footer className="mt-16" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)', borderTop: '1px solid rgba(17, 75, 95, 0.2)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-600 flex items-center gap-1">
+            <p className="text-sm flex items-center gap-1" style={{color: '#114B5F'}}>
               Made with 
-              <span className="text-red-500 mx-1">♥</span> 
+              <span className="mx-1" style={{color: '#114B5F'}}>♥</span> 
               in San Francisco
             </p>
             <a 
               href="https://www.x.com/utkaxxh" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+              className="flex items-center gap-2 text-sm transition-colors duration-200"
+              style={{color: '#114B5F'}}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>

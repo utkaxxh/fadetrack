@@ -16,16 +16,20 @@ const tabs: { label: string; value: TabType }[] = [
 
 export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
   return (
-    <div className="border-b border-gray-200">
+    <div style={{borderBottom: '1px solid rgba(17, 75, 95, 0.2)', backgroundColor: 'rgba(247, 240, 222, 0.3)'}}>
       <nav className="flex space-x-8 px-6">
         {tabs.map((tab) => (
           <button
             key={tab.value}
             className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
               activeTab === tab.value
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? ''
+                : ''
             }`}
+            style={{
+              borderBottomColor: activeTab === tab.value ? '#114B5F' : 'transparent',
+              color: activeTab === tab.value ? '#114B5F' : 'rgba(17, 75, 95, 0.6)'
+            }}
             onClick={() => setActiveTab(tab.value)}
           >
             {tab.label}
