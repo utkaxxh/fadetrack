@@ -228,7 +228,7 @@ export default function HomePage() {
               </h1>
               <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
                 Never forget a great cut again. Log your haircuts, discover top barbers, 
-                and get reminders when it's time for your next fresh look.
+                and get reminders when it&apos;s time for your next fresh look.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link 
