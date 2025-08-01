@@ -315,26 +315,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Stats Section */}
+        {/* Journey Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12" style={{color: '#114B5F'}}>
-              Join Thousands of Happy Users
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{color: '#114B5F'}}>
+              Your Haircut Journey Starts Here
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { number: "10,000+", label: "Haircuts Logged" },
-                { number: "5,000+", label: "Active Users" },
-                { number: "1,200+", label: "Barber Reviews" }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold mb-2" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
-                    {stat.number}
-                  </div>
-                  <div className="text-lg" style={{color: '#114B5F'}}>{stat.label}</div>
-                </div>
-              ))}
-            </div>
+            <p className="text-xl md:text-2xl max-w-2xl mx-auto" style={{color: '#114B5F', opacity: 0.8}}>
+              Log every cut, discover great barbers, never settle for less
+            </p>
           </div>
         </section>
 
@@ -345,7 +334,7 @@ export default function HomePage() {
               Ready to Track Your Perfect Cut?
             </h2>
             <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#F7F0DE'}}>
-              Join thousands of users who never miss their perfect haircut timing again
+              Start your personalized haircut tracking journey today
             </p>
             <Link 
               href="/login" 
