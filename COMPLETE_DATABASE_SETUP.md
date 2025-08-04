@@ -17,7 +17,16 @@ Copy and paste the following SQL into your Supabase SQL Editor and execute it:
 -- COMPLETE FADETRACK DATABASE SETUP
 -- ==========================================
 
--- First, create the barbers table
+-- Create user_roles table first (no dependencies)
+CREATE TABLE IF NOT EXISTS user_roles (
+  id SERIAL PRIMARY KEY,
+  user_email VARCHAR(255) NOT NULL UNIQUE,
+  role VARCHAR(20) NOT NULL DEFAULT 'customer' CHECK (role IN ('customer', 'professional')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create barbers table (no dependencies)
 CREATE TABLE IF NOT EXISTS barbers (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -30,7 +39,7 @@ CREATE TABLE IF NOT EXISTS barbers (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create the reviews table
+-- Create reviews table (depends on barbers)
 CREATE TABLE IF NOT EXISTS reviews (
   id SERIAL PRIMARY KEY,
   user_email VARCHAR(255) NOT NULL,
@@ -51,16 +60,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create user_roles table to distinguish between regular users and professionals
-CREATE TABLE IF NOT EXISTS user_roles (
-  id SERIAL PRIMARY KEY,
-  user_email VARCHAR(255) NOT NULL UNIQUE,
-  role VARCHAR(20) NOT NULL DEFAULT 'customer' CHECK (role IN ('customer', 'professional')),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Create professional_profiles table
+-- Create professional_profiles table (depends on user_roles)
 CREATE TABLE IF NOT EXISTS professional_profiles (
   id SERIAL PRIMARY KEY,
   user_email VARCHAR(255) NOT NULL UNIQUE,
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS professional_profiles (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create services table for professionals
+-- Create services table (depends on professional_profiles)
 CREATE TABLE IF NOT EXISTS services (
   id SERIAL PRIMARY KEY,
   professional_email VARCHAR(255) NOT NULL,
@@ -98,11 +98,10 @@ CREATE TABLE IF NOT EXISTS services (
   duration_minutes INTEGER,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  FOREIGN KEY (professional_email) REFERENCES professional_profiles(user_email) ON DELETE CASCADE
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create portfolio table for professionals
+-- Create portfolio table (depends on professional_profiles)  
 CREATE TABLE IF NOT EXISTS portfolio (
   id SERIAL PRIMARY KEY,
   professional_email VARCHAR(255) NOT NULL,
@@ -110,23 +109,20 @@ CREATE TABLE IF NOT EXISTS portfolio (
   description TEXT,
   service_type VARCHAR(255),
   is_featured BOOLEAN DEFAULT false,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  FOREIGN KEY (professional_email) REFERENCES professional_profiles(user_email) ON DELETE CASCADE
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create review_responses table for professional responses
+-- Create review_responses table (depends on reviews and professional_profiles)
 CREATE TABLE IF NOT EXISTS review_responses (
   id SERIAL PRIMARY KEY,
   review_id INTEGER NOT NULL,
   professional_email VARCHAR(255) NOT NULL,
   response_text TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE,
-  FOREIGN KEY (professional_email) REFERENCES professional_profiles(user_email) ON DELETE CASCADE
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create haircuts table (for backward compatibility)
+-- Create haircuts table (no dependencies)
 CREATE TABLE IF NOT EXISTS haircuts (
   id SERIAL PRIMARY KEY,
   user_email VARCHAR(255) NOT NULL,
@@ -139,7 +135,7 @@ CREATE TABLE IF NOT EXISTS haircuts (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create reminders table
+-- Create reminders table (no dependencies)
 CREATE TABLE IF NOT EXISTS reminders (
   id SERIAL PRIMARY KEY,
   user_email VARCHAR(255) NOT NULL,
@@ -150,6 +146,57 @@ CREATE TABLE IF NOT EXISTS reminders (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- ==========================================
+-- ADD FOREIGN KEY CONSTRAINTS AFTER ALL TABLES ARE CREATED
+-- ==========================================
+
+-- Add foreign key constraints for services table
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'services_professional_email_fkey'
+    ) THEN
+        ALTER TABLE services ADD CONSTRAINT services_professional_email_fkey 
+        FOREIGN KEY (professional_email) REFERENCES professional_profiles(user_email) ON DELETE CASCADE;
+    END IF;
+END $$;
+
+-- Add foreign key constraints for portfolio table
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'portfolio_professional_email_fkey'
+    ) THEN
+        ALTER TABLE portfolio ADD CONSTRAINT portfolio_professional_email_fkey 
+        FOREIGN KEY (professional_email) REFERENCES professional_profiles(user_email) ON DELETE CASCADE;
+    END IF;
+END $$;
+
+-- Add foreign key constraints for review_responses table
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'review_responses_review_id_fkey'
+    ) THEN
+        ALTER TABLE review_responses ADD CONSTRAINT review_responses_review_id_fkey 
+        FOREIGN KEY (review_id) REFERENCES reviews(id) ON DELETE CASCADE;
+    END IF;
+END $$;
+
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'review_responses_professional_email_fkey'
+    ) THEN
+        ALTER TABLE review_responses ADD CONSTRAINT review_responses_professional_email_fkey 
+        FOREIGN KEY (professional_email) REFERENCES professional_profiles(user_email) ON DELETE CASCADE;
+    END IF;
+END $$;
 
 -- ==========================================
 -- CREATE INDEXES FOR BETTER PERFORMANCE
