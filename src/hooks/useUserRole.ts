@@ -32,12 +32,18 @@ export function useUserRole(user: User | null) {
   };
 
   const updateUserRole = async (newRole: UserRole) => {
-    if (!user?.email) return false;
+    console.log('useUserRole: updateUserRole called with:', { newRole, userEmail: user?.email });
+    
+    if (!user?.email) {
+      console.log('useUserRole: No user email, returning false');
+      return false;
+    }
 
     setIsLoading(true);
     setError(null);
 
     try {
+      console.log('useUserRole: Making API call to /api/userRole');
       const response = await fetch('/api/userRole', {
         method: 'POST',
         headers: {
@@ -49,13 +55,16 @@ export function useUserRole(user: User | null) {
         }),
       });
 
+      console.log('useUserRole: API response status:', response.status);
       const data = await response.json();
+      console.log('useUserRole: API response data:', data);
 
       if (response.ok) {
+        console.log('useUserRole: Success, setting role to:', newRole);
         setRole(newRole);
         return true;
       } else {
-        console.error('Error updating user role:', data);
+        console.error('useUserRole: API error:', data);
         setError(data.error || 'Failed to update user role');
         
         // Provide more specific error messages
@@ -66,7 +75,7 @@ export function useUserRole(user: User | null) {
         return false;
       }
     } catch (err: unknown) {
-      console.error('Error updating user role:', err);
+      console.error('useUserRole: Network error:', err);
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(`Network error: ${errorMessage}`);
       return false;

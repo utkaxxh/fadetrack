@@ -13,7 +13,13 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
   const [error, setError] = useState('');
 
   const handleRoleSelection = async () => {
+    console.log('UserRoleSelection: Starting role selection', { 
+      selectedRole, 
+      currentRole 
+    });
+    
     if (selectedRole === currentRole) {
+      console.log('UserRoleSelection: Role unchanged, completing');
       onComplete();
       return;
     }
@@ -21,11 +27,15 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
     setIsSubmitting(true);
     setError('');
 
+    console.log('UserRoleSelection: Calling onRoleUpdate with role:', selectedRole);
     const success = await onRoleUpdate(selectedRole);
+    console.log('UserRoleSelection: Role update result:', success);
     
     if (success) {
+      console.log('UserRoleSelection: Success, completing');
       onComplete();
     } else {
+      console.log('UserRoleSelection: Failed, setting error');
       setError('Failed to update your role. Please try again.');
     }
     

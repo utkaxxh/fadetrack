@@ -48,12 +48,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
       // Set or update user role
       const { user_email, role } = req.body;
+      console.log('userRole API: POST request received', { user_email, role });
 
       if (!user_email || !role) {
+        console.log('userRole API: Missing user_email or role');
         return res.status(400).json({ error: 'Missing user_email or role' });
       }
 
       if (!['customer', 'professional'].includes(role)) {
+        console.log('userRole API: Invalid role:', role);
         return res.status(400).json({ error: 'Invalid role. Must be customer or professional' });
       }
 
@@ -62,9 +65,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await supabaseAdmin.rpc('create_user_roles_table_if_not_exists');
       } catch (error) {
         // Ignore error if function doesn't exist, we'll handle table creation differently
-        console.log('Note: create_user_roles_table_if_not_exists function not available');
+        console.log('userRole API: Note - create_user_roles_table_if_not_exists function not available');
       }
 
+      console.log('userRole API: Checking for existing role');
       // Check if user already has a role
       const { data: existingRole, error: fetchError } = await supabaseAdmin
         .from('user_roles')
@@ -72,8 +76,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         .eq('user_email', user_email)
         .single();
 
+      console.log('userRole API: Existing role check result', { existingRole, fetchError });
+
       // If the table doesn't exist, we'll get an error here
       if (fetchError && (fetchError.code === 'PGRST116' || fetchError.message?.includes('relation "user_roles" does not exist'))) {
+        console.log('userRole API: Table not found error');
         return res.status(500).json({ 
           error: 'User roles table not found. Please run the database setup script in your Supabase dashboard.',
           details: 'Execute the COMPLETE_DATABASE_SETUP.md instructions in your Supabase SQL Editor'
@@ -81,6 +88,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       if (existingRole) {
+        console.log('userRole API: Updating existing role');
         // Update existing role
         const { data, error } = await supabaseAdmin
           .from('user_roles')
@@ -90,15 +98,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           .single();
 
         if (error) {
-          console.error('Error updating user role:', error);
+          console.error('userRole API: Error updating user role:', error);
           return res.status(500).json({ 
             error: 'Failed to update user role',
             details: error.message 
           });
         }
 
+        console.log('userRole API: Successfully updated role:', data);
         return res.status(200).json({ success: true, role: data.role });
       } else {
+        console.log('userRole API: Creating new role record');
         // Create new role record
         const { data, error } = await supabaseAdmin
           .from('user_roles')
@@ -107,13 +117,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           .single();
 
         if (error) {
-          console.error('Error creating user role:', error);
+          console.error('userRole API: Error creating user role:', error);
           return res.status(500).json({ 
             error: 'Failed to create user role',
             details: error.message
           });
         }
 
+        console.log('userRole API: Successfully created role:', data);
         return res.status(201).json({ success: true, role: data.role });
       }
     }
