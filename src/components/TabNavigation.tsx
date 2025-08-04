@@ -1,20 +1,38 @@
 import React from 'react';
+import { UserRole } from '../hooks/useUserRole';
 
-export type TabType = 'log' | 'history' | 'reminders' | 'reviews' | 'directory'; 
+export type TabType = 'log' | 'history' | 'reminders' | 'reviews' | 'directory' | 'dashboard'; 
 interface TabNavigationProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
+  userRole?: UserRole;
 }
 
-const tabs: { label: string; value: TabType }[] = [
-  { label: 'Log Haircut', value: 'log' },
-  { label: 'History', value: 'history' },
-  { label: 'Reminders', value: 'reminders' },
-  { label: 'Post Review', value: 'reviews' },
-  { label: 'Browse Reviews', value: 'directory' },
-];
+const getTabsForRole = (role: UserRole): { label: string; value: TabType }[] => {
+  const commonTabs = [
+    { label: 'Browse Reviews', value: 'directory' as TabType },
+  ];
 
-export default function TabNavigation({ activeTab, setActiveTab }: TabNavigationProps) {
+  if (role === 'professional') {
+    return [
+      { label: 'Dashboard', value: 'dashboard' as TabType },
+      ...commonTabs,
+    ];
+  }
+
+  // Customer tabs
+  return [
+    { label: 'Log Haircut', value: 'log' as TabType },
+    { label: 'History', value: 'history' as TabType },
+    { label: 'Reminders', value: 'reminders' as TabType },
+    { label: 'Post Review', value: 'reviews' as TabType },
+    ...commonTabs,
+  ];
+};
+
+export default function TabNavigation({ activeTab, setActiveTab, userRole = 'customer' }: TabNavigationProps) {
+  const tabs = getTabsForRole(userRole);
+
   return (
     <div style={{borderBottom: '1px solid rgba(17, 75, 95, 0.2)', backgroundColor: 'rgba(247, 240, 222, 0.3)'}}>
       <nav className="flex space-x-8 px-6">

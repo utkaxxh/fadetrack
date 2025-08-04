@@ -13,7 +13,11 @@ import AccountSettings from '../components/AccountSettings';
 import AccountDropdown from '../components/AccountDropdown';
 import ReviewForm from '../components/ReviewForm';
 import PublicReviews from '../components/PublicReviews';
+import UserRoleSelection from '../components/UserRoleSelection';
+import ProfessionalProfileSetup from '../components/ProfessionalProfileSetup';
+import ProfessionalDashboard from '../components/ProfessionalDashboard';
 import { useSupabaseUser } from '../components/useSupabaseUser';
+import { useUserRole } from '../hooks/useUserRole';
 
 export type Barber = {
   id?: number;
@@ -66,7 +70,52 @@ export default function HomePage() {
   const [showAccountSettings, setShowAccountSettings] = useState(false);
   const [haircuts, setHaircuts] = useState<Haircut[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [showRoleSelection, setShowRoleSelection] = useState(false);
+  const [showProfileSetup, setShowProfileSetup] = useState(false);
   const user = useSupabaseUser();
+  const { role, updateUserRole, isProfessional, isLoading: roleLoading } = useUserRole(user);
+
+  // Set default tab based on user role
+  useEffect(() => {
+    if (!roleLoading) {
+      if (isProfessional && activeTab === 'log') {
+        setActiveTab('dashboard');
+      } else if (!isProfessional && activeTab === 'dashboard') {
+        setActiveTab('log');
+      }
+    }
+  }, [isProfessional, roleLoading, activeTab]);
+
+  // Check if new user needs role selection
+  useEffect(() => {
+    if (user && !roleLoading && role === 'customer') {
+      // Check if this is a new user (no previous role set) or if they want to switch
+      const hasSeenRoleSelection = localStorage.getItem(`role-selected-${user.email}`);
+      if (!hasSeenRoleSelection) {
+        setShowRoleSelection(true);
+      }
+    }
+  }, [user, role, roleLoading]);
+
+  const handleRoleSelection = () => {
+    if (user?.email) {
+      localStorage.setItem(`role-selected-${user.email}`, 'true');
+    }
+    setShowRoleSelection(false);
+    
+    // If they selected professional, show profile setup
+    if (role === 'professional') {
+      setShowProfileSetup(true);
+    }
+  };
+
+  const handleProfileSetupComplete = () => {
+    setShowProfileSetup(false);
+  };
+
+  const handleProfileSetupSkip = () => {
+    setShowProfileSetup(false);
+  };
 
   // Handle escape key to close account settings modal
   useEffect(() => {
@@ -205,13 +254,22 @@ export default function HomePage() {
                   Fadetrack
                 </h1>
               </div>
-              <Link 
-                href="/login" 
-                className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-                style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
-              >
-                Get Started
-              </Link>
+              <div className="flex items-center gap-6">
+                <Link 
+                  href="/directory" 
+                  className="text-sm font-medium transition-colors duration-200 hover:opacity-80"
+                  style={{color: '#114B5F'}}
+                >
+                  Find Professionals
+                </Link>
+                <Link 
+                  href="/login" 
+                  className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
+                >
+                  Get Started
+                </Link>
+              </div>
             </div>
           </div>
         </header>
@@ -238,13 +296,13 @@ export default function HomePage() {
                 >
                   Start Tracking Free
                 </Link>
-                <a 
-                  href="#features" 
+                <Link 
+                  href="/directory" 
                   className="px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
                   style={{color: '#114B5F', backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
                 >
-                  Learn More
-                </a>
+                  Find Professionals
+                </Link>
               </div>
             </div>
           </div>
@@ -408,13 +466,14 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
-          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} userRole={role} />
           <div className="p-6" style={{backgroundColor: 'rgba(247, 240, 222, 0.3)'}}>
-            {activeTab === 'log' && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
-            {activeTab === 'history' && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
-            {activeTab === 'reminders' && <ReminderSettings user={user} />}
-            {activeTab === 'reviews' && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
+            {activeTab === 'log' && !isProfessional && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
+            {activeTab === 'history' && !isProfessional && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
+            {activeTab === 'reminders' && !isProfessional && <ReminderSettings user={user} />}
+            {activeTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
             {activeTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
+            {activeTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} />}
           </div>
         </div>
       </main>
@@ -447,6 +506,25 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Role Selection Modal */}
+      {showRoleSelection && (
+        <UserRoleSelection
+          user={user}
+          currentRole={role}
+          onRoleUpdate={updateUserRole}
+          onComplete={handleRoleSelection}
+        />
+      )}
+
+      {/* Professional Profile Setup Modal */}
+      {showProfileSetup && (
+        <ProfessionalProfileSetup
+          user={user}
+          onComplete={handleProfileSetupComplete}
+          onSkip={handleProfileSetupSkip}
+        />
       )}
 
       {/* Footer */}
