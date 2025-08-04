@@ -13,8 +13,11 @@ export function useUserRole(user: User | null) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/userRole?email=${encodeURIComponent(userEmail)}`);
+      console.log('useUserRole: Fetching role for email:', userEmail);
+      const response = await fetch(`/api/userRoleSimple?email=${encodeURIComponent(userEmail)}`);
       const data = await response.json();
+      
+      console.log('useUserRole: Fetch response:', { response: response.status, data });
       
       if (response.ok) {
         setRole(data.role || 'customer');
@@ -23,7 +26,7 @@ export function useUserRole(user: User | null) {
         setRole('customer'); // Default fallback
       }
     } catch (err) {
-      console.error('Error fetching user role:', err);
+      console.error('useUserRole: Fetch error:', err);
       setError('Failed to fetch user role');
       setRole('customer'); // Default fallback
     } finally {
@@ -43,8 +46,8 @@ export function useUserRole(user: User | null) {
     setError(null);
 
     try {
-      console.log('useUserRole: Making API call to /api/userRole');
-      const response = await fetch('/api/userRole', {
+      console.log('useUserRole: Making API call to /api/userRoleSimple');
+      const response = await fetch('/api/userRoleSimple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
