@@ -511,7 +511,6 @@ export default function HomePage() {
       {/* Role Selection Modal */}
       {showRoleSelection && (
         <UserRoleSelection
-          user={user}
           currentRole={role}
           onRoleUpdate={updateUserRole}
           onComplete={handleRoleSelection}

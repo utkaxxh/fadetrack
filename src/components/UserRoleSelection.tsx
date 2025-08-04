@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import type { User } from '@supabase/supabase-js';
 import { UserRole } from '../hooks/useUserRole';
 
 interface UserRoleSelectionProps {
