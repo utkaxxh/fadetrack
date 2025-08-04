@@ -28,11 +28,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: 'Email parameter required' });
       }
 
-      const { data: userRole } = await supabaseAdmin
+      const { data: userRole, error } = await supabaseAdmin
         .from('user_roles')
         .select('role')
         .eq('user_email', email)
         .single();
+
+      // If table doesn't exist or other error, return default role
+      if (error) {
+        console.log('Error fetching user role (defaulting to customer):', error);
+        return res.status(200).json({ role: 'customer' });
+      }
 
       return res.status(200).json({ 
         role: userRole?.role || 'customer' // Default to customer if no role set
@@ -51,12 +57,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: 'Invalid role. Must be customer or professional' });
       }
 
+      // Try to create the table first if it doesn't exist
+      try {
+        await supabaseAdmin.rpc('create_user_roles_table_if_not_exists');
+      } catch (error) {
+        // Ignore error if function doesn't exist, we'll handle table creation differently
+        console.log('Note: create_user_roles_table_if_not_exists function not available');
+      }
+
       // Check if user already has a role
-      const { data: existingRole } = await supabaseAdmin
+      const { data: existingRole, error: fetchError } = await supabaseAdmin
         .from('user_roles')
         .select('*')
         .eq('user_email', user_email)
         .single();
+
+      // If the table doesn't exist, we'll get an error here
+      if (fetchError && (fetchError.code === 'PGRST116' || fetchError.message?.includes('relation "user_roles" does not exist'))) {
+        return res.status(500).json({ 
+          error: 'User roles table not found. Please run the database setup script in your Supabase dashboard.',
+          details: 'Execute the COMPLETE_DATABASE_SETUP.md instructions in your Supabase SQL Editor'
+        });
+      }
 
       if (existingRole) {
         // Update existing role
@@ -69,7 +91,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (error) {
           console.error('Error updating user role:', error);
-          return res.status(500).json({ error: 'Failed to update user role' });
+          return res.status(500).json({ 
+            error: 'Failed to update user role',
+            details: error.message 
+          });
         }
 
         return res.status(200).json({ success: true, role: data.role });
@@ -83,7 +108,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (error) {
           console.error('Error creating user role:', error);
-          return res.status(500).json({ error: 'Failed to create user role' });
+          return res.status(500).json({ 
+            error: 'Failed to create user role',
+            details: error.message
+          });
         }
 
         return res.status(201).json({ success: true, role: data.role });

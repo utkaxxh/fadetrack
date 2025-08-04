@@ -110,7 +110,15 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
         </div>
 
         {error && (
-          <p className="text-red-600 text-sm mb-4 text-center">{error}</p>
+          <div className="mb-4 p-3 rounded-lg" style={{backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)'}}>
+            <p className="text-red-600 text-sm text-center font-medium">{error}</p>
+            {error.includes('Database not properly set up') && (
+              <div className="mt-2 text-xs text-red-500 text-center">
+                <p>The database tables need to be set up in your Supabase project.</p>
+                <p>Please check the COMPLETE_DATABASE_SETUP.md file for instructions.</p>
+              </div>
+            )}
+          </div>
         )}
 
         <button

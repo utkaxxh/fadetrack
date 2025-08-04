@@ -55,12 +55,20 @@ export function useUserRole(user: User | null) {
         setRole(newRole);
         return true;
       } else {
+        console.error('Error updating user role:', data);
         setError(data.error || 'Failed to update user role');
+        
+        // Provide more specific error messages
+        if (data.error?.includes('table not found') || data.error?.includes('relation "user_roles" does not exist')) {
+          setError('Database not properly set up. Please contact support or check the setup documentation.');
+        }
+        
         return false;
       }
     } catch (err: unknown) {
       console.error('Error updating user role:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(`Network error: ${errorMessage}`);
       return false;
     } finally {
       setIsLoading(false);
