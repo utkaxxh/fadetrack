@@ -3,13 +3,12 @@ import type { User } from '@supabase/supabase-js';
 import { UserRole } from '../hooks/useUserRole';
 
 interface UserRoleSelectionProps {
-  user: User | null;
   currentRole: UserRole;
   onRoleUpdate: (role: UserRole) => Promise<boolean>;
   onComplete: () => void;
 }
 
-export default function UserRoleSelection({ user, currentRole, onRoleUpdate, onComplete }: UserRoleSelectionProps) {
+export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplete }: UserRoleSelectionProps) {
   const [selectedRole, setSelectedRole] = useState<UserRole>(currentRole);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -68,7 +67,7 @@ export default function UserRoleSelection({ user, currentRole, onRoleUpdate, onC
                 )}
               </div>
               <div>
-                <h3 className="font-semibold text-lg" style={{color: '#114B5F'}}>I'm a Customer</h3>
+                <h3 className="font-semibold text-lg" style={{color: '#114B5F'}}>I&apos;m a Customer</h3>
                 <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>
                   Track my haircuts, find great barbers, and leave reviews
                 </p>
@@ -102,7 +101,7 @@ export default function UserRoleSelection({ user, currentRole, onRoleUpdate, onC
                 )}
               </div>
               <div>
-                <h3 className="font-semibold text-lg" style={{color: '#114B5F'}}>I'm a Professional</h3>
+                <h3 className="font-semibold text-lg" style={{color: '#114B5F'}}>I&apos;m a Professional</h3>
                 <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>
                   Barber, beautician, or stylist - manage my profile and showcase my work
                 </p>

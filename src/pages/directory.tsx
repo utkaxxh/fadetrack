@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import EnhancedSearch from '../components/EnhancedSearch';
 
 interface Professional {
@@ -34,10 +35,9 @@ interface SearchFilters {
 }
 
 export default function ProfessionalDirectory() {
-  const [professionals, setProfessionals] = useState<Professional[]>([]);
+  const [searchResults, setSearchResults] = useState<Professional[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchResults, setSearchResults] = useState<Professional[]>([]);
   const [totalResults, setTotalResults] = useState(0);
 
   // Initialize with basic search
@@ -132,7 +132,7 @@ export default function ProfessionalDirectory() {
 
         {/* Enhanced Search Component */}
         <div className="mb-8">
-          <EnhancedSearch onSearch={handleSearch} isLoading={isLoading} />
+          <EnhancedSearch onSearch={handleSearch} />
         </div>
 
         {/* Results */}
@@ -169,9 +169,11 @@ export default function ProfessionalDirectory() {
                         style={{backgroundColor: 'rgba(17, 75, 95, 0.1)', color: '#114B5F'}}
                       >
                         {professional.profile_image ? (
-                          <img 
+                          <Image 
                             src={professional.profile_image} 
                             alt={professional.display_name}
+                            width={64}
+                            height={64}
                             className="w-full h-full rounded-full object-cover"
                           />
                         ) : (

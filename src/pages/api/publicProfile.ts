@@ -77,16 +77,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       is_active: profileData.is_active,
       average_rating: profileData.average_rating || 0,
       total_reviews: profileData.total_reviews || 0,
-      services: (profileData.professional_services || []).map((service: any) => ({
+      services: (profileData.professional_services || []).map((service: { 
+        id: string, 
+        service_name: string, 
+        description: string, 
+        price_min: number, 
+        price_max: number, 
+        duration_minutes: number,
+        is_active: boolean
+      }) => ({
         id: service.id,
-        service_name: service.name,
+        service_name: service.service_name,
         description: service.description,
-        price_min: service.price,
-        price_max: service.price,
+        price_min: service.price_min,
+        price_max: service.price_max,
         duration_minutes: service.duration_minutes,
         is_active: service.is_active
       })),
-      portfolio: (profileData.professional_portfolio || []).map((item: any) => ({
+      portfolio: (profileData.professional_portfolio || []).map((item: {
+        id: string,
+        image_url: string,
+        caption: string,
+        service_type: string,
+        created_at: string
+      }) => ({
         id: item.id,
         image_url: item.image_url,
         caption: item.caption,

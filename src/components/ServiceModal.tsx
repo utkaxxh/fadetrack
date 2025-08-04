@@ -22,15 +22,13 @@ interface ServiceModalProps {
     is_active: boolean;
   }) => void;
   service?: Service;
-  professionalId: string;
 }
 
 export default function ServiceModal({ 
   isOpen, 
   onClose, 
   onSave, 
-  service, 
-  professionalId 
+  service 
 }: ServiceModalProps) {
   const [formData, setFormData] = useState({
     service_name: service?.service_name || '',
@@ -78,7 +76,7 @@ export default function ServiceModal({
     onClose();
   };
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | number | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));

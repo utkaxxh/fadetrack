@@ -58,9 +58,9 @@ export function useUserRole(user: User | null) {
         setError(data.error || 'Failed to update user role');
         return false;
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error updating user role:', err);
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'An error occurred');
       return false;
     } finally {
       setIsLoading(false);

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 
 interface ProfessionalProfile {
   id: number;
@@ -78,14 +78,7 @@ export default function PublicProfessionalProfile({
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'about' | 'services' | 'portfolio' | 'reviews'>('about');
 
-  useEffect(() => {
-    if (professionalId || professionalEmail) {
-      fetchProfessionalProfile();
-      fetchProfessionalReviews();
-    }
-  }, [professionalId, professionalEmail]);
-
-  const fetchProfessionalProfile = async () => {
+  const fetchProfessionalProfile = useCallback(async () => {
     try {
       const query = professionalId 
         ? `id=${encodeURIComponent(professionalId)}`
@@ -105,9 +98,9 @@ export default function PublicProfessionalProfile({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [professionalId, professionalEmail]);
 
-  const fetchProfessionalReviews = async () => {
+  const fetchProfessionalReviews = useCallback(async () => {
     try {
       const query = professionalEmail || profile?.user_email;
       if (!query) return;
@@ -121,7 +114,14 @@ export default function PublicProfessionalProfile({
     } catch (err) {
       console.error('Error fetching reviews:', err);
     }
-  };
+  }, [professionalEmail, profile?.user_email]);
+
+  useEffect(() => {
+    if (professionalId || professionalEmail) {
+      fetchProfessionalProfile();
+      fetchProfessionalReviews();
+    }
+  }, [professionalId, professionalEmail, fetchProfessionalProfile, fetchProfessionalReviews]);
 
   if (isLoading) {
     return (
@@ -285,9 +285,11 @@ export default function PublicProfessionalProfile({
             >
               <div className="aspect-square bg-gray-200 flex items-center justify-center">
                 {item.image_url ? (
-                  <img
+                  <Image
                     src={item.image_url}
                     alt={item.caption}
+                    width={400}
+                    height={400}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -394,9 +396,11 @@ export default function PublicProfessionalProfile({
             style={{backgroundColor: 'rgba(17, 75, 95, 0.1)', color: '#114B5F'}}
           >
             {profile.profile_image ? (
-              <img 
+              <Image 
                 src={profile.profile_image} 
                 alt={profile.display_name}
+                width={96}
+                height={96}
                 className="w-full h-full rounded-full object-cover"
               />
             ) : (
@@ -457,7 +461,7 @@ export default function PublicProfessionalProfile({
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key as any)}
+            onClick={() => setActiveTab(tab.key as 'about' | 'services' | 'portfolio' | 'reviews')}
             className={`px-4 py-2 rounded-lg transition-all duration-200 ${
               activeTab === tab.key
                 ? 'font-semibold text-white'

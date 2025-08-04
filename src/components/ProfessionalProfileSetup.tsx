@@ -101,8 +101,8 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
       } else {
         setError(data.error || 'Failed to create profile');
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsSubmitting(false);
     }

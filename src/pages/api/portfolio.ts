@@ -83,7 +83,7 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: 'Portfolio item ID is required' });
   }
 
-  const updates: any = {};
+  const updates: Record<string, unknown> = {};
   if (caption !== undefined) updates.caption = caption;
   if (service_type !== undefined) updates.service_type = service_type;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { User } from '@supabase/supabase-js';
 import ServiceModal from './ServiceModal';
 import PortfolioModal from './PortfolioModal';
@@ -73,7 +73,6 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
   const [profile, setProfile] = useState<ProfessionalProfile | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
   const [activeSection, setActiveSection] = useState<'overview' | 'profile' | 'services' | 'portfolio' | 'reviews'>('overview');
   
   // Modal states
@@ -82,14 +81,7 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
   const [editingService, setEditingService] = useState<Service | undefined>(undefined);
   const [editingPortfolioItem, setEditingPortfolioItem] = useState<PortfolioItem | undefined>(undefined);
 
-  useEffect(() => {
-    if (user?.email) {
-      fetchProfile();
-      fetchReviews();
-    }
-  }, [user?.email]);
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     if (!user?.email) return;
     
     try {
@@ -99,17 +91,16 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
       if (response.ok) {
         setProfile(data.profile);
       } else {
-        setError(data.error || 'Failed to fetch profile');
+        console.error('Failed to fetch profile:', data.error);
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
-      setError('Failed to fetch profile');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user?.email]);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     if (!user?.email) return;
     
     try {
@@ -122,7 +113,14 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
     } catch (err) {
       console.error('Error fetching reviews:', err);
     }
-  };
+  }, [user?.email]);
+
+  useEffect(() => {
+    if (user?.email) {
+      fetchProfile();
+      fetchReviews();
+    }
+  }, [user?.email, fetchProfile, fetchReviews]);
 
   const handleSaveService = async (serviceData: {
     service_name: string;
@@ -795,16 +793,8 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
     </div>
   );
 
-  const renderPlaceholder = (title: string, description: string) => (
-    <div className="text-center py-12">
-      <h3 className="text-xl font-semibold mb-4" style={{color: '#114B5F'}}>{title}</h3>
-      <p style={{color: '#114B5F', opacity: 0.8}}>{description}</p>
-    </div>
-  );
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-6">{/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold mb-2" style={{color: '#114B5F'}}>
           Welcome back, {profile.display_name}!
@@ -825,7 +815,7 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
         ].map((section) => (
           <button
             key={section.key}
-            onClick={() => setActiveSection(section.key as any)}
+            onClick={() => setActiveSection(section.key as 'overview' | 'profile' | 'services' | 'portfolio' | 'reviews')}
             className={`px-4 py-2 rounded-lg transition-all duration-200 ${
               activeSection === section.key
                 ? 'font-semibold text-white'
@@ -860,7 +850,6 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
         }}
         onSave={handleSaveService}
         service={editingService}
-        professionalId={profile?.id?.toString() || ''}
       />
 
       <PortfolioModal
@@ -871,7 +860,6 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
         }}
         onSave={handleSavePortfolioItem}
         item={editingPortfolioItem}
-        professionalId={profile?.id?.toString() || ''}
       />
     </div>
   );

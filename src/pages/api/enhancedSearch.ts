@@ -132,7 +132,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (priceRange !== 'all') {
       filteredProfessionals = filteredProfessionals.filter(prof => {
         if (!prof.professional_services || prof.professional_services.length === 0) return false;
-        return prof.professional_services.some((service: any) => 
+        return prof.professional_services.some((service: { price: number, is_active: boolean }) => 
           service.is_active && matchesPriceRange(priceRange as string, service.price)
         );
       });

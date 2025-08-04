@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface PortfolioItem {
   id?: number;
@@ -17,15 +18,13 @@ interface PortfolioModalProps {
     service_type: string;
   }) => void;
   item?: PortfolioItem;
-  professionalId: string;
 }
 
 export default function PortfolioModal({ 
   isOpen, 
   onClose, 
   onSave, 
-  item, 
-  professionalId 
+  item 
 }: PortfolioModalProps) {
   const [formData, setFormData] = useState({
     image_url: item?.image_url || '',
@@ -67,7 +66,7 @@ export default function PortfolioModal({
     onClose();
   };
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -157,9 +156,11 @@ export default function PortfolioModal({
                 className="w-full h-48 rounded-lg border-2 border-dashed flex items-center justify-center"
                 style={{borderColor: 'rgba(17, 75, 95, 0.3)'}}
               >
-                <img
+                <Image
                   src={formData.image_url}
                   alt="Preview"
+                  width={300}
+                  height={200}
                   className="max-w-full max-h-full object-contain rounded-lg"
                   onError={() => {
                     // If image fails to load, show placeholder

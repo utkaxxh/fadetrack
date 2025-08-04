@@ -85,7 +85,7 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: 'Service ID is required' });
   }
 
-  const updates: any = {};
+  const updates: Record<string, unknown> = {};
   if (name !== undefined) updates.name = name;
   if (description !== undefined) updates.description = description;
   if (price !== undefined) updates.price = price;

@@ -17,10 +17,9 @@ interface SearchFilters {
 interface EnhancedSearchProps {
   onSearch: (filters: SearchFilters) => void;
   initialFilters?: Partial<SearchFilters>;
-  isLoading?: boolean;
 }
 
-export default function EnhancedSearch({ onSearch, initialFilters = {}, isLoading = false }: EnhancedSearchProps) {
+export default function EnhancedSearch({ onSearch, initialFilters = {} }: EnhancedSearchProps) {
   const [filters, setFilters] = useState<SearchFilters>({
     searchTerm: '',
     profession: 'all',
@@ -68,7 +67,7 @@ export default function EnhancedSearch({ onSearch, initialFilters = {}, isLoadin
             lng: position.coords.longitude
           });
         },
-        (error) => {
+        () => {
           console.log('Location access denied or unavailable');
         }
       );
