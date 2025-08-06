@@ -67,9 +67,10 @@ interface Review {
 
 interface ProfessionalDashboardProps {
   user: User | null;
+  onSetupProfile?: () => void;
 }
 
-export default function ProfessionalDashboard({ user }: ProfessionalDashboardProps) {
+export default function ProfessionalDashboard({ user, onSetupProfile }: ProfessionalDashboardProps) {
   const [profile, setProfile] = useState<ProfessionalProfile | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -255,7 +256,14 @@ export default function ProfessionalDashboard({ user }: ProfessionalDashboardPro
           Complete your professional profile to start receiving reviews and growing your business.
         </p>
         <button
-          onClick={() => window.location.reload()} // This will trigger profile setup
+          onClick={() => {
+            console.log('🚀 Set Up Your Profile button clicked');
+            if (onSetupProfile) {
+              onSetupProfile();
+            } else {
+              console.warn('⚠️ onSetupProfile callback not provided');
+            }
+          }}
           className="px-6 py-3 font-semibold text-white rounded-lg transition-all duration-200"
           style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
         >

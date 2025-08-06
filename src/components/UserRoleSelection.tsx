@@ -4,7 +4,7 @@ import { UserRole } from '../hooks/useUserRole';
 interface UserRoleSelectionProps {
   currentRole: UserRole;
   onRoleUpdate: (role: UserRole) => Promise<boolean>;
-  onComplete: () => void;
+  onComplete: (selectedRole?: string) => void;
 }
 
 export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplete }: UserRoleSelectionProps) {
@@ -19,8 +19,8 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
     });
     
     if (selectedRole === currentRole) {
-      console.log('UserRoleSelection: Role unchanged, completing');
-      onComplete();
+      console.log('UserRoleSelection: Role unchanged, completing with selectedRole:', selectedRole);
+      onComplete(selectedRole);
       return;
     }
 
@@ -32,17 +32,15 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
     console.log('UserRoleSelection: Role update result:', success);
     
     if (success) {
-      console.log('UserRoleSelection: Success, completing');
-      onComplete();
+      console.log('UserRoleSelection: Success, completing with selectedRole:', selectedRole);
+      onComplete(selectedRole);
     } else {
       console.log('UserRoleSelection: Failed, setting error');
       setError('Failed to update your role. Please try again.');
     }
-    
-    setIsSubmitting(false);
-  };
 
-  return (
+    setIsSubmitting(false);
+  };  return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="p-8 rounded-lg max-w-md w-full mx-4" style={{backgroundColor: '#F7F0DE', border: '2px solid #114B5F'}}>
         <h2 className="text-2xl font-bold mb-6 text-center" style={{color: '#114B5F'}}>

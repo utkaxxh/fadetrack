@@ -97,16 +97,31 @@ export default function HomePage() {
     }
   }, [user, role, roleLoading]);
 
-  const handleRoleSelection = () => {
+  const handleRoleSelection = (selectedRole?: string) => {
+    console.log('🔄 handleRoleSelection called with selectedRole:', selectedRole);
+    console.log('🔄 Current role state:', role);
+    
     if (user?.email) {
       localStorage.setItem(`role-selected-${user.email}`, 'true');
     }
     setShowRoleSelection(false);
     
+    // Use the selectedRole parameter if provided, otherwise use the role state
+    const roleToCheck = selectedRole || role;
+    console.log('🔄 Role to check for professional setup:', roleToCheck);
+    
     // If they selected professional, show profile setup
-    if (role === 'professional') {
+    if (roleToCheck === 'professional') {
+      console.log('🚀 Setting showProfileSetup to true for professional role');
       setShowProfileSetup(true);
+    } else {
+      console.log('🔄 Not a professional role, roleToCheck:', roleToCheck);
     }
+  };
+
+  const handleOpenProfileSetup = () => {
+    console.log('🚀 handleOpenProfileSetup called - showing profile setup modal');
+    setShowProfileSetup(true);
   };
 
   const handleProfileSetupComplete = () => {
@@ -473,7 +488,7 @@ export default function HomePage() {
             {activeTab === 'reminders' && !isProfessional && <ReminderSettings user={user} />}
             {activeTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
             {activeTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
-            {activeTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} />}
+            {activeTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}
           </div>
         </div>
       </main>
