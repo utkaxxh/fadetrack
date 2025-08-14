@@ -89,7 +89,7 @@ export default function PortfolioModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div 
         className="rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-        style={{backgroundColor: '#F7F0DE', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+        style={{backgroundColor: '#f1f5f9', border: '1px solid rgba(17, 75, 95, 0.2)'}}
       >
         <div 
           className="flex items-center justify-between p-6"
@@ -119,9 +119,8 @@ export default function PortfolioModal({
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
                 style={{
-                  backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                   borderColor: 'rgba(17, 75, 95, 0.3)', 
                   color: '#114B5F'
                 }}
@@ -133,9 +132,8 @@ export default function PortfolioModal({
                 type="url"
                 value={formData.image_url}
                 onChange={(e) => handleChange('image_url', e.target.value)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
                 style={{
-                  backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                   borderColor: errors.image_url ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                   color: '#114B5F'
                 }}
@@ -178,9 +176,8 @@ export default function PortfolioModal({
               value={formData.caption}
               onChange={(e) => handleChange('caption', e.target.value)}
               rows={3}
-              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                 borderColor: errors.caption ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                 color: '#114B5F'
               }}
@@ -198,9 +195,8 @@ export default function PortfolioModal({
             <select
               value={formData.service_type}
               onChange={(e) => handleChange('service_type', e.target.value)}
-              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                 borderColor: 'rgba(17, 75, 95, 0.3)', 
                 color: '#114B5F'
               }}
@@ -219,7 +215,7 @@ export default function PortfolioModal({
               onClick={onClose}
               className="px-6 py-3 rounded-lg font-semibold transition-all duration-200"
               style={{
-                backgroundColor: 'rgba(17, 75, 95, 0.1)', 
+                backgroundColor: 'rgba(17, 75, 95, 0.08)', 
                 color: '#114B5F',
                 border: '1px solid rgba(17, 75, 95, 0.2)'
               }}
@@ -228,8 +224,7 @@ export default function PortfolioModal({
             </button>
             <button
               type="submit"
-              className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200"
-              style={{backgroundColor: '#114B5F'}}
+              className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 btn-primary-teal"
             >
               {item ? 'Update Item' : 'Add to Portfolio'}
             </button>

@@ -26,9 +26,9 @@ export default function ProfessionalProfilePage() {
   }
 
   return (
-    <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #F7F0DE, #faf5e4, #F7F0DE)'}}>
+    <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
+      <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(241, 245, 249, 0.85)', borderBottom: '1px solid rgba(17, 75, 95, 0.15)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center gap-3">
@@ -39,8 +39,7 @@ export default function ProfessionalProfilePage() {
             </Link>
             <Link 
               href="/login" 
-              className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-              style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
+              className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 btn-primary-teal"
             >
               Join Fadetrack
             </Link>
@@ -54,7 +53,7 @@ export default function ProfessionalProfilePage() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)', borderTop: '1px solid rgba(17, 75, 95, 0.2)'}}>
+      <footer className="mt-16" style={{backgroundColor: 'rgba(241, 245, 249, 0.75)', borderTop: '1px solid rgba(17, 75, 95, 0.15)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-sm flex items-center gap-1" style={{color: '#114B5F'}}>

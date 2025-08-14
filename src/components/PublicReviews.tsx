@@ -107,9 +107,8 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
               id="sort"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'newest' | 'rating' | 'oldest')}
-              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200"
+              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: '#F7F0DE',
                 color: '#114B5F',
                 borderColor: 'rgba(17, 75, 95, 0.3)',
               }}
@@ -127,9 +126,8 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
               id="filter"
               value={filterRating || ''}
               onChange={(e) => setFilterRating(e.target.value ? parseInt(e.target.value) : null)}
-              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200"
+              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: '#F7F0DE',
                 color: '#114B5F',
                 borderColor: 'rgba(17, 75, 95, 0.3)',
               }}
@@ -152,9 +150,8 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
               placeholder="Search locations..."
               value={filterLocation}
               onChange={(e) => setFilterLocation(e.target.value)}
-              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200 w-40"
+              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200 w-40 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: '#F7F0DE',
                 color: '#114B5F',
                 borderColor: 'rgba(17, 75, 95, 0.3)',
               }}
@@ -165,9 +162,8 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
               <select
                 value={filterLocation}
                 onChange={(e) => setFilterLocation(e.target.value)}
-                className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200"
+                className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200 bg-slate-100 focus:bg-white"
                 style={{
-                  backgroundColor: '#F7F0DE',
                   color: '#114B5F',
                   borderColor: 'rgba(17, 75, 95, 0.3)',
                 }}

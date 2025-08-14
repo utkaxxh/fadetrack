@@ -404,7 +404,7 @@ export default function HomePage() {
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
               Ready to Track Your Perfect Cut?
             </h2>
-            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#F7F0DE'}}>
+            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#114B5F'}}>
               Start your personalized haircut tracking journey today
             </p>
             <Link 
@@ -417,7 +417,7 @@ export default function HomePage() {
         </section>
 
         {/* Footer */}
-        <footer className="py-12" style={{backgroundColor: '#114B5F', color: '#F7F0DE'}}>
+        <footer className="py-12" style={{backgroundColor: '#114B5F', color: '#f1f5f9'}}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="flex items-center gap-3">
@@ -432,9 +432,9 @@ export default function HomePage() {
                 </span>
                 <span className="text-lg font-semibold">Fadetrack</span>
               </div>
-              <p className="text-sm flex items-center gap-1" style={{color: '#F7F0DE', opacity: 0.8}}>
+              <p className="text-sm flex items-center gap-1" style={{color: '#f1f5f9', opacity: 0.9}}>
                 Made with 
-                <span className="mx-1" style={{color: '#F7F0DE'}}>♥</span> 
+                <span className="mx-1" style={{color: '#f1f5f9'}}>♥</span> 
                 in San Francisco
               </p>
               <a 
@@ -442,7 +442,7 @@ export default function HomePage() {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm transition-colors duration-200"
-                style={{color: '#F7F0DE', opacity: 0.8}}
+                style={{color: '#f1f5f9', opacity: 0.9}}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>

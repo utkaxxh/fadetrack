@@ -3,9 +3,9 @@
   width: 100%;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  background-color: #F7F0DE;
+  background-color: #f1f5f9;
   color: #114B5F;
-  border: 1px solid #114B5F;
+  border: 1px solid rgba(17,75,95,0.4);
   transition: all 0.2s ease;
 }
 
@@ -74,7 +74,7 @@
 
 /* Custom gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #114B5F, #F7F0DE);
+  background: linear-gradient(135deg, #114B5F, #0d3a4a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -82,12 +82,12 @@
 
 /* Custom button hover effects */
 .btn-gradient {
-  background: linear-gradient(135deg, #114B5F, #F7F0DE);
+  background: linear-gradient(135deg, #114B5F, #0d3a4a);
   transition: all 0.3s ease;
 }
 
 .btn-gradient:hover {
-  background: linear-gradient(135deg, #0d3a4a, #f0e4c8);
+  background: linear-gradient(135deg, #0d3a4a, #114B5F);
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(17, 75, 95, 0.4);
 }

@@ -42,7 +42,7 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
     setIsSubmitting(false);
   };  return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="p-8 rounded-lg max-w-md w-full mx-4" style={{backgroundColor: '#F7F0DE', border: '2px solid #114B5F'}}>
+      <div className="p-8 rounded-lg max-w-md w-full mx-4" style={{backgroundColor: '#f1f5f9', border: '2px solid #114B5F'}}>
         <h2 className="text-2xl font-bold mb-6 text-center" style={{color: '#114B5F'}}>
           Choose Your Account Type
         </h2>

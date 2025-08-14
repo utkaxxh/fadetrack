@@ -89,7 +89,7 @@ export default function ServiceModal({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div 
         className="rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-        style={{backgroundColor: '#F7F0DE', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+        style={{backgroundColor: '#f1f5f9', border: '1px solid rgba(17, 75, 95, 0.2)'}}
       >
         <div 
           className="flex items-center justify-between p-6"
@@ -118,9 +118,8 @@ export default function ServiceModal({
               type="text"
               value={formData.service_name}
               onChange={(e) => handleChange('service_name', e.target.value)}
-              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                 borderColor: errors.service_name ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                 color: '#114B5F'
               }}
@@ -139,9 +138,8 @@ export default function ServiceModal({
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               rows={3}
-              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                 borderColor: errors.description ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                 color: '#114B5F'
               }}
@@ -163,9 +161,8 @@ export default function ServiceModal({
                 step="0.01"
                 value={formData.price_min}
                 onChange={(e) => handleChange('price_min', parseFloat(e.target.value) || 0)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
                 style={{
-                  backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                   borderColor: errors.price_min ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                   color: '#114B5F'
                 }}
@@ -185,9 +182,8 @@ export default function ServiceModal({
                 step="0.01"
                 value={formData.price_max}
                 onChange={(e) => handleChange('price_max', parseFloat(e.target.value) || 0)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
                 style={{
-                  backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                   borderColor: errors.price_max ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                   color: '#114B5F'
                 }}
@@ -207,9 +203,8 @@ export default function ServiceModal({
               min="1"
               value={formData.duration_minutes}
               onChange={(e) => handleChange('duration_minutes', parseInt(e.target.value) || 60)}
-              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
+              className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
               style={{
-                backgroundColor: 'rgba(247, 240, 222, 0.5)', 
                 borderColor: errors.duration_minutes ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                 color: '#114B5F'
               }}
@@ -238,7 +233,7 @@ export default function ServiceModal({
               onClick={onClose}
               className="px-6 py-3 rounded-lg font-semibold transition-all duration-200"
               style={{
-                backgroundColor: 'rgba(17, 75, 95, 0.1)', 
+                backgroundColor: 'rgba(17, 75, 95, 0.08)', 
                 color: '#114B5F',
                 border: '1px solid rgba(17, 75, 95, 0.2)'
               }}
@@ -247,8 +242,7 @@ export default function ServiceModal({
             </button>
             <button
               type="submit"
-              className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200"
-              style={{backgroundColor: '#114B5F'}}
+              className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 btn-primary-teal"
             >
               {service ? 'Update Service' : 'Add Service'}
             </button>

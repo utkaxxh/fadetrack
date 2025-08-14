@@ -163,7 +163,7 @@ export default function PublicProfessionalProfile({
             <span
               key={index}
               className="px-3 py-1 text-sm rounded-full"
-              style={{backgroundColor: '#F7F0DE', color: '#114B5F', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+              style={{backgroundColor: '#f1f5f9', color: '#114B5F', border: '1px solid rgba(17, 75, 95, 0.15)'}}
             >
               {specialty}
             </span>
@@ -306,7 +306,7 @@ export default function PublicProfessionalProfile({
               </div>
               <div className="p-4">
                 <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.caption}</p>
-                <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#F7F0DE', color: '#114B5F'}}>
+                <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}>
                   {item.service_type}
                 </span>
               </div>
@@ -355,7 +355,7 @@ export default function PublicProfessionalProfile({
                   </p>
                 </div>
                 {review.service_type && (
-                  <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#F7F0DE', color: '#114B5F'}}>
+                  <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}>
                     {review.service_type}
                   </span>
                 )}
@@ -365,7 +365,7 @@ export default function PublicProfessionalProfile({
               <p style={{color: '#114B5F'}} className="mb-4">{review.review_text}</p>
               
               {review.professional_response && (
-                <div className="p-4 rounded-lg" style={{backgroundColor: '#F7F0DE', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+                <div className="p-4 rounded-lg" style={{backgroundColor: '#f1f5f9', border: '1px solid rgba(17, 75, 95, 0.15)'}}>
                   <p className="text-sm font-semibold mb-2" style={{color: '#114B5F'}}>
                     Response from {profile.display_name}:
                   </p>

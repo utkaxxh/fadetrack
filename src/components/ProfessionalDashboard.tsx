@@ -403,7 +403,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           <button
             onClick={() => setActiveSection('profile')}
             className="p-4 rounded-lg transition-all duration-200 text-left"
-            style={{backgroundColor: '#F7F0DE', border: '1px solid #114B5F'}}
+            style={{backgroundColor: '#f1f5f9', border: '1px solid #114B5F'}}
           >
             <h4 className="font-semibold" style={{color: '#114B5F'}}>Edit Profile</h4>
             <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>Update your business information</p>
@@ -412,7 +412,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           <button
             onClick={() => setActiveSection('services')}
             className="p-4 rounded-lg transition-all duration-200 text-left"
-            style={{backgroundColor: '#F7F0DE', border: '1px solid #114B5F'}}
+            style={{backgroundColor: '#f1f5f9', border: '1px solid #114B5F'}}
           >
             <h4 className="font-semibold" style={{color: '#114B5F'}}>Manage Services</h4>
             <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>Add or update your offerings</p>
@@ -421,7 +421,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           <button
             onClick={() => setActiveSection('portfolio')}
             className="p-4 rounded-lg transition-all duration-200 text-left"
-            style={{backgroundColor: '#F7F0DE', border: '1px solid #114B5F'}}
+            style={{backgroundColor: '#f1f5f9', border: '1px solid #114B5F'}}
           >
             <h4 className="font-semibold" style={{color: '#114B5F'}}>Portfolio</h4>
             <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>Showcase your work</p>
@@ -430,7 +430,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           <button
             onClick={() => setActiveSection('reviews')}
             className="p-4 rounded-lg transition-all duration-200 text-left"
-            style={{backgroundColor: '#F7F0DE', border: '1px solid #114B5F'}}
+            style={{backgroundColor: '#f1f5f9', border: '1px solid #114B5F'}}
           >
             <h4 className="font-semibold" style={{color: '#114B5F'}}>Reviews</h4>
             <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>View and respond to reviews</p>
@@ -530,7 +530,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('business_name', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 />
               </div>
               
@@ -542,7 +542,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('display_name', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 />
               </div>
               
@@ -553,7 +553,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('profession_type', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 >
                   <option value="barber">Barber</option>
                   <option value="beautician">Beautician</option>
@@ -572,7 +572,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   min="1"
                   max="50"
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 />
               </div>
               
@@ -584,7 +584,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   disabled={!isEditingProfile}
                   rows={4}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="Tell customers about yourself and your experience..."
                 />
               </div>
@@ -604,7 +604,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('phone', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="(555) 123-4567"
                 />
               </div>
@@ -617,7 +617,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('address', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="123 Main St"
                 />
               </div>
@@ -631,7 +631,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                     onChange={(e) => handleProfileInputChange('city', e.target.value)}
                     disabled={!isEditingProfile}
                     className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                     placeholder="San Francisco"
                   />
                 </div>
@@ -643,7 +643,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                     onChange={(e) => handleProfileInputChange('state', e.target.value)}
                     disabled={!isEditingProfile}
                     className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                     placeholder="CA"
                   />
                 </div>
@@ -657,7 +657,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('zip_code', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="94102"
                 />
               </div>
@@ -670,7 +670,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('instagram', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="@yourusername"
                 />
               </div>
@@ -683,7 +683,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   onChange={(e) => handleProfileInputChange('website', e.target.value)}
                   disabled={!isEditingProfile}
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="https://yourwebsite.com"
                 />
               </div>
@@ -729,7 +729,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                       setShowServiceModal(true);
                     }}
                     className="text-sm px-3 py-1 rounded" 
-                    style={{backgroundColor: '#F7F0DE', color: '#114B5F'}}
+                    style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}
                   >
                     Edit
                   </button>
@@ -816,7 +816,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
               <div className="p-4">
                 <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.caption}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#F7F0DE', color: '#114B5F'}}>
+                  <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}>
                     {item.service_type}
                   </span>
                   <button 
@@ -894,7 +894,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
               <p style={{color: '#114B5F'}} className="mb-4">{review.review_text}</p>
               
               {review.professional_response ? (
-                <div className="p-4 rounded-lg" style={{backgroundColor: '#F7F0DE', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+                <div className="p-4 rounded-lg" style={{backgroundColor: '#f1f5f9', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
                   <p className="text-sm font-semibold mb-2" style={{color: '#114B5F'}}>Your Response:</p>
                   <p style={{color: '#114B5F'}} className="text-sm">{review.professional_response}</p>
                   <p style={{color: '#114B5F', opacity: 0.6}} className="text-xs mt-2">
@@ -906,8 +906,8 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   <input
                     type="text"
                     placeholder="Write a response..."
-                    className="flex-1 p-3 rounded-lg border focus:outline-none focus:ring-2"
-                    style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    className="flex-1 p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
+                    style={{borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                     onKeyPress={(e) => {
                       if (e.key === 'Enter') {
                         const target = e.target as HTMLInputElement;
