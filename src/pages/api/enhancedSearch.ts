@@ -6,29 +6,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// Haversine formula to calculate distance between two points
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 3959; // Earth's radius in miles
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-
-function matchesPriceRange(priceRange: string, servicePrice: number): boolean {
-  switch (priceRange) {
-    case 'budget': return servicePrice >= 20 && servicePrice <= 40;
-    case 'mid': return servicePrice >= 40 && servicePrice <= 80;
-    case 'premium': return servicePrice >= 80 && servicePrice <= 120;
-    case 'luxury': return servicePrice >= 120;
-    default: return true;
-  }
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
@@ -44,9 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     rating = '0',
     distance = '25',
     availability = 'all',
-    sortBy = 'rating',
-    userLat,
-    userLng
+    sortBy = 'rating'
   } = req.query;
 
   try {
@@ -138,7 +113,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Add distance property to professionals (set to null for now)
     type ProfessionalWithDistance = typeof filteredProfessionals[0] & { distance?: number | null };
-    let professionalsWithDistance: ProfessionalWithDistance[] = filteredProfessionals.map(prof => ({
+    const professionalsWithDistance: ProfessionalWithDistance[] = filteredProfessionals.map(prof => ({
       ...prof,
       distance: null // No distance calculation without coordinates
     }));

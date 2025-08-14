@@ -42,7 +42,7 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
 
   useEffect(() => {
     onSearch(filters);
-  }, [filters]); // Remove onSearch from dependencies to prevent infinite loop
+  }, [filters, onSearch]);
 
   const fetchSpecialties = async () => {
     try {
