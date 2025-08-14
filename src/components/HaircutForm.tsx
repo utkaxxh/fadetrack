@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
 import confetti from 'canvas-confetti';
-import LocationAutocomplete, { LocationData } from './LocationAutocomplete';
+import LocationAutocompleteDebug, { LocationData } from './LocationAutocompleteDebug';
 
 import type { Haircut } from '../app/page';
 import type { User } from '@supabase/supabase-js';
@@ -203,11 +203,11 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
           <label htmlFor="location" className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
             Location
           </label>
-          <LocationAutocomplete
+          <LocationAutocompleteDebug
             id="location"
             name="location" 
             value={form.location} 
-            onChange={(value, data) => {
+            onChange={(value: string, data?: LocationData) => {
               setForm({ ...form, location: value });
               setLocationData(data || null);
             }}
@@ -219,8 +219,8 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
               color: '#114B5F',
               borderColor: 'rgba(17, 75, 95, 0.3)',
             }}
-            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
-            onBlur={(e) => e.target.style.boxShadow = 'none'}
+            onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
+            onBlur={(e: React.FocusEvent<HTMLInputElement>) => e.target.style.boxShadow = 'none'}
           />
         </div>
 

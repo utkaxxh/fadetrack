@@ -16,6 +16,7 @@ import PublicReviews from '../components/PublicReviews';
 import UserRoleSelection from '../components/UserRoleSelection';
 import ProfessionalProfileSetup from '../components/ProfessionalProfileSetup';
 import ProfessionalDashboard from '../components/ProfessionalDashboard';
+import GoogleMapsEnvCheck from '../components/GoogleMapsEnvCheck';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 import { useUserRole } from '../hooks/useUserRole';
 
@@ -480,6 +481,11 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Google Maps Debug Info */}
+        <div className="mb-6">
+          <GoogleMapsEnvCheck />
+        </div>
+        
         <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} userRole={role} />
           <div className="p-6" style={{backgroundColor: 'rgba(247, 240, 222, 0.3)'}}>
