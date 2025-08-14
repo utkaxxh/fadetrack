@@ -259,16 +259,14 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-logo-new.svg" 
-                    alt="Fadetrack Logo" 
-                    width={56} 
-                    height={32}
-                    className="logo-img transition-transform hover:scale-105"
+                    src="/fadetrack-wordmark.svg" 
+                    alt="Fadetrack Wordmark" 
+                    width={160} 
+                    height={40}
+                    priority
+                    className="logo-img transition-transform hover:scale-[1.02]"
                   />
                 </span>
-                <h1 className="text-2xl font-bold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
-                  Fadetrack
-                </h1>
               </div>
               <div className="flex items-center gap-6">
                 <Link 
@@ -423,14 +421,13 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-logo-new.svg" 
-                    alt="Fadetrack Logo" 
-                    width={42} 
-                    height={24}
+                    src="/fadetrack-wordmark.svg" 
+                    alt="Fadetrack Wordmark" 
+                    width={140} 
+                    height={36}
                     className="logo-img"
                   />
                 </span>
-                <span className="text-lg font-semibold">Fadetrack</span>
               </div>
               <p className="text-sm flex items-center gap-1" style={{color: '#f1f5f9', opacity: 0.9}}>
                 Made with 
@@ -464,14 +461,13 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <span className="logo-wrapper">
                 <Image 
-                  src="/fadetrack-logo-new.svg" 
-                  alt="Fadetrack Logo" 
-                  width={56} 
-                  height={32}
-                  className="logo-img transition-transform hover:scale-105"
+                  src="/fadetrack-wordmark.svg" 
+                  alt="Fadetrack Wordmark" 
+                  width={140} 
+                  height={36}
+                  className="logo-img transition-transform hover:scale-[1.02]"
                 />
               </span>
-              <h1 className="text-2xl font-semibold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Fadetrack</h1>
             </div>
             <div className="flex items-center gap-3">
               <AccountDropdown user={user} onAccountSettings={handleOpenAccountSettings} />
