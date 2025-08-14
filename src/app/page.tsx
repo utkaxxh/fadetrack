@@ -259,10 +259,10 @@ export default function HomePage() {
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center gap-3">
                 <Image 
-                  src="/fadetrack-logo.svg" 
+                  src="/fadetrack-logo-new.jpg" 
                   alt="Fadetrack Logo" 
-                  width={32} 
-                  height={32}
+                  width={40} 
+                  height={23}
                   className="transition-transform hover:scale-105"
                 />
                 <h1 className="text-2xl font-bold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
@@ -425,10 +425,10 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="flex items-center gap-3">
                 <Image 
-                  src="/fadetrack-logo.svg" 
+                  src="/fadetrack-logo-new.jpg" 
                   alt="Fadetrack Logo" 
-                  width={24} 
-                  height={24}
+                  width={32} 
+                  height={18}
                 />
                 <span className="text-lg font-semibold">Fadetrack</span>
               </div>
@@ -463,10 +463,10 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
               <Image 
-                src="/fadetrack-logo.svg" 
+                src="/fadetrack-logo-new.jpg" 
                 alt="Fadetrack Logo" 
-                width={32} 
-                height={32}
+                width={40} 
+                height={23}
                 className="transition-transform hover:scale-105"
               />
               <h1 className="text-2xl font-semibold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Fadetrack</h1>
