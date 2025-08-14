@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -258,13 +257,15 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center gap-3">
-                <Image 
-                  src="/fadetrack-logo-new.jpg" 
-                  alt="Fadetrack Logo" 
-                  width={56} 
-                  height={32}
-                  className="transition-transform hover:scale-105"
-                />
+                <span className="logo-wrapper">
+                  <Image 
+                    src="/fadetrack-logo-new.jpg" 
+                    alt="Fadetrack Logo" 
+                    width={56} 
+                    height={32}
+                    className="logo-img transition-transform hover:scale-105"
+                  />
+                </span>
                 <h1 className="text-2xl font-bold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
                   Fadetrack
                 </h1>
@@ -279,8 +280,7 @@ export default function HomePage() {
                 </Link>
                 <Link 
                   href="/login" 
-                  className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-                  style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
+                  className="btn-primary-teal px-6 py-2.5 text-sm font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
                 >
                   Get Started
                 </Link>
@@ -306,15 +306,13 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link 
                   href="/login" 
-                  className="px-8 py-4 text-lg font-semibold text-white rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105"
-                  style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', boxShadow: '0 25px 50px -12px rgba(17, 75, 95, 0.25)'}}
+                  className="btn-primary-teal px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
                 >
                   Start Tracking Free
                 </Link>
                 <Link 
                   href="/directory" 
-                  className="px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
-                  style={{color: '#114B5F', backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+                  className="btn-secondary-light px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/30"
                 >
                   Find Professionals
                 </Link>
@@ -411,8 +409,7 @@ export default function HomePage() {
             </p>
             <Link 
               href="/login" 
-              className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105"
-              style={{color: '#114B5F', backgroundColor: '#f8fafc'}}
+              className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105 btn-secondary-light focus:outline-none focus:ring-2 focus:ring-teal-500/40"
             >
               Get Started for Free
             </Link>
@@ -424,12 +421,15 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="flex items-center gap-3">
-                <Image 
-                  src="/fadetrack-logo-new.jpg" 
-                  alt="Fadetrack Logo" 
-                  width={42} 
-                  height={24}
-                />
+                <span className="logo-wrapper">
+                  <Image 
+                    src="/fadetrack-logo-new.jpg" 
+                    alt="Fadetrack Logo" 
+                    width={42} 
+                    height={24}
+                    className="logo-img"
+                  />
+                </span>
                 <span className="text-lg font-semibold">Fadetrack</span>
               </div>
               <p className="text-sm flex items-center gap-1" style={{color: '#F7F0DE', opacity: 0.8}}>
@@ -462,13 +462,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <Image 
-                src="/fadetrack-logo-new.jpg" 
-                alt="Fadetrack Logo" 
-                width={56} 
-                height={32}
-                className="transition-transform hover:scale-105"
-              />
+              <span className="logo-wrapper">
+                <Image 
+                  src="/fadetrack-logo-new.jpg" 
+                  alt="Fadetrack Logo" 
+                  width={56} 
+                  height={32}
+                  className="logo-img transition-transform hover:scale-105"
+                />
+              </span>
               <h1 className="text-2xl font-semibold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Fadetrack</h1>
             </div>
             <div className="flex items-center gap-3">
