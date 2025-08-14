@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await supabaseAdmin.rpc('create_user_roles_table_if_not_exists');
       } catch (error) {
         // Ignore error if function doesn't exist, we'll handle table creation differently
-        console.log('userRole API: Note - create_user_roles_table_if_not_exists function not available');
+        console.log('userRole API: Note - create_user_roles_table_if_not_exists function not available:', error);
       }
 
       console.log('userRole API: Checking for existing role');

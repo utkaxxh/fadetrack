@@ -27,9 +27,9 @@ export default function GoogleMapsEnvCheck() {
           <ul className="list-disc list-inside mt-2 space-y-1">
             <li><strong>Production:</strong> Ensure NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is set in Vercel/deployment environment</li>
             <li><strong>API Restrictions:</strong> In Google Console, ensure your domain is allowed</li>
-            <li><strong>APIs Enabled:</strong> Enable "Places API" and "Maps JavaScript API"</li>
+            <li><strong>APIs Enabled:</strong> Enable &quot;Places API&quot; and &quot;Maps JavaScript API&quot;</li>
             <li><strong>Billing:</strong> Ensure billing is enabled for your Google Cloud project</li>
-            <li><strong>Quotas:</strong> Check you haven't exceeded daily limits</li>
+            <li><strong>Quotas:</strong> Check you haven&apos;t exceeded daily limits</li>
           </ul>
         </div>
         
