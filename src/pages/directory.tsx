@@ -53,17 +53,24 @@ export default function ProfessionalDirectory() {
       });
 
       const response = await fetch(`/api/enhancedSearch?${queryParams.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
-      if (response.ok) {
-        setSearchResults(data.professionals || []);
-        setTotalResults(data.total || 0);
-      } else {
-        setError(data.error || 'Failed to search professionals');
+      if (data.error) {
+        throw new Error(data.error);
       }
+      
+      setSearchResults(data.professionals || []);
+      setTotalResults(data.total || 0);
     } catch (err) {
       console.error('Error searching professionals:', err);
-      setError('Failed to search professionals');
+      setError(err instanceof Error ? err.message : 'Failed to search professionals');
+      setSearchResults([]);
+      setTotalResults(0);
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +78,7 @@ export default function ProfessionalDirectory() {
 
   // Initialize with basic search
   useEffect(() => {
-    handleSearch({
+    const initialFilters = {
       searchTerm: '',
       profession: 'all',
       location: '',
@@ -81,10 +88,12 @@ export default function ProfessionalDirectory() {
       distance: '25',
       availability: 'all',
       sortBy: 'rating'
-    });
+    };
+    handleSearch(initialFilters);
   }, [handleSearch]);
 
-  if (isLoading && searchResults.length === 0) {
+  // Show loading only on initial load
+  if (isLoading && searchResults.length === 0 && totalResults === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Animated Background */}
