@@ -61,20 +61,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         bio,
         city,
         state,
-        latitude,
-        longitude,
         specialties,
         average_rating,
         total_reviews,
         years_experience,
         is_verified,
-        profile_image,
-        professional_services:professional_services!professional_id (
-          price,
-          is_active
-        )
-      `)
-      .eq('is_active', true);
+        profile_image
+      `);
 
     // Apply profession filter
     if (profession !== 'all') {
@@ -128,37 +121,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
     }
 
-    // Apply price range filter
-    if (priceRange !== 'all') {
-      filteredProfessionals = filteredProfessionals.filter(prof => {
-        if (!prof.professional_services || prof.professional_services.length === 0) return false;
-        return prof.professional_services.some((service: { price: number, is_active: boolean }) => 
-          service.is_active && matchesPriceRange(priceRange as string, service.price)
-        );
-      });
-    }
+    // Apply price range filter - skip for now since we don't have services data
+    // if (priceRange !== 'all') {
+    //   filteredProfessionals = filteredProfessionals.filter(prof => {
+    //     if (!prof.professional_services || prof.professional_services.length === 0) return false;
+    //     return prof.professional_services.some((service: { price: number, is_active: boolean }) => 
+    //       service.is_active && matchesPriceRange(priceRange as string, service.price)
+    //     );
+    //   });
+    // }
 
-    // Calculate distances if user location is provided
-    const userLatNum = userLat ? parseFloat(userLat as string) : null;
-    const userLngNum = userLng ? parseFloat(userLng as string) : null;
-    const maxDistance = parseFloat(distance as string);
+    // Calculate distances - skip for now since we don't have lat/lng data
+    // const userLatNum = userLat ? parseFloat(userLat as string) : null;
+    // const userLngNum = userLng ? parseFloat(userLng as string) : null;
+    // const maxDistance = parseFloat(distance as string);
 
-    // Add distance property to professionals
+    // Add distance property to professionals (set to null for now)
     type ProfessionalWithDistance = typeof filteredProfessionals[0] & { distance?: number | null };
-    let professionalsWithDistance: ProfessionalWithDistance[] = filteredProfessionals;
-
-    if (userLatNum && userLngNum) {
-      professionalsWithDistance = filteredProfessionals.map(prof => ({
-        ...prof,
-        distance: prof.latitude && prof.longitude 
-          ? calculateDistance(userLatNum, userLngNum, prof.latitude, prof.longitude)
-          : null
-      })).filter(prof => 
-        location === 'near_me' 
-          ? prof.distance !== null && prof.distance <= maxDistance
-          : true
-      );
-    }
+    let professionalsWithDistance: ProfessionalWithDistance[] = filteredProfessionals.map(prof => ({
+      ...prof,
+      distance: null // No distance calculation without coordinates
+    }));
 
     // Apply sorting
     professionalsWithDistance.sort((a, b) => {
@@ -210,7 +193,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         specialty,
         priceRange,
         rating: minRating,
-        distance: maxDistance,
+        distance: parseFloat(distance as string),
         availability,
         sortBy
       }
