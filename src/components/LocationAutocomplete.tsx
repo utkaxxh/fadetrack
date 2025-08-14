@@ -57,11 +57,23 @@ export default function LocationAutocomplete({
 
         if (!inputRef.current) return;
 
+        // Add global error handler for Google Maps
+        (window as Window & { gm_authFailure?: () => void }).gm_authFailure = () => {
+          console.warn('Google Maps authentication failed');
+          setLoadingError('Google Maps authentication failed');
+        };
+
         // Initialize the autocomplete
         autocompleteRef.current = new google.maps.places.Autocomplete(inputRef.current, {
           types: ['(cities)'],
           fields: ['address_components', 'formatted_address', 'place_id', 'name']
         });
+
+        // Style the autocomplete dropdown
+        const pacContainer = document.querySelector('.pac-container');
+        if (pacContainer) {
+          (pacContainer as HTMLElement).style.zIndex = '9999';
+        }
 
         // Listen for place selection
         autocompleteRef.current.addListener('place_changed', () => {
@@ -105,7 +117,8 @@ export default function LocationAutocomplete({
         setIsLoading(false);
       } catch (error) {
         console.error('Error loading Google Places API:', error);
-        setLoadingError('Failed to load location suggestions');
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load location suggestions';
+        setLoadingError(errorMessage);
         setIsLoading(false);
       }
     };
@@ -114,6 +127,31 @@ export default function LocationAutocomplete({
     if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
       setLoadingError('Google Maps API key not configured');
       return;
+    }
+
+    // Add global CSS for Google Places autocomplete
+    if (!document.getElementById('google-places-styles')) {
+      const style = document.createElement('style');
+      style.id = 'google-places-styles';
+      style.textContent = `
+        .pac-container {
+          z-index: 9999 !important;
+          border-radius: 8px !important;
+          border: 1px solid #e2e8f0 !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        }
+        .pac-item {
+          border-top: 1px solid #f1f5f9 !important;
+          padding: 8px 16px !important;
+        }
+        .pac-item:hover {
+          background-color: #f8fafc !important;
+        }
+        .pac-item:first-child {
+          border-top: none !important;
+        }
+      `;
+      document.head.appendChild(style);
     }
 
     initializeAutocomplete();
@@ -127,7 +165,13 @@ export default function LocationAutocomplete({
   }, [onChange]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
+    const newValue = e.target.value;
+    onChange(newValue);
+    
+    // Clear error when user starts typing
+    if (newValue && loadingError) {
+      setLoadingError(null);
+    }
   };
 
   return (
@@ -146,10 +190,12 @@ export default function LocationAutocomplete({
         onFocus={onFocus}
         onBlur={onBlur}
         disabled={isLoading}
+        autoComplete="off"
+        spellCheck="false"
       />
       
-      {loadingError && (
-        <div className="absolute top-full left-0 mt-1 p-2 bg-red-100 border border-red-300 rounded text-red-700 text-xs z-10">
+      {loadingError && value && (
+        <div className="absolute top-full left-0 mt-1 p-2 bg-red-100 border border-red-300 rounded text-red-700 text-xs z-10 max-w-xs">
           {loadingError}
         </div>
       )}
