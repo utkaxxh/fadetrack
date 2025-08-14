@@ -259,7 +259,7 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-logo-new.jpg" 
+                    src="/fadetrack-logo-new.svg" 
                     alt="Fadetrack Logo" 
                     width={56} 
                     height={32}
@@ -423,7 +423,7 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-logo-new.jpg" 
+                    src="/fadetrack-logo-new.svg" 
                     alt="Fadetrack Logo" 
                     width={42} 
                     height={24}
@@ -464,7 +464,7 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <span className="logo-wrapper">
                 <Image 
-                  src="/fadetrack-logo-new.jpg" 
+                  src="/fadetrack-logo-new.svg" 
                   alt="Fadetrack Logo" 
                   width={56} 
                   height={32}
