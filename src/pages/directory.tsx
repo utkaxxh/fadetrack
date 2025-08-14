@@ -141,10 +141,32 @@ export default function ProfessionalDirectory() {
             <p className="text-red-600">{error}</p>
           </div>
         ) : searchResults.length === 0 && !isLoading ? (
-          <div className="text-center py-8">
-            <p style={{color: '#114B5F', opacity: 0.8}}>
-              No professionals found matching your criteria.
-            </p>
+          <div className="text-center py-16">
+            <div className="max-w-md mx-auto">
+              <div className="text-6xl mb-6">🚀</div>
+              <h3 className="text-2xl font-bold mb-4" style={{color: '#114B5F'}}>
+                Coming Soon!
+              </h3>
+              <p className="text-lg mb-6" style={{color: '#114B5F', opacity: 0.8}}>
+                We're working hard to bring amazing professionals to your area. 
+                Professional barbers and stylists can join our platform soon!
+              </p>
+              <div className="bg-white rounded-lg p-6 shadow-sm" style={{border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+                <h4 className="font-semibold mb-2" style={{color: '#114B5F'}}>
+                  Are you a professional?
+                </h4>
+                <p className="text-sm mb-4" style={{color: '#114B5F', opacity: 0.7}}>
+                  Get notified when we launch professional profiles in your area.
+                </p>
+                <Link 
+                  href="/login" 
+                  className="inline-block px-6 py-2 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}
+                >
+                  Join as Professional
+                </Link>
+              </div>
+            </div>
           </div>
         ) : (
           <div>

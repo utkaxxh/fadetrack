@@ -35,11 +35,9 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [specialties, setSpecialties] = useState<string[]>([]);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     fetchSpecialties();
-    requestLocation();
   }, []);
 
   useEffect(() => {
@@ -55,22 +53,6 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
       }
     } catch (err) {
       console.error('Error fetching specialties:', err);
-    }
-  };
-
-  const requestLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        () => {
-          console.log('Location access denied or unavailable');
-        }
-      );
     }
   };
 
@@ -168,15 +150,6 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            {userLocation && (
-              <button
-                onClick={() => handleFilterChange('location', 'near_me')}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs px-2 py-1 rounded"
-                style={{backgroundColor: 'rgba(17, 75, 95, 0.1)', color: '#114B5F'}}
-              >
-                Near me
-              </button>
-            )}
           </div>
         </div>
 
@@ -328,30 +301,6 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
                 <span>5★</span>
               </div>
             </div>
-
-            {userLocation && (
-              <div>
-                <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
-                  Distance: {filters.distance} miles
-                </label>
-                <input
-                  type="range"
-                  min="1"
-                  max="100"
-                  step="1"
-                  value={filters.distance}
-                  onChange={(e) => handleFilterChange('distance', parseInt(e.target.value))}
-                  className="w-full"
-                  style={{accentColor: '#114B5F'}}
-                />
-                <div className="flex justify-between text-xs mt-1" style={{color: '#114B5F', opacity: 0.6}}>
-                  <span>1 mi</span>
-                  <span>25 mi</span>
-                  <span>50 mi</span>
-                  <span>100 mi</span>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}

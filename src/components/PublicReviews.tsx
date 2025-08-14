@@ -100,15 +100,21 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
   return (
     <div className="max-w-4xl mx-auto">
       {/* Filters and Sort */}
-      <div className="mb-6 flex flex-wrap gap-4 items-center justify-between">
-        <div className="flex flex-wrap gap-4">
+      <div className="mb-6 p-4 rounded-lg" style={{backgroundColor: 'rgba(17, 75, 95, 0.05)', border: '1px solid rgba(17, 75, 95, 0.1)'}}>
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <div>
-            <label htmlFor="sort" className="text-sm font-medium text-gray-700 mr-2">Sort by:</label>
             <select
               id="sort"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'newest' | 'rating' | 'oldest')}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200"
+              style={{
+                backgroundColor: '#F7F0DE',
+                color: '#114B5F',
+                borderColor: 'rgba(17, 75, 95, 0.3)',
+              }}
+              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
+              onBlur={(e) => e.target.style.boxShadow = 'none'}
             >
               <option value="newest">Newest First</option>
               <option value="rating">Highest Rated</option>
@@ -117,12 +123,18 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
           </div>
           
           <div>
-            <label htmlFor="filter" className="text-sm font-medium text-gray-700 mr-2">Filter by rating:</label>
             <select
               id="filter"
               value={filterRating || ''}
               onChange={(e) => setFilterRating(e.target.value ? parseInt(e.target.value) : null)}
-              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200"
+              style={{
+                backgroundColor: '#F7F0DE',
+                color: '#114B5F',
+                borderColor: 'rgba(17, 75, 95, 0.3)',
+              }}
+              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
+              onBlur={(e) => e.target.style.boxShadow = 'none'}
             >
               <option value="">All Ratings</option>
               <option value="5">5 Stars</option>
@@ -133,36 +145,47 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
             </select>
           </div>
 
-          <div>
-            <label htmlFor="location-filter" className="text-sm font-medium text-gray-700 mr-2">Filter by location:</label>
-            <div className="flex gap-2">
-              <input
-                id="location-filter"
-                type="text"
-                placeholder="Search locations..."
+          <div className="flex gap-2">
+            <input
+              id="location-filter"
+              type="text"
+              placeholder="Search locations..."
+              value={filterLocation}
+              onChange={(e) => setFilterLocation(e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200 w-40"
+              style={{
+                backgroundColor: '#F7F0DE',
+                color: '#114B5F',
+                borderColor: 'rgba(17, 75, 95, 0.3)',
+              }}
+              onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
+              onBlur={(e) => e.target.style.boxShadow = 'none'}
+            />
+            {uniqueLocations.length > 0 && (
+              <select
                 value={filterLocation}
                 onChange={(e) => setFilterLocation(e.target.value)}
-                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-40"
-              />
-              {uniqueLocations.length > 0 && (
-                <select
-                  value={filterLocation}
-                  onChange={(e) => setFilterLocation(e.target.value)}
-                  className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">All Locations</option>
-                  {uniqueLocations.map((location) => (
-                    <option key={location} value={location}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
+                className="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 transition-all duration-200"
+                style={{
+                  backgroundColor: '#F7F0DE',
+                  color: '#114B5F',
+                  borderColor: 'rgba(17, 75, 95, 0.3)',
+                }}
+                onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
+              >
+                <option value="">All Locations</option>
+                {uniqueLocations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
         
-        <div className="text-sm text-gray-600">
+        <div className="text-sm mt-3" style={{color: '#114B5F'}}>
           {filteredAndSortedReviews.length} review{filteredAndSortedReviews.length !== 1 ? 's' : ''}
         </div>
       </div>
