@@ -107,11 +107,17 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-8" style={{border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+    <div className="p-8">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Find Your Perfect Match</h2>
+        <p className="text-gray-600">Search and filter to discover the best professionals for you</p>
+      </div>
+
       {/* Basic Search Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+          <label className="block text-sm font-semibold text-gray-700 mb-3">
             Search Professionals
           </label>
           <div className="relative">
@@ -120,11 +126,10 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
               value={filters.searchTerm}
               onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
               placeholder="Search by name, business, or specialty..."
-              className="w-full p-3 pl-10 rounded-lg border focus:outline-none focus:ring-2"
-              style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+              className="w-full p-4 pl-12 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white"
             />
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <svg className="w-5 h-5" style={{color: '#114B5F', opacity: 0.5}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -132,7 +137,7 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
         </div>
         
         <div>
-          <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+          <label className="block text-sm font-semibold text-gray-700 mb-3">
             Location
           </label>
           <div className="relative">
@@ -141,11 +146,10 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
               value={filters.location}
               onChange={(e) => handleFilterChange('location', e.target.value)}
               placeholder="City, State or ZIP"
-              className="w-full p-3 pl-10 rounded-lg border focus:outline-none focus:ring-2"
-              style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+              className="w-full p-4 pl-12 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 placeholder-gray-500 bg-gray-50 focus:bg-white"
             />
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-              <svg className="w-5 h-5" style={{color: '#114B5F', opacity: 0.5}} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -154,14 +158,13 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+          <label className="block text-sm font-semibold text-gray-700 mb-3">
             Sort By
           </label>
           <select
             value={filters.sortBy}
             onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-            className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-            style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+            className="w-full p-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 bg-gray-50 focus:bg-white"
           >
             {sortOptions.map(option => (
               <option key={option.value} value={option.value}>
@@ -173,15 +176,14 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
       </div>
 
       {/* Advanced Filters Toggle */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center border-t border-gray-200 pt-6">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center gap-2 text-sm font-medium transition-colors duration-200"
-          style={{color: '#114B5F'}}
+          className="flex items-center gap-3 text-gray-700 hover:text-gray-900 transition-colors duration-200 group"
         >
-          <span>Advanced Filters</span>
+          <span className="font-semibold">Advanced Filters</span>
           <svg 
-            className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} 
+            className={`w-5 h-5 transition-transform duration-300 group-hover:scale-110 ${isExpanded ? 'rotate-180' : ''}`} 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -192,8 +194,7 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
         
         <button
           onClick={clearFilters}
-          className="text-sm font-medium transition-colors duration-200"
-          style={{color: '#114B5F', opacity: 0.8}}
+          className="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 font-medium"
         >
           Clear All
         </button>
@@ -201,17 +202,16 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
 
       {/* Advanced Filters */}
       {isExpanded && (
-        <div className="mt-6 pt-6 border-t" style={{borderColor: 'rgba(17, 75, 95, 0.2)'}}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mt-8 pt-8 border-t border-gray-200 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Profession Type
               </label>
               <select
                 value={filters.profession}
                 onChange={(e) => handleFilterChange('profession', e.target.value)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                className="w-full p-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 bg-gray-50 focus:bg-white"
               >
                 {professionTypes.map(type => (
                   <option key={type.value} value={type.value}>
@@ -222,14 +222,13 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Specialty
               </label>
               <select
                 value={filters.specialty}
                 onChange={(e) => handleFilterChange('specialty', e.target.value)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                className="w-full p-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 bg-gray-50 focus:bg-white"
               >
                 <option value="all">All Specialties</option>
                 {specialties.map(specialty => (
@@ -241,14 +240,13 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Price Range
               </label>
               <select
                 value={filters.priceRange}
                 onChange={(e) => handleFilterChange('priceRange', e.target.value)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                className="w-full p-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 bg-gray-50 focus:bg-white"
               >
                 {priceRanges.map(range => (
                   <option key={range.value} value={range.value}>
@@ -259,14 +257,13 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
                 Availability
               </label>
               <select
                 value={filters.availability}
                 onChange={(e) => handleFilterChange('availability', e.target.value)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                className="w-full p-4 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 text-gray-900 bg-gray-50 focus:bg-white"
               >
                 {availabilityOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -277,28 +274,32 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
-                Minimum Rating: {parseFloat(filters.rating) > 0 ? `${filters.rating}+ stars` : 'Any'}
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+            <div className="bg-gray-50 rounded-xl p-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-4">
+                Minimum Rating: {parseFloat(filters.rating) > 0 ? `${filters.rating}+ stars` : 'Any Rating'}
               </label>
-              <input
-                type="range"
-                min="0"
-                max="5"
-                step="0.5"
-                value={filters.rating}
-                onChange={(e) => handleFilterChange('rating', parseFloat(e.target.value))}
-                className="w-full"
-                style={{accentColor: '#114B5F'}}
-              />
-              <div className="flex justify-between text-xs mt-1" style={{color: '#114B5F', opacity: 0.6}}>
-                <span>Any</span>
-                <span>1★</span>
-                <span>2★</span>
-                <span>3★</span>
-                <span>4★</span>
-                <span>5★</span>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="0"
+                  max="5"
+                  step="0.5"
+                  value={filters.rating}
+                  onChange={(e) => handleFilterChange('rating', parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  style={{
+                    background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${(parseFloat(filters.rating) / 5) * 100}%, #E5E7EB ${(parseFloat(filters.rating) / 5) * 100}%, #E5E7EB 100%)`
+                  }}
+                />
+                <div className="flex justify-between text-xs mt-2 text-gray-500">
+                  <span>Any</span>
+                  <span>1★</span>
+                  <span>2★</span>
+                  <span>3★</span>
+                  <span>4★</span>
+                  <span>5★</span>
+                </div>
               </div>
             </div>
           </div>
