@@ -148,7 +148,7 @@ export default function ProfessionalDirectory() {
                 Coming Soon!
               </h3>
               <p className="text-lg mb-6" style={{color: '#114B5F', opacity: 0.8}}>
-                We're working hard to bring amazing professionals to your area. 
+                We&apos;re working hard to bring amazing professionals to your area. 
                 Professional barbers and stylists can join our platform soon!
               </p>
               <div className="bg-white rounded-lg p-6 shadow-sm" style={{border: '1px solid rgba(17, 75, 95, 0.2)'}}>
