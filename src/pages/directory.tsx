@@ -105,10 +105,11 @@ export default function ProfessionalDirectory() {
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Animated Background */}
         <div className="fixed inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"></div>
-          <div className="absolute top-0 left-1/4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute top-0 right-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-          <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F7F0DE] via-[#faf5e4] to-[#F7F0DE]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(17,75,95,0.08),transparent_55%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(17,75,95,0.06),transparent_55%)]"></div>
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-[rgba(17,75,95,0.10)] rounded-full mix-blend-multiply blur-2xl opacity-40 animate-pulse"></div>
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[rgba(247,240,222,0.4)] rounded-full mix-blend-multiply blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
         </div>
         
         <div className="relative z-10 text-center">
@@ -131,37 +132,36 @@ export default function ProfessionalDirectory() {
     <div className="min-h-screen relative overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(56,189,248,0.1),transparent_50%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.1),transparent_50%)]"></div>
-        <div className="absolute top-0 left-1/4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute top-0 right-1/4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F7F0DE] via-[#faf5e4] to-[#F7F0DE]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(17,75,95,0.08),transparent_55%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(17,75,95,0.06),transparent_55%)]"></div>
+        <div className="absolute top-0 left-1/4 w-72 h-72 bg-[rgba(17,75,95,0.10)] rounded-full mix-blend-multiply blur-2xl opacity-40 animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[rgba(247,240,222,0.4)] rounded-full mix-blend-multiply blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
       </div>
       
       {/* Header */}
-      <header className="relative z-40 sticky top-0 backdrop-blur-xl border-b border-white/20" style={{background: 'rgba(255, 255, 255, 0.8)'}}>
+      <header className="relative z-40 sticky top-0 backdrop-blur-xl border-b border-[rgba(17,75,95,0.15)]" style={{background:'rgba(247,240,222,0.85)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg">
+                <div className="absolute inset-0 rounded-xl blur opacity-60 group-hover:opacity-90 transition-opacity" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}></div>
+                <div className="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg" style={{background:'linear-gradient(135deg,#114B5F,#0d3a4a)'}}>
                   <span className="text-white font-bold text-xl">F</span>
                 </div>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-clip-text text-transparent" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}>
                 Fadetrack
               </h1>
             </Link>
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="relative px-8 py-3 text-sm font-semibold text-white rounded-full transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 group overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+              <div className="absolute inset-0 transition-all duration-300" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}></div>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'linear-gradient(90deg,#0d3a4a,#114B5F)'}}></div>
               <span className="relative z-10">Join Fadetrack</span>
-              <div className="absolute inset-0 rounded-full shadow-lg group-hover:shadow-2xl transition-all duration-300" style={{boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4)'}}></div>
+              <div className="absolute inset-0 rounded-full shadow-lg group-hover:shadow-2xl transition-all duration-300" style={{boxShadow:'0 10px 25px rgba(17,75,95,0.35)'}}></div>
             </Link>
           </div>
         </div>
@@ -171,20 +171,20 @@ export default function ProfessionalDirectory() {
       <section className="relative z-10 overflow-hidden pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium mb-8 bg-gradient-to-r from-blue-100 to-purple-100 border border-blue-200/50 backdrop-blur-sm">
+            <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium mb-8 backdrop-blur-sm border" style={{background:'rgba(247,240,222,0.7)',borderColor:'rgba(17,75,95,0.25)',color:'#114B5F'}}>
               <span className="mr-2 text-2xl">✨</span>
-              <span className="bg-gradient-to-r from-blue-700 to-purple-700 bg-clip-text text-transparent font-semibold">Professional Directory</span>
+              <span className="font-semibold" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)',WebkitBackgroundClip:'text',color:'transparent'}}>Professional Directory</span>
             </div>
             <h1 className="text-6xl md:text-7xl font-black mb-8 leading-tight">
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="bg-clip-text text-transparent" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}>
                 Find Your Perfect
               </span>
               <br />
-              <span className="text-4xl md:text-5xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-4xl md:text-5xl bg-clip-text text-transparent" style={{background:'linear-gradient(90deg,#0d3a4a,#114B5F)'}}>
                 Hair Professional
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-12">
+            <p className="text-xl max-w-3xl mx-auto leading-relaxed mb-12" style={{color:'#114B5F'}}>
               Discover talented barbers, stylists, and beauticians. Browse reviews, compare services, and book your next perfect cut.
             </p>
           </div>
@@ -193,12 +193,11 @@ export default function ProfessionalDirectory() {
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        {/* Enhanced Search Component */}
         <div className="mb-16">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-white/60 to-white/40 rounded-3xl blur-sm"></div>
-            <div className="relative backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/50 to-white/30"></div>
+            <div className="absolute inset-0 rounded-3xl blur-sm" style={{background:'linear-gradient(135deg,rgba(247,240,222,0.7),rgba(247,240,222,0.5))'}}></div>
+            <div className="relative backdrop-blur-xl rounded-3xl shadow-2xl border overflow-hidden" style={{background:'linear-gradient(135deg,rgba(247,240,222,0.85),rgba(247,240,222,0.65))',borderColor:'rgba(17,75,95,0.15)'}}>
+              <div className="absolute inset-0" style={{background:'radial-gradient(circle at 30% 20%,rgba(17,75,95,0.10),transparent 60%)'}}></div>
               <div className="relative">
                 <EnhancedSearch onSearch={handleSearch} />
               </div>
@@ -276,14 +275,13 @@ export default function ProfessionalDirectory() {
                 <Link
                   key={professional.id}
                   href={`/professional/${professional.id}`}
-                  className="group relative rounded-2xl bg-white/70 dark:bg-slate-800/60 backdrop-blur-xl ring-1 ring-slate-900/5 dark:ring-white/10 p-5 flex flex-col gap-5 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group relative rounded-2xl backdrop-blur-xl ring-1 p-5 flex flex-col gap-5 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  style={{background:'rgba(247,240,222,0.85)',borderColor:'rgba(17,75,95,0.10)'}}
                 >
-                  {/* subtle gradient overlay */}
-                  <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/10" />
-
+                  <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{background:'linear-gradient(135deg,rgba(17,75,95,0.08),rgba(17,75,95,0.02))'}} />
                   <div className="flex items-start gap-4 relative z-10">
                     <div className="relative shrink-0">
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 text-white flex items-center justify-center font-semibold text-xl shadow-lg ring-2 ring-white/30 dark:ring-slate-700/60 group-hover:scale-105 transition-transform overflow-hidden">
+                      <div className="w-16 h-16 rounded-xl text-white flex items-center justify-center font-semibold text-xl shadow-lg ring-2 ring-white/40 group-hover:scale-105 transition-transform overflow-hidden" style={{background:'linear-gradient(135deg,#114B5F,#0d3a4a)'}}>
                         {professional.profile_image ? (
                           <Image src={professional.profile_image} alt={professional.display_name} width={64} height={64} className="w-full h-full object-cover" />
                         ) : (
@@ -296,17 +294,17 @@ export default function ProfessionalDirectory() {
                     </div>
 
                     <div className="flex-1 min-w-0 space-y-1">
-                      <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                      <h3 className="text-base font-semibold tracking-tight text-slate-900 group-hover:text-[#114B5F] transition-colors line-clamp-1">
                         {professional.business_name}
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-1">
+                      <p className="text-sm text-slate-600 line-clamp-1">
                         {professional.display_name}
                       </p>
-                      <p className="flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-500">
+                      <p className="flex items-center gap-1 text-xs font-medium text-slate-500">
                         <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         {professional.city}, {professional.state}
                         {professional.distance != null && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 ml-1">
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 ml-1">
                             {professional.distance.toFixed(1)} mi
                           </span>
                         )}
@@ -322,7 +320,7 @@ export default function ProfessionalDirectory() {
                             <Star key={i} filled={i < Math.round(professional.average_rating)} />
                           ))}
                         </div>
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                        <span className="text-sm font-medium" style={{color:'#114B5F'}}>
                           {professional.average_rating.toFixed(1)}
                         </span>
                         <span className="text-xs text-slate-400">({professional.total_reviews})</span>
@@ -337,7 +335,7 @@ export default function ProfessionalDirectory() {
                   </div>
 
                   {professional.bio && (
-                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-2 relative z-10">
+                    <p className="text-sm leading-relaxed line-clamp-2 relative z-10" style={{color:'#114B5F',opacity:0.85}}>
                       {professional.bio}
                     </p>
                   )}
@@ -345,12 +343,12 @@ export default function ProfessionalDirectory() {
                   {professional.specialties?.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-auto relative z-10">
                       {professional.specialties.slice(0, 4).map((spec, i) => (
-                        <span key={i} className="inline-flex items-center rounded-full bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-700/60 dark:to-slate-700/30 px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:text-slate-300 ring-1 ring-slate-900/5 dark:ring-white/10">
+                        <span key={i} className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ring-1" style={{background:'rgba(247,240,222,0.8)',color:'#114B5F',borderColor:'rgba(17,75,95,0.12)'}}>
                           {spec}
                         </span>
                       ))}
                       {professional.specialties.length > 4 && (
-                        <span className="inline-flex items-center rounded-full bg-slate-50 dark:bg-slate-700/40 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 ring-1 ring-slate-900/5 dark:ring-white/10">
+                        <span className="inline-flex items-center rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-500 ring-1 ring-slate-900/5">
                           +{professional.specialties.length - 4} more
                         </span>
                       )}
@@ -358,7 +356,7 @@ export default function ProfessionalDirectory() {
                   )}
 
                   <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm shadow-md">→</span>
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm shadow-md" style={{background:'#114B5F',color:'#F7F0DE'}}>→</span>
                   </div>
                 </Link>
               ))}
