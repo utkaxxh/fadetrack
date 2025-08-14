@@ -1,12 +1,25 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+const supabaseAdmin = createClient(
+  supabaseUrl, 
+  supabaseServiceKey || supabaseAnonKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
 );
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('publicProfile API: Request method:', req.method);
+  console.log('publicProfile API: Query params:', req.query);
+
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
     return res.status(405).json({ error: 'Method not allowed' });
@@ -19,99 +32,68 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    let query = supabase
+    // First get the basic profile
+    let profileQuery = supabaseAdmin
       .from('professional_profiles')
-      .select(`
-        *,
-        professional_services:professional_services!professional_id (
-          id,
-          name,
-          description,
-          price,
-          duration_minutes,
-          is_active
-        ),
-        professional_portfolio:professional_portfolio!professional_id (
-          id,
-          image_url,
-          caption,
-          service_type,
-          created_at
-        )
-      `)
+      .select('*')
       .eq('is_active', true); // Only show active profiles
 
     if (id) {
-      query = query.eq('id', id);
+      profileQuery = profileQuery.eq('id', id);
     } else if (email) {
-      query = query.eq('user_email', email);
+      profileQuery = profileQuery.eq('user_email', email);
     }
 
-    const { data: profileData, error: profileError } = await query.single();
+    const { data: profileData, error: profileError } = await profileQuery.maybeSingle();
 
     if (profileError) {
-      console.error('Error fetching public profile:', profileError);
+      console.error('publicProfile API: Error fetching profile:', profileError);
+      return res.status(500).json({ error: 'Failed to fetch profile', details: profileError });
+    }
+
+    if (!profileData) {
+      console.log('publicProfile API: Profile not found');
       return res.status(404).json({ error: 'Professional profile not found' });
     }
 
-    // Transform the data to match the expected format
+    console.log('publicProfile API: Profile found:', profileData.business_name);
+
+    // Get services if profile exists
+    const { data: servicesData, error: servicesError } = await supabaseAdmin
+      .from('services')
+      .select('*')
+      .eq('professional_id', profileData.id)
+      .eq('is_active', true);
+
+    if (servicesError) {
+      console.warn('publicProfile API: Error fetching services:', servicesError);
+    }
+
+    // Get portfolio if profile exists
+    const { data: portfolioData, error: portfolioError } = await supabaseAdmin
+      .from('portfolio')
+      .select('*')
+      .eq('professional_id', profileData.id);
+
+    if (portfolioError) {
+      console.warn('publicProfile API: Error fetching portfolio:', portfolioError);
+    }
+
+    // Combine the data
     const profile = {
-      id: profileData.id,
-      user_email: profileData.user_email,
-      business_name: profileData.business_name,
-      display_name: profileData.display_name,
-      profession_type: profileData.profession_type,
-      bio: profileData.bio,
-      phone: profileData.phone,
-      address: profileData.address,
-      city: profileData.city,
-      state: profileData.state,
-      zip_code: profileData.zip_code,
-      instagram: profileData.instagram,
-      website: profileData.website,
-      profile_image: profileData.profile_image,
-      years_experience: profileData.years_experience,
-      specialties: profileData.specialties || [],
-      price_range: profileData.price_range,
-      is_verified: profileData.is_verified,
-      is_active: profileData.is_active,
-      average_rating: profileData.average_rating || 0,
-      total_reviews: profileData.total_reviews || 0,
-      services: (profileData.professional_services || []).map((service: { 
-        id: string, 
-        service_name: string, 
-        description: string, 
-        price_min: number, 
-        price_max: number, 
-        duration_minutes: number,
-        is_active: boolean
-      }) => ({
-        id: service.id,
-        service_name: service.service_name,
-        description: service.description,
-        price_min: service.price_min,
-        price_max: service.price_max,
-        duration_minutes: service.duration_minutes,
-        is_active: service.is_active
-      })),
-      portfolio: (profileData.professional_portfolio || []).map((item: {
-        id: string,
-        image_url: string,
-        caption: string,
-        service_type: string,
-        created_at: string
-      }) => ({
-        id: item.id,
-        image_url: item.image_url,
-        caption: item.caption,
-        service_type: item.service_type,
-        created_at: item.created_at
-      }))
+      ...profileData,
+      services: servicesData || [],
+      portfolio: portfolioData || []
     };
+
+    console.log('publicProfile API: Returning profile with', profile.services.length, 'services and', profile.portfolio.length, 'portfolio items');
 
     return res.status(200).json({ profile });
   } catch (error) {
-    console.error('Public profile API error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('publicProfile API: Unexpected error:', error);
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 }

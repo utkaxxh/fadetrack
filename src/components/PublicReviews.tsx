@@ -11,11 +11,25 @@ interface PublicReviewsProps {
 export default function PublicReviews({ reviews, user, onDeleteReview }: PublicReviewsProps) {
   const [sortBy, setSortBy] = useState<'newest' | 'rating' | 'oldest'>('newest');
   const [filterRating, setFilterRating] = useState<number | null>(null);
+  const [filterLocation, setFilterLocation] = useState<string>('');
   const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  // Get unique locations from reviews for the dropdown
+  const uniqueLocations = Array.from(new Set(reviews
+    .filter(review => review.is_public && review.location)
+    .map(review => review.location.trim())
+  )).sort();
 
   // Filter and sort reviews
   const filteredAndSortedReviews = reviews
-    .filter(review => review.is_public && (filterRating === null || review.rating === filterRating))
+    .filter(review => {
+      const matchesPublic = review.is_public;
+      const matchesRating = filterRating === null || review.rating === filterRating;
+      const matchesLocation = filterLocation === '' || 
+        review.location.toLowerCase().includes(filterLocation.toLowerCase());
+      
+      return matchesPublic && matchesRating && matchesLocation;
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case 'newest':
@@ -70,10 +84,15 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
   };
 
   if (filteredAndSortedReviews.length === 0) {
+    const hasFilters = filterRating !== null || filterLocation !== '';
     return (
       <div className="text-center py-12">
-        <div className="text-gray-400 text-lg mb-2">No public reviews yet</div>
-        <div className="text-gray-500 text-sm">Be the first to share your experience!</div>
+        <div className="text-gray-400 text-lg mb-2">
+          {hasFilters ? 'No reviews match your filters' : 'No public reviews yet'}
+        </div>
+        <div className="text-gray-500 text-sm">
+          {hasFilters ? 'Try adjusting your search criteria' : 'Be the first to share your experience!'}
+        </div>
       </div>
     );
   }
@@ -112,6 +131,34 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
               <option value="2">2 Stars</option>
               <option value="1">1 Star</option>
             </select>
+          </div>
+
+          <div>
+            <label htmlFor="location-filter" className="text-sm font-medium text-gray-700 mr-2">Filter by location:</label>
+            <div className="flex gap-2">
+              <input
+                id="location-filter"
+                type="text"
+                placeholder="Search locations..."
+                value={filterLocation}
+                onChange={(e) => setFilterLocation(e.target.value)}
+                className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-40"
+              />
+              {uniqueLocations.length > 0 && (
+                <select
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)}
+                  className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">All Locations</option>
+                  {uniqueLocations.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
           </div>
         </div>
         

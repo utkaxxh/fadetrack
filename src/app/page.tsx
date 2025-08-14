@@ -294,9 +294,9 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto text-center">
             <div className="animate-fade-in">
               <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight" style={{color: '#114B5F'}}>
-                Track Your Perfect
+                Discover Top-Rated
                 <span className="block" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
-                  Haircut Journey
+                  Barbers Near You
                 </span>
               </h1>
               <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
 import confetti from 'canvas-confetti';
+import LocationAutocomplete, { LocationData } from './LocationAutocomplete';
 
 import type { Haircut } from '../app/page';
 import type { User } from '@supabase/supabase-js';
@@ -23,6 +24,7 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
     notes: '',
   });
 
+  const [locationData, setLocationData] = useState<LocationData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -79,8 +81,18 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
     setIsSubmitting(true);
     
     const haircutWithEmail: Haircut = { ...form, user_email: user.email };
+    
+    // Prepare data with structured location
+    const haircutData = {
+      ...haircutWithEmail,
+      city: locationData?.city || '',
+      state: locationData?.state || '',
+      country: locationData?.country || '',
+      place_id: locationData?.place_id || null
+    };
+    
     // Insert haircut into Supabase
-    const { error } = await supabase.from('haircuts').insert([haircutWithEmail]);
+    const { error } = await supabase.from('haircuts').insert([haircutData]);
     
     if (error) {
       alert('Failed to log haircut: ' + error.message);
@@ -99,6 +111,7 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
 
     onSubmit(form);
     setForm({ date: '', barber: '', location: '', style: '', cost: '', notes: '' });
+    setLocationData(null);
     setIsSubmitting(false);
   }
 
@@ -190,13 +203,16 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
           <label htmlFor="location" className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
             Location
           </label>
-          <input 
+          <LocationAutocomplete
             id="location"
             name="location" 
             value={form.location} 
-            onChange={handleChange} 
+            onChange={(value, data) => {
+              setForm({ ...form, location: value });
+              setLocationData(data || null);
+            }}
             required 
-            placeholder="Downtown SF" 
+            placeholder="Enter city, state, country..." 
             className="block w-full px-3 py-2 border rounded-lg shadow-sm transition-all duration-200"
             style={{
               backgroundColor: '#F7F0DE',

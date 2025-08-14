@@ -81,21 +81,30 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
   const [editingService, setEditingService] = useState<Service | undefined>(undefined);
   const [editingPortfolioItem, setEditingPortfolioItem] = useState<PortfolioItem | undefined>(undefined);
+  
+  // Profile editing states
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [profileFormData, setProfileFormData] = useState<Partial<ProfessionalProfile>>({});
 
   const fetchProfile = useCallback(async () => {
     if (!user?.email) return;
     
     try {
-      const response = await fetch(`/api/professionalProfile?email=${encodeURIComponent(user.email)}`);
+      console.log('ProfessionalDashboard: Fetching profile for email:', user.email);
+      const response = await fetch(`/api/professionalProfileSimple?email=${encodeURIComponent(user.email)}`);
       const data = await response.json();
+      
+      console.log('ProfessionalDashboard: Profile fetch response:', { status: response.status, data });
       
       if (response.ok) {
         setProfile(data.profile);
+        console.log('ProfessionalDashboard: Profile set:', data.profile ? 'Profile found' : 'No profile found');
       } else {
-        console.error('Failed to fetch profile:', data.error);
+        console.error('ProfessionalDashboard: Failed to fetch profile:', data.error);
       }
     } catch (err) {
-      console.error('Error fetching profile:', err);
+      console.error('ProfessionalDashboard: Error fetching profile:', err);
     } finally {
       setIsLoading(false);
     }
@@ -235,6 +244,80 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
     } catch (err) {
       console.error('Error responding to review:', err);
     }
+  };
+
+  // Profile editing handlers
+  const handleEditProfile = () => {
+    if (profile) {
+      setProfileFormData({
+        business_name: profile.business_name,
+        display_name: profile.display_name,
+        profession_type: profile.profession_type,
+        bio: profile.bio,
+        phone: profile.phone,
+        address: profile.address,
+        city: profile.city,
+        state: profile.state,
+        zip_code: profile.zip_code,
+        instagram: profile.instagram,
+        website: profile.website,
+        years_experience: profile.years_experience,
+        specialties: profile.specialties,
+        price_range: profile.price_range
+      });
+      setIsEditingProfile(true);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingProfile(false);
+    setProfileFormData({});
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user?.email || !profileFormData) return;
+
+    setIsSavingProfile(true);
+    try {
+      console.log('ProfessionalDashboard: Saving profile changes:', profileFormData);
+      
+      const response = await fetch('/api/professionalProfileSimple', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_email: user.email,
+          ...profileFormData
+        }),
+      });
+
+      const data = await response.json();
+      console.log('ProfessionalDashboard: Save profile response:', { status: response.status, data });
+
+      if (response.ok) {
+        console.log('ProfessionalDashboard: Profile updated successfully');
+        await fetchProfile(); // Refresh the profile data
+        setIsEditingProfile(false);
+        setProfileFormData({});
+      } else {
+        console.error('ProfessionalDashboard: Failed to save profile:', data.error);
+        // You could add a toast notification here
+        alert('Failed to save profile changes: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      console.error('ProfessionalDashboard: Error saving profile:', err);
+      alert('Network error while saving profile changes');
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
+  const handleProfileInputChange = (field: string, value: string | number | boolean | string[]) => {
+    setProfileFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   if (isLoading) {
@@ -390,7 +473,47 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
 
   const renderProfile = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-semibold" style={{color: '#114B5F'}}>Profile Management</h3>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold" style={{color: '#114B5F'}}>Profile Management</h3>
+        <div className="flex gap-2">
+          {profile && (
+            <button
+              onClick={() => window.open(`/professional/${profile.id}`, '_blank')}
+              className="px-4 py-2 rounded-lg font-medium transition-all duration-200"
+              style={{backgroundColor: 'rgba(17, 75, 95, 0.1)', color: '#114B5F', border: '1px solid #114B5F'}}
+            >
+              View Public Profile
+            </button>
+          )}
+          {!isEditingProfile ? (
+            <button
+              onClick={handleEditProfile}
+              className="px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200"
+              style={{backgroundColor: '#114B5F'}}
+            >
+              Edit Profile
+            </button>
+          ) : (
+            <div className="flex gap-2">
+              <button
+                onClick={handleCancelEdit}
+                className="px-4 py-2 rounded-lg font-medium transition-all duration-200"
+                style={{backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid #ef4444'}}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveProfile}
+                disabled={isSavingProfile}
+                className="px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{backgroundColor: '#114B5F'}}
+              >
+                {isSavingProfile ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       
       {profile ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -403,9 +526,11 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Business Name</label>
                 <input
                   type="text"
-                  defaultValue={profile.business_name}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.business_name || '') : profile.business_name}
+                  onChange={(e) => handleProfileInputChange('business_name', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 />
               </div>
               
@@ -413,23 +538,27 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Display Name</label>
                 <input
                   type="text"
-                  defaultValue={profile.display_name}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.display_name || '') : profile.display_name}
+                  onChange={(e) => handleProfileInputChange('display_name', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Profession Type</label>
                 <select
-                  defaultValue={profile.profession_type}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.profession_type || '') : profile.profession_type}
+                  onChange={(e) => handleProfileInputChange('profession_type', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 >
                   <option value="barber">Barber</option>
-                  <option value="hair_stylist">Hair Stylist</option>
                   <option value="beautician">Beautician</option>
-                  <option value="cosmetologist">Cosmetologist</option>
+                  <option value="stylist">Hair Stylist</option>
+                  <option value="salon">Salon Owner</option>
                 </select>
               </div>
               
@@ -437,19 +566,25 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Years of Experience</label>
                 <input
                   type="number"
-                  defaultValue={profile.years_experience}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.years_experience || 1) : profile.years_experience}
+                  onChange={(e) => handleProfileInputChange('years_experience', parseInt(e.target.value) || 1)}
+                  disabled={!isEditingProfile}
+                  min="1"
+                  max="50"
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 />
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Bio</label>
                 <textarea
-                  defaultValue={profile.bio}
+                  value={isEditingProfile ? (profileFormData.bio || '') : profile.bio}
+                  onChange={(e) => handleProfileInputChange('bio', e.target.value)}
+                  disabled={!isEditingProfile}
                   rows={4}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed resize-none"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="Tell customers about yourself and your experience..."
                 />
               </div>
@@ -465,9 +600,12 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Phone</label>
                 <input
                   type="tel"
-                  defaultValue={profile.phone}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.phone || '') : profile.phone}
+                  onChange={(e) => handleProfileInputChange('phone', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  placeholder="(555) 123-4567"
                 />
               </div>
               
@@ -475,9 +613,12 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Address</label>
                 <input
                   type="text"
-                  defaultValue={profile.address}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.address || '') : profile.address}
+                  onChange={(e) => handleProfileInputChange('address', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  placeholder="123 Main St"
                 />
               </div>
               
@@ -486,18 +627,24 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>City</label>
                   <input
                     type="text"
-                    defaultValue={profile.city}
-                    className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                    style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    value={isEditingProfile ? (profileFormData.city || '') : profile.city}
+                    onChange={(e) => handleProfileInputChange('city', e.target.value)}
+                    disabled={!isEditingProfile}
+                    className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    placeholder="San Francisco"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>State</label>
                   <input
                     type="text"
-                    defaultValue={profile.state}
-                    className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                    style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    value={isEditingProfile ? (profileFormData.state || '') : profile.state}
+                    onChange={(e) => handleProfileInputChange('state', e.target.value)}
+                    disabled={!isEditingProfile}
+                    className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                    placeholder="CA"
                   />
                 </div>
               </div>
@@ -506,9 +653,12 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>ZIP Code</label>
                 <input
                   type="text"
-                  defaultValue={profile.zip_code}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.zip_code || '') : profile.zip_code}
+                  onChange={(e) => handleProfileInputChange('zip_code', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  placeholder="94102"
                 />
               </div>
               
@@ -516,9 +666,11 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Instagram Handle</label>
                 <input
                   type="text"
-                  defaultValue={profile.instagram}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.instagram || '') : profile.instagram}
+                  onChange={(e) => handleProfileInputChange('instagram', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="@yourusername"
                 />
               </div>
@@ -527,9 +679,11 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                 <label className="block text-sm font-medium mb-1" style={{color: '#114B5F'}}>Website</label>
                 <input
                   type="url"
-                  defaultValue={profile.website}
-                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2"
-                  style={{backgroundColor: '#F7F0DE', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
+                  value={isEditingProfile ? (profileFormData.website || '') : profile.website}
+                  onChange={(e) => handleProfileInputChange('website', e.target.value)}
+                  disabled={!isEditingProfile}
+                  className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  style={{backgroundColor: isEditingProfile ? '#F7F0DE' : '#f9f9f9', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="https://yourwebsite.com"
                 />
               </div>
@@ -539,16 +693,6 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
       ) : (
         <p style={{color: '#114B5F', opacity: 0.8}}>Loading profile...</p>
       )}
-      
-      <div className="flex justify-end">
-        <button
-          onClick={() => {/* TODO: Save profile changes */}}
-          className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200"
-          style={{backgroundColor: '#114B5F'}}
-        >
-          Save Changes
-        </button>
-      </div>
     </div>
   );
 

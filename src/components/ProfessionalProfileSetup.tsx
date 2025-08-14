@@ -77,13 +77,21 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
   };
 
   const handleSubmit = async () => {
-    if (!user?.email) return;
+    if (!user?.email) {
+      setError('User email is required');
+      return;
+    }
 
     setIsSubmitting(true);
     setError('');
 
     try {
-      const response = await fetch('/api/professionalProfile', {
+      console.log('ProfessionalProfileSetup: Submitting profile data:', {
+        user_email: user.email,
+        ...profile
+      });
+
+      const response = await fetch('/api/professionalProfileSimple', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -94,15 +102,21 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
         }),
       });
 
+      console.log('ProfessionalProfileSetup: API response status:', response.status);
       const data = await response.json();
+      console.log('ProfessionalProfileSetup: API response data:', data);
 
       if (response.ok) {
+        console.log('ProfessionalProfileSetup: Profile created successfully');
         onComplete();
       } else {
+        console.error('ProfessionalProfileSetup: API error:', data);
         setError(data.error || 'Failed to create profile');
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('ProfessionalProfileSetup: Network error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(`Network error: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
