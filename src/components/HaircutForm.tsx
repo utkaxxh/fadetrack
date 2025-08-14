@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { supabase } from './supabaseClient';
 import confetti from 'canvas-confetti';
-import LocationAutocompleteDebug, { LocationData } from './LocationAutocompleteDebug';
+import LocationAutocomplete, { LocationData } from './LocationAutocomplete';
 
 import type { Haircut } from '../app/page';
 import type { User } from '@supabase/supabase-js';
@@ -203,7 +203,7 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
           <label htmlFor="location" className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>
             Location
           </label>
-          <LocationAutocompleteDebug
+          <LocationAutocomplete
             id="location"
             name="location" 
             value={form.location} 
