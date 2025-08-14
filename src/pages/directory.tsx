@@ -105,11 +105,11 @@ export default function ProfessionalDirectory() {
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Animated Background */}
         <div className="fixed inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F7F0DE] via-[#faf5e4] to-[#F7F0DE]"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(17,75,95,0.08),transparent_55%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(17,75,95,0.06),transparent_55%)]"></div>
           <div className="absolute top-0 left-1/4 w-72 h-72 bg-[rgba(17,75,95,0.10)] rounded-full mix-blend-multiply blur-2xl opacity-40 animate-pulse"></div>
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[rgba(247,240,222,0.4)] rounded-full mix-blend-multiply blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[rgba(248,250,252,0.4)] rounded-full mix-blend-multiply blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
         </div>
         
         <div className="relative z-10 text-center">
@@ -119,7 +119,7 @@ export default function ProfessionalDirectory() {
               <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
           </div>
-          <h2 className="text-2xl font-black mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-black mb-4" style={{color:'#114B5F'}}>
             Loading professionals...
           </h2>
           <p className="text-gray-600 text-lg">Finding the perfect matches for you</p>
@@ -132,15 +132,15 @@ export default function ProfessionalDirectory() {
     <div className="min-h-screen relative overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F7F0DE] via-[#faf5e4] to-[#F7F0DE]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(17,75,95,0.08),transparent_55%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(17,75,95,0.06),transparent_55%)]"></div>
         <div className="absolute top-0 left-1/4 w-72 h-72 bg-[rgba(17,75,95,0.10)] rounded-full mix-blend-multiply blur-2xl opacity-40 animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[rgba(247,240,222,0.4)] rounded-full mix-blend-multiply blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[rgba(248,250,252,0.4)] rounded-full mix-blend-multiply blur-3xl opacity-40 animate-pulse animation-delay-2000"></div>
       </div>
       
       {/* Header */}
-      <header className="relative z-40 sticky top-0 backdrop-blur-xl border-b border-[rgba(17,75,95,0.15)]" style={{background:'rgba(247,240,222,0.85)'}}>
+      <header className="relative z-40 sticky top-0 backdrop-blur-xl border-b border-[rgba(17,75,95,0.15)]" style={{background:'rgba(248,250,252,0.85)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center gap-3 group">
@@ -150,7 +150,7 @@ export default function ProfessionalDirectory() {
                   <span className="text-white font-bold text-xl">F</span>
                 </div>
               </div>
-              <h1 className="text-2xl font-bold bg-clip-text text-transparent" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}>
+              <h1 className="text-2xl font-bold" style={{color:'#114B5F'}}>
                 Fadetrack
               </h1>
             </Link>
@@ -171,18 +171,14 @@ export default function ProfessionalDirectory() {
       <section className="relative z-10 overflow-hidden pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium mb-8 backdrop-blur-sm border" style={{background:'rgba(247,240,222,0.7)',borderColor:'rgba(17,75,95,0.25)',color:'#114B5F'}}>
+            <div className="inline-flex items-center px-6 py-3 rounded-full text-sm font-medium mb-8 backdrop-blur-sm border" style={{background:'rgba(248,250,252,0.7)',borderColor:'rgba(17,75,95,0.25)',color:'#114B5F'}}>
               <span className="mr-2 text-2xl">✨</span>
-              <span className="font-semibold" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)',WebkitBackgroundClip:'text',color:'transparent'}}>Professional Directory</span>
+              <span className="font-semibold" style={{color:'#114B5F'}}>Professional Directory</span>
             </div>
             <h1 className="text-6xl md:text-7xl font-black mb-8 leading-tight">
-              <span className="bg-clip-text text-transparent" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}>
-                Find Your Perfect
-              </span>
+              <span className="text-[#114B5F]">Find Your Perfect</span>
               <br />
-              <span className="text-4xl md:text-5xl bg-clip-text text-transparent" style={{background:'linear-gradient(90deg,#0d3a4a,#114B5F)'}}>
-                Hair Professional
-              </span>
+              <span className="text-4xl md:text-5xl text-[#0d3a4a]">Hair Professional</span>
             </h1>
             <p className="text-xl max-w-3xl mx-auto leading-relaxed mb-12" style={{color:'#114B5F'}}>
               Discover talented barbers, stylists, and beauticians. Browse reviews, compare services, and book your next perfect cut.
@@ -195,8 +191,8 @@ export default function ProfessionalDirectory() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="mb-16">
           <div className="relative">
-            <div className="absolute inset-0 rounded-3xl blur-sm" style={{background:'linear-gradient(135deg,rgba(247,240,222,0.7),rgba(247,240,222,0.5))'}}></div>
-            <div className="relative backdrop-blur-xl rounded-3xl shadow-2xl border overflow-hidden" style={{background:'linear-gradient(135deg,rgba(247,240,222,0.85),rgba(247,240,222,0.65))',borderColor:'rgba(17,75,95,0.15)'}}>
+            <div className="absolute inset-0 rounded-3xl blur-sm" style={{background:'linear-gradient(135deg,rgba(248,250,252,0.7),rgba(248,250,252,0.5))'}}></div>
+            <div className="relative backdrop-blur-xl rounded-3xl shadow-2xl border overflow-hidden" style={{background:'linear-gradient(135deg,rgba(248,250,252,0.85),rgba(248,250,252,0.65))',borderColor:'rgba(17,75,95,0.15)'}}>
               <div className="absolute inset-0" style={{background:'radial-gradient(circle at 30% 20%,rgba(17,75,95,0.10),transparent 60%)'}}></div>
               <div className="relative">
                 <EnhancedSearch onSearch={handleSearch} />
@@ -255,7 +251,7 @@ export default function ProfessionalDirectory() {
           <div>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4">
               <div>
-                <h2 className="text-3xl font-black mb-4 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                <h2 className="text-3xl font-black mb-4" style={{color:'#114B5F'}}>
                   {isLoading ? 'Searching...' : `${totalResults} Professional${totalResults !== 1 ? 's' : ''} Found`}
                 </h2>
                 <p className="text-lg text-gray-600">
@@ -276,7 +272,7 @@ export default function ProfessionalDirectory() {
                   key={professional.id}
                   href={`/professional/${professional.id}`}
                   className="group relative rounded-2xl backdrop-blur-xl ring-1 p-5 flex flex-col gap-5 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                  style={{background:'rgba(247,240,222,0.85)',borderColor:'rgba(17,75,95,0.10)'}}
+                  style={{background:'rgba(248,250,252,0.85)',borderColor:'rgba(17,75,95,0.10)'}}
                 >
                   <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{background:'linear-gradient(135deg,rgba(17,75,95,0.08),rgba(17,75,95,0.02))'}} />
                   <div className="flex items-start gap-4 relative z-10">
@@ -343,7 +339,7 @@ export default function ProfessionalDirectory() {
                   {professional.specialties?.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-auto relative z-10">
                       {professional.specialties.slice(0, 4).map((spec, i) => (
-                        <span key={i} className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ring-1" style={{background:'rgba(247,240,222,0.8)',color:'#114B5F',borderColor:'rgba(17,75,95,0.12)'}}>
+                        <span key={i} className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ring-1" style={{background:'rgba(248,250,252,0.8)',color:'#114B5F',borderColor:'rgba(17,75,95,0.12)'}}>
                           {spec}
                         </span>
                       ))}
@@ -356,7 +352,7 @@ export default function ProfessionalDirectory() {
                   )}
 
                   <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm shadow-md" style={{background:'#114B5F',color:'#F7F0DE'}}>→</span>
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm shadow-md" style={{background:'#114B5F',color:'#f8fafc'}}>→</span>
                   </div>
                 </Link>
               ))}

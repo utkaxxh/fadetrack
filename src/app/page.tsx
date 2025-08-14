@@ -252,17 +252,17 @@ export default function HomePage() {
   if (!user) {
     // Landing page for non-authenticated users
     return (
-      <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #F7F0DE, #faf5e4, #F7F0DE)'}}>
+      <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
         {/* Header */}
-        <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
+        <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center gap-3">
                 <Image 
                   src="/fadetrack-logo-new.jpg" 
                   alt="Fadetrack Logo" 
-                  width={40} 
-                  height={23}
+                  width={56} 
+                  height={32}
                   className="transition-transform hover:scale-105"
                 />
                 <h1 className="text-2xl font-bold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
@@ -330,7 +330,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-24 px-4 sm:px-6 lg:px-8" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)'}}>
+        <section id="features" className="py-24 px-4 sm:px-6 lg:px-8" style={{backgroundColor: 'rgba(248, 250, 252, 0.5)'}}>
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-20">
               <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{color: '#114B5F'}}>
@@ -377,7 +377,7 @@ export default function HomePage() {
                 <div 
                   key={index}
                   className="backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                  style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+                  style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
                 >
                   <div className="text-4xl mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-bold mb-3" style={{color: '#114B5F'}}>{feature.title}</h3>
@@ -412,7 +412,7 @@ export default function HomePage() {
             <Link 
               href="/login" 
               className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105"
-              style={{color: '#114B5F', backgroundColor: '#F7F0DE'}}
+              style={{color: '#114B5F', backgroundColor: '#f8fafc'}}
             >
               Get Started for Free
             </Link>
@@ -427,8 +427,8 @@ export default function HomePage() {
                 <Image 
                   src="/fadetrack-logo-new.jpg" 
                   alt="Fadetrack Logo" 
-                  width={32} 
-                  height={18}
+                  width={42} 
+                  height={24}
                 />
                 <span className="text-lg font-semibold">Fadetrack</span>
               </div>
@@ -456,17 +456,17 @@ export default function HomePage() {
   );
 }  // Authenticated user dashboard
   return (
-    <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #F7F0DE, #faf5e4, #F7F0DE)'}}>
+    <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-sm" style={{backgroundColor: 'rgba(247, 240, 222, 0.95)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
+      <header className="sticky top-0 z-50 backdrop-blur-sm" style={{backgroundColor: 'rgba(248, 250, 252, 0.95)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
               <Image 
                 src="/fadetrack-logo-new.jpg" 
                 alt="Fadetrack Logo" 
-                width={40} 
-                height={23}
+                width={56} 
+                height={32}
                 className="transition-transform hover:scale-105"
               />
               <h1 className="text-2xl font-semibold" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>Fadetrack</h1>
@@ -480,9 +480,9 @@ export default function HomePage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(247, 240, 222, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+        <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} userRole={role} />
-          <div className="p-6" style={{backgroundColor: 'rgba(247, 240, 222, 0.3)'}}>
+          <div className="p-6" style={{backgroundColor: 'rgba(248, 250, 252, 0.3)'}}>
             {activeTab === 'log' && !isProfessional && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
             {activeTab === 'history' && !isProfessional && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
             {activeTab === 'reminders' && !isProfessional && <ReminderSettings user={user} />}
@@ -503,7 +503,7 @@ export default function HomePage() {
             }
           }}
         >
-          <div className="rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" style={{backgroundColor: '#F7F0DE', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
+          <div className="rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" style={{backgroundColor: '#f8fafc', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
             <div className="flex items-center justify-between p-6" style={{borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
               <h2 className="text-xl font-semibold" style={{color: '#114B5F'}}>Account Settings</h2>
               <button
@@ -516,7 +516,7 @@ export default function HomePage() {
                 </svg>
               </button>
             </div>
-            <div className="p-6" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)'}}>
+            <div className="p-6" style={{backgroundColor: 'rgba(248, 250, 252, 0.5)'}}>
               <AccountSettings user={user} />
             </div>
           </div>
@@ -542,7 +542,7 @@ export default function HomePage() {
       )}
 
       {/* Footer */}
-      <footer className="mt-16" style={{backgroundColor: 'rgba(247, 240, 222, 0.5)', borderTop: '1px solid rgba(17, 75, 95, 0.2)'}}>
+      <footer className="mt-16" style={{backgroundColor: 'rgba(248, 250, 252, 0.5)', borderTop: '1px solid rgba(17, 75, 95, 0.2)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-sm flex items-center gap-1" style={{color: '#114B5F'}}>
