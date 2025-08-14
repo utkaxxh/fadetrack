@@ -74,6 +74,12 @@ export default function LocationAutocompleteDebug({
         }
         setDebugInfo('Places API available, creating autocomplete...');
 
+        // Add error listener for Google Maps errors
+        (window as any).gm_authFailure = () => {
+          setLoadingError('Google Maps API authentication failed - check API key restrictions');
+          setDebugInfo('Authentication failed - API key may be restricted');
+        };
+
         // Initialize the autocomplete
         autocompleteRef.current = new google.maps.places.Autocomplete(inputRef.current, {
           types: ['(cities)'],
