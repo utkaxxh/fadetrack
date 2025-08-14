@@ -35,26 +35,13 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [specialties, setSpecialties] = useState<string[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     fetchSpecialties();
   }, []);
 
-  useEffect(() => {
-    // Only trigger search after component is initialized to prevent initial infinite loop
-    if (isInitialized) {
-      // Debounce the search to prevent excessive API calls
-      const timeoutId = setTimeout(() => {
-        onSearch(filters);
-      }, 300);
-      
-      return () => clearTimeout(timeoutId);
-    } else {
-      setIsInitialized(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]); // Only depend on filters, not onSearch to prevent infinite loop
+  // Remove automatic search trigger to prevent infinite loops
+  // Search will be triggered manually by user actions
 
   const fetchSpecialties = async () => {
     try {
@@ -69,11 +56,14 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
   };
 
   const handleFilterChange = (key: keyof SearchFilters, value: string | number) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    // Trigger search immediately when user changes filters
+    onSearch(newFilters);
   };
 
   const clearFilters = () => {
-    setFilters({
+    const defaultFilters = {
       searchTerm: '',
       profession: 'all',
       location: '',
@@ -83,7 +73,10 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
       distance: '25',
       availability: 'all',
       sortBy: 'rating'
-    });
+    };
+    setFilters(defaultFilters);
+    // Trigger search with cleared filters
+    onSearch(defaultFilters);
   };
 
   const professionTypes = [

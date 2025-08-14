@@ -34,11 +34,16 @@ interface SearchFilters {
   userLng?: number;
 }
 
+const Star = ({ filled }: { filled?: boolean }) => (
+  <svg aria-hidden="true" className={`w-4 h-4 ${filled ? 'text-amber-400' : 'text-slate-300'}`} fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.803 2.037a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.803-2.037a1 1 0 00-1.175 0l-2.803 2.037c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+);
+
 export default function ProfessionalDirectory() {
   const [searchResults, setSearchResults] = useState<Professional[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [totalResults, setTotalResults] = useState(0);
+  const [hasPerformedInitialSearch, setHasPerformedInitialSearch] = useState(false);
 
   const handleSearch = useCallback(async (filters: SearchFilters) => {
     setIsLoading(true);
@@ -73,6 +78,7 @@ export default function ProfessionalDirectory() {
       setTotalResults(0);
     } finally {
       setIsLoading(false);
+      setHasPerformedInitialSearch(true);
     }
   }, []); // Empty dependency array since this function doesn't depend on any props or state
 
@@ -94,7 +100,7 @@ export default function ProfessionalDirectory() {
   }, []); // Empty dependency array to run only once on mount
 
   // Show loading only on initial load
-  if (isLoading && searchResults.length === 0 && totalResults === 0) {
+  if (!hasPerformedInitialSearch && searchResults.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
         {/* Animated Background */}
@@ -267,137 +273,92 @@ export default function ProfessionalDirectory() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
               {searchResults.map((professional) => (
-                <Link 
-                  key={professional.id} 
+                <Link
+                  key={professional.id}
                   href={`/professional/${professional.id}`}
-                  className="group block"
+                  className="group relative rounded-2xl bg-white/70 dark:bg-slate-800/60 backdrop-blur-xl ring-1 ring-slate-900/5 dark:ring-white/10 p-5 flex flex-col gap-5 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="bg-white rounded-2xl shadow-lg p-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 group-hover:border-blue-200 relative overflow-hidden">
-                    {/* Background decoration */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-purple-50 rounded-full -translate-y-16 translate-x-16 transition-all duration-300 group-hover:scale-150"></div>
-                    
-                    {/* Profile Section */}
-                    <div className="relative flex items-start mb-6">
-                      <div className="relative">
-                        <div 
-                          className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold mr-4 shadow-lg transition-all duration-300 group-hover:scale-110"
-                          style={{background: 'linear-gradient(135deg, #114B5F, #0d3a4a)', color: 'white'}}
-                        >
-                          {professional.profile_image ? (
-                            <Image 
-                              src={professional.profile_image} 
-                              alt={professional.display_name}
-                              width={80}
-                              height={80}
-                              className="w-full h-full rounded-2xl object-cover"
-                            />
-                          ) : (
-                            professional.display_name.charAt(0).toUpperCase()
-                          )}
-                        </div>
-                        {professional.is_verified && (
-                          <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                            <span className="text-white text-sm">✓</span>
-                          </div>
+                  {/* subtle gradient overlay */}
+                  <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/10" />
+
+                  <div className="flex items-start gap-4 relative z-10">
+                    <div className="relative shrink-0">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-slate-900 to-slate-700 text-white flex items-center justify-center font-semibold text-xl shadow-lg ring-2 ring-white/30 dark:ring-slate-700/60 group-hover:scale-105 transition-transform overflow-hidden">
+                        {professional.profile_image ? (
+                          <Image src={professional.profile_image} alt={professional.display_name} width={64} height={64} className="w-full h-full object-cover" />
+                        ) : (
+                          professional.display_name.charAt(0).toUpperCase()
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-blue-900 transition-colors truncate">
-                          {professional.business_name}
-                        </h3>
-                        <p className="text-gray-600 mb-2 font-medium">
-                          {professional.display_name}
-                        </p>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <span className="mr-1">📍</span>
-                          {professional.city}, {professional.state}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Rating Section */}
-                    <div className="mb-6">
-                      {professional.average_rating > 0 ? (
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <div className="flex mr-3">
-                              {[...Array(5)].map((_, i) => (
-                                <span
-                                  key={i}
-                                  className={`text-lg ${i < Math.floor(professional.average_rating) ? 'text-yellow-400' : 'text-gray-300'}`}
-                                >
-                                  ★
-                                </span>
-                              ))}
-                            </div>
-                            <span className="font-bold text-gray-900">
-                              {professional.average_rating.toFixed(1)}
-                            </span>
-                          </div>
-                          <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                            {professional.total_reviews} review{professional.total_reviews !== 1 ? 's' : ''}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center py-3 bg-gray-50 rounded-xl">
-                          <span className="text-gray-500 text-sm font-medium">New Professional</span>
-                        </div>
+                      {professional.is_verified && (
+                        <span className="absolute -bottom-1 -right-1 inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-bold shadow-md ring-2 ring-white dark:ring-slate-800">✓</span>
                       )}
                     </div>
 
-                    {/* Bio */}
-                    {professional.bio && (
-                      <p className="text-gray-600 mb-6 line-clamp-2 leading-relaxed">
-                        {professional.bio}
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                        {professional.business_name}
+                      </h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-1">
+                        {professional.display_name}
                       </p>
-                    )}
-
-                    {/* Details */}
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center text-sm">
-                        <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                          �
-                        </span>
-                        <span className="text-gray-700 font-medium">
-                          {professional.profession_type.charAt(0).toUpperCase() + professional.profession_type.slice(1)}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center text-sm">
-                        <span className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                          �
-                        </span>
-                        <span className="text-gray-700">
-                          {professional.years_experience} year{professional.years_experience !== 1 ? 's' : ''} experience
-                        </span>
-                      </div>
+                      <p className="flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-500">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        {professional.city}, {professional.state}
+                        {professional.distance != null && (
+                          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300 ml-1">
+                            {professional.distance.toFixed(1)} mi
+                          </span>
+                        )}
+                      </p>
                     </div>
+                  </div>
 
-                    {/* Specialties */}
-                    {professional.specialties && professional.specialties.length > 0 && (
-                      <div className="border-t border-gray-100 pt-6">
-                        <div className="flex flex-wrap gap-2">
-                          {professional.specialties.slice(0, 3).map((specialty: string, index: number) => (
-                            <span
-                              key={index}
-                              className="text-xs font-medium px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-purple-50 text-blue-900 border border-blue-100"
-                            >
-                              {specialty}
-                            </span>
+                  <div className="flex items-center justify-between gap-4 relative z-10">
+                    {professional.average_rating > 0 ? (
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star key={i} filled={i < Math.round(professional.average_rating)} />
                           ))}
-                          {professional.specialties.length > 3 && (
-                            <span className="text-xs font-medium px-3 py-1.5 rounded-full bg-gray-100 text-gray-600">
-                              +{professional.specialties.length - 3} more
-                            </span>
-                          )}
                         </div>
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                          {professional.average_rating.toFixed(1)}
+                        </span>
+                        <span className="text-xs text-slate-400">({professional.total_reviews})</span>
                       </div>
+                    ) : (
+                      <span className="inline-flex items-center text-xs font-medium px-2 py-1 rounded-md bg-amber-50 text-amber-700 ring-1 ring-amber-600/20">New</span>
                     )}
 
-                    {/* Hover arrow */}
-                    <div className="absolute bottom-6 right-6 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                      <span className="text-white text-lg">→</span>
+                    <span className="text-[11px] uppercase tracking-wide font-semibold text-slate-400">
+                      {professional.profession_type}
+                    </span>
+                  </div>
+
+                  {professional.bio && (
+                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-2 relative z-10">
+                      {professional.bio}
+                    </p>
+                  )}
+
+                  {professional.specialties?.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-auto relative z-10">
+                      {professional.specialties.slice(0, 4).map((spec, i) => (
+                        <span key={i} className="inline-flex items-center rounded-full bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-700/60 dark:to-slate-700/30 px-2.5 py-1 text-[11px] font-medium text-slate-600 dark:text-slate-300 ring-1 ring-slate-900/5 dark:ring-white/10">
+                          {spec}
+                        </span>
+                      ))}
+                      {professional.specialties.length > 4 && (
+                        <span className="inline-flex items-center rounded-full bg-slate-50 dark:bg-slate-700/40 px-2.5 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400 ring-1 ring-slate-900/5 dark:ring-white/10">
+                          +{professional.specialties.length - 4} more
+                        </span>
+                      )}
                     </div>
+                  )}
+
+                  <div className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm shadow-md">→</span>
                   </div>
                 </Link>
               ))}
