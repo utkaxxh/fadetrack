@@ -35,14 +35,26 @@ export default function EnhancedSearch({ onSearch, initialFilters = {} }: Enhanc
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [specialties, setSpecialties] = useState<string[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     fetchSpecialties();
   }, []);
 
   useEffect(() => {
-    onSearch(filters);
-  }, [filters, onSearch]);
+    // Only trigger search after component is initialized to prevent initial infinite loop
+    if (isInitialized) {
+      // Debounce the search to prevent excessive API calls
+      const timeoutId = setTimeout(() => {
+        onSearch(filters);
+      }, 300);
+      
+      return () => clearTimeout(timeoutId);
+    } else {
+      setIsInitialized(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]); // Only depend on filters, not onSearch to prevent infinite loop
 
   const fetchSpecialties = async () => {
     try {

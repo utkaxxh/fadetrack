@@ -74,9 +74,9 @@ export default function ProfessionalDirectory() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, []); // Empty dependency array since this function doesn't depend on any props or state
 
-  // Initialize with basic search
+  // Initialize with basic search on component mount
   useEffect(() => {
     const initialFilters = {
       searchTerm: '',
@@ -90,7 +90,8 @@ export default function ProfessionalDirectory() {
       sortBy: 'rating'
     };
     handleSearch(initialFilters);
-  }, [handleSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array to run only once on mount
 
   // Show loading only on initial load
   if (isLoading && searchResults.length === 0 && totalResults === 0) {
