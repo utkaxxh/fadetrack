@@ -71,6 +71,15 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
+  // Word flip state for hero headline
+  const flipWords = ['Barber', 'Beautician', 'Stylist'];
+  const [wordIndex, setWordIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex(i => (i + 1) % flipWords.length);
+    }, 2400); // cycle every 2.4s
+    return () => clearInterval(interval);
+  }, []);
   const user = useSupabaseUser();
   const { role, updateUserRole, isProfessional, isLoading: roleLoading } = useUserRole(user);
 
@@ -291,15 +300,26 @@ export default function HomePage() {
         <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto text-center">
             <div className="animate-fade-in">
-              <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight" style={{color: '#114B5F'}}>
-                Discover Top-Rated
-                <span className="block" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text'}}>
-                  Barbers Near You
+              <h1
+                aria-label="Review Your Barber, Beautician, or Stylist"
+                className="text-5xl md:text-7xl font-bold mb-10 leading-tight tracking-tight"
+                style={{color: '#114B5F'}}
+              >
+                Review Your{' '}
+                <span className="relative inline-block h-[1em] overflow-hidden align-baseline w-[8.2ch]">
+                  <span
+                    key={wordIndex}
+                    className="block animate-flip-word bg-clip-text text-transparent"
+                    style={{
+                      background: 'linear-gradient(to right, #114B5F, #0d3a4a)'
+                    }}
+                  >
+                    {flipWords[wordIndex]}
+                  </span>
                 </span>
               </h1>
               <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
-                Never forget a great cut again. Log your haircuts, discover top barbers, 
-                and get reminders when it&apos;s time for your next fresh look.
+                Honest, recent, community-powered grooming reviews.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link 
@@ -317,7 +337,18 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          
+          {/* Animation styles */}
+          <style jsx>{`
+            @keyframes flipWord {
+              0% { transform: translateY(100%); opacity: 0; }
+              12% { transform: translateY(0); opacity: 1; }
+              70% { transform: translateY(0); opacity: 1; }
+              88% { transform: translateY(-55%); opacity: 0; }
+              100% { transform: translateY(-55%); opacity: 0; }
+            }
+            .animate-flip-word { animation: flipWord 2.4s cubic-bezier(.77,.03,.22,1) forwards; }
+            @media (prefers-reduced-motion: reduce) { .animate-flip-word { animation: none; } }
+          `}</style>
           {/* Floating elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl" style={{background: 'radial-gradient(circle, rgba(17, 75, 95, 0.2), transparent)'}}></div>
