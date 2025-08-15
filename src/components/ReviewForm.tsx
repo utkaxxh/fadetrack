@@ -84,13 +84,20 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
       return;
     }
 
+    if (!form.location || !locationData) {
+      alert('Please select a location from the suggestions so we can save full location details.');
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
+      const fullLocation = locationData?.formatted || form.location;
       const reviewData = {
         ...form,
+        location: fullLocation,
         user_email: user.email,
-        user_name: user.email.split('@')[0], // Use email prefix as display name
+        user_name: user.email.split('@')[0],
         city: locationData?.city || '',
         state: locationData?.state || '',
         country: locationData?.country || '',
@@ -119,7 +126,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
         setShowSuccess(false);
       }, 4000);
 
-      onSubmit(form);
+      onSubmit({ ...form, location: fullLocation });
       setForm({ 
         barber_id: 0,
         barber_name: '', 

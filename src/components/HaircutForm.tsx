@@ -77,9 +77,15 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
       return;
     }
 
+    if (!form.location || !locationData) {
+      alert('Please select a location from suggestions so we can save full details.');
+      return;
+    }
+
     setIsSubmitting(true);
     
-    const haircutWithEmail: Haircut = { ...form, user_email: user.email };
+    const fullLocation = locationData?.formatted || form.location;
+    const haircutWithEmail: Haircut = { ...form, location: fullLocation, user_email: user.email };
     
     // Prepare data with structured location
     const haircutData = {
@@ -90,7 +96,6 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
       place_id: locationData?.place_id || null
     };
     
-    // Insert haircut into Supabase
     const { error } = await supabase.from('haircuts').insert([haircutData]);
     
     if (error) {
@@ -108,7 +113,7 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
       setShowSuccess(false);
     }, 4000);
 
-    onSubmit(form);
+    onSubmit({ ...form, location: fullLocation });
     setForm({ date: '', barber: '', location: '', style: '', cost: '', notes: '' });
     setLocationData(null);
     setIsSubmitting(false);
