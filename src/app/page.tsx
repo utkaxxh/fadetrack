@@ -327,7 +327,7 @@ export default function HomePage() {
                   href="/login" 
                   className="btn-primary-teal px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
                 >
-                  Start Tracking Free
+                  Rate My Barber
                 </Link>
                 <Link 
                   href="/directory" 
