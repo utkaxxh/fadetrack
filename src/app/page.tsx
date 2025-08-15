@@ -306,12 +306,13 @@ export default function HomePage() {
                 style={{color: '#114B5F'}}
               >
                 Review Your{' '}
-                <span className="relative inline-block h-[1em] overflow-hidden align-baseline w-[8.2ch]">
+                <span className="relative inline-block h-[1em] overflow-hidden align-baseline w-[8.5ch]">
                   <span
                     key={wordIndex}
-                    className="block animate-flip-word bg-clip-text text-transparent"
+                    className="block animate-flip-word px-2 -mx-2 rounded-md"
                     style={{
-                      background: 'linear-gradient(to right, #114B5F, #0d3a4a)'
+                      backgroundColor: 'rgba(17,75,95,0.08)',
+                      color: '#0d3a4a'
                     }}
                   >
                     {flipWords[wordIndex]}
