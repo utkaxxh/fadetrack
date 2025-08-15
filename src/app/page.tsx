@@ -307,15 +307,14 @@ export default function HomePage() {
               >
                 Review Your{' '}
                 <span
-                  className="relative inline-block align-baseline overflow-hidden"
-                  style={{ width: '8.7ch', height: '1.2em' }}
+                  className="relative inline-block overflow-hidden"
+                  style={{ width: '8.7ch', height: '1em', verticalAlign: 'baseline' }}
                 >
                   <span
                     key={wordIndex}
-                    className="absolute inset-0 flex items-center justify-start animate-word-cycle font-bold"
+                    className="absolute left-0 bottom-0 animate-word-cycle font-bold"
                     style={{
                       color: '#0d3a4a',
-                      // subtle text rendering improvements
                       WebkitFontSmoothing: 'antialiased'
                     }}
                   >
@@ -345,13 +344,13 @@ export default function HomePage() {
           {/* Animation styles */}
           <style jsx>{`
             @keyframes wordCycle {
-              0% { transform: translateY(35%); opacity: 0; }
+              0% { transform: translateY(110%); opacity: 0; }
               10% { transform: translateY(0); opacity: 1; }
-              70% { transform: translateY(0); opacity: 1; }
-              90% { transform: translateY(-35%); opacity: 0; }
-              100% { transform: translateY(-35%); opacity: 0; }
+              75% { transform: translateY(0); opacity: 1; }
+              90% { transform: translateY(-110%); opacity: 0; }
+              100% { transform: translateY(-110%); opacity: 0; }
             }
-            .animate-word-cycle { animation: wordCycle 2.4s cubic-bezier(.77,.03,.22,1) forwards; }
+            .animate-word-cycle { animation: wordCycle 2.4s cubic-bezier(.77,.03,.22,1) forwards; will-change: transform, opacity; }
             @media (prefers-reduced-motion: reduce) {
               .animate-word-cycle { animation: none; }
             }
@@ -440,7 +439,7 @@ export default function HomePage() {
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
               Ready to Track Your Perfect Cut?
             </h2>
-            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#114B5F'}}>
+            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#ffffff', opacity: 0.9}}>
               Start your personalized haircut tracking journey today
             </p>
             <Link 
