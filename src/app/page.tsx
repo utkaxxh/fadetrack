@@ -306,13 +306,17 @@ export default function HomePage() {
                 style={{color: '#114B5F'}}
               >
                 Review Your{' '}
-                <span className="relative inline-block h-[1em] overflow-hidden align-baseline w-[8.5ch]">
+                <span
+                  className="relative inline-block align-baseline overflow-hidden"
+                  style={{ width: '8.7ch', height: '1.2em' }}
+                >
                   <span
                     key={wordIndex}
-                    className="block animate-flip-word px-2 -mx-2 rounded-md"
+                    className="absolute inset-0 flex items-center justify-start animate-word-cycle font-bold"
                     style={{
-                      backgroundColor: 'rgba(17,75,95,0.08)',
-                      color: '#0d3a4a'
+                      color: '#0d3a4a',
+                      // subtle text rendering improvements
+                      WebkitFontSmoothing: 'antialiased'
                     }}
                   >
                     {flipWords[wordIndex]}
@@ -340,15 +344,17 @@ export default function HomePage() {
           </div>
           {/* Animation styles */}
           <style jsx>{`
-            @keyframes flipWord {
-              0% { transform: translateY(100%); opacity: 0; }
-              12% { transform: translateY(0); opacity: 1; }
+            @keyframes wordCycle {
+              0% { transform: translateY(35%); opacity: 0; }
+              10% { transform: translateY(0); opacity: 1; }
               70% { transform: translateY(0); opacity: 1; }
-              88% { transform: translateY(-55%); opacity: 0; }
-              100% { transform: translateY(-55%); opacity: 0; }
+              90% { transform: translateY(-35%); opacity: 0; }
+              100% { transform: translateY(-35%); opacity: 0; }
             }
-            .animate-flip-word { animation: flipWord 2.4s cubic-bezier(.77,.03,.22,1) forwards; }
-            @media (prefers-reduced-motion: reduce) { .animate-flip-word { animation: none; } }
+            .animate-word-cycle { animation: wordCycle 2.4s cubic-bezier(.77,.03,.22,1) forwards; }
+            @media (prefers-reduced-motion: reduce) {
+              .animate-word-cycle { animation: none; }
+            }
           `}</style>
           {/* Floating elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
