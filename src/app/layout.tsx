@@ -19,10 +19,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/logo.png", type: "image/png" }
+      { url: "/fadetrack-logo-new.svg", type: "image/svg+xml" }
     ],
     shortcut: ["/favicon.ico"],
-    apple: ["/logo.png"],
+    apple: ["/fadetrack-logo-new.svg"],
   },
   openGraph: {
     title: "Fadetrack",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     url: "https://your-domain.example", // update with real domain
     siteName: "Fadetrack",
     images: [
-      { url: "/logo.png", width: 512, height: 512, alt: "Fadetrack Logo" },
+      { url: "/fadetrack-logo-new.svg", width: 1200, height: 630, alt: "Fadetrack Logo" },
     ],
     locale: "en_US",
     type: "website",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Fadetrack",
     description: "Log your haircuts, find professionals, and stay sharp.",
-    images: ["/logo.png"],
+    images: ["/fadetrack-logo-new.svg"],
   },
 };
 
@@ -51,7 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/fadetrack-logo-new.svg" type="image/svg+xml" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
