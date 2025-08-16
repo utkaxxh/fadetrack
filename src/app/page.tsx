@@ -339,7 +339,7 @@ export default function HomePage() {
           {/* Animation styles */}
           <style jsx>{`
             .flip-word-wrapper { position: relative; display: inline-block; height: 1em; width: 13ch; overflow: hidden; vertical-align: baseline; line-height: 1em; }
-            .flip-word { position: absolute; left: 0; bottom: -0.065em; font-weight: 700; line-height: 1em; color: #0d3a4a; -webkit-font-smoothing: antialiased; }
+            .flip-word { position: absolute; left: 0; bottom: 0; font-weight: 700; line-height: 1em; color: #0d3a4a; -webkit-font-smoothing: antialiased; }
             @keyframes wordCycle { 0% { transform: translateY(100%); opacity: 0; } 12% { transform: translateY(0); opacity: 1; } 72% { transform: translateY(0); opacity: 1; } 88% { transform: translateY(-100%); opacity: 0; } 100% { transform: translateY(-100%); opacity: 0; } }
             .animate-word-cycle { animation: wordCycle 2.4s cubic-bezier(.77,.03,.22,1) forwards; will-change: transform, opacity; }
             @media (prefers-reduced-motion: reduce) { .animate-word-cycle { animation: none; } }
