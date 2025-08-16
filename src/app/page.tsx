@@ -266,16 +266,15 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center gap-3">
-                <span className="logo-wrapper flex items-center gap-2">
+                <span className="logo-wrapper">
                   <Image 
                     src="/fadetrack-logo-new.svg" 
                     alt="Fadetrack Logo" 
-                    width={160} 
-                    height={40}
+                    width={120} 
+                    height={30}
                     priority
-                    className="logo-img rounded-sm"  
+                    className="logo-img"  
                   />
-                  <span className="text-lg font-semibold tracking-tight" style={{color: '#114B5F'}}>Fadetrack</span>
                 </span>
               </div>
               <div className="flex items-center gap-6">
@@ -446,15 +445,14 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="flex items-center gap-3">
-                <span className="logo-wrapper flex items-center gap-2">
+                <span className="logo-wrapper">
                   <Image 
                     src="/fadetrack-logo-new.svg" 
                     alt="Fadetrack Logo" 
-                    width={140} 
-                    height={36}
-                    className="logo-img rounded-sm"
+                    width={100} 
+                    height={26}
+                    className="logo-img"
                   />
-                  <span className="sr-only">Fadetrack</span>
                 </span>
               </div>
               <p className="text-sm flex items-center gap-1" style={{color: '#f1f5f9', opacity: 0.9}}>
@@ -487,15 +485,14 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <span className="logo-wrapper flex items-center gap-2">
+              <span className="logo-wrapper">
                 <Image 
                   src="/fadetrack-logo-new.svg" 
                   alt="Fadetrack Logo" 
-                  width={140} 
-                  height={36}
-                  className="logo-img rounded-sm"
+                  width={100} 
+                  height={26}
+                  className="logo-img"
                 />
-                <span className="text-base font-semibold tracking-tight" style={{color: '#114B5F'}}>Fadetrack</span>
               </span>
             </div>
             <div className="flex items-center gap-3">
