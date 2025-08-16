@@ -268,8 +268,8 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-wordmark.svg" 
-                    alt="Fadetrack Wordmark" 
+                    src="/logo.png" 
+                    alt="Fadetrack Logo" 
                     width={160} 
                     height={40}
                     priority
@@ -447,8 +447,8 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-wordmark.svg" 
-                    alt="Fadetrack Wordmark" 
+                    src="/logo.png" 
+                    alt="Fadetrack Logo" 
                     width={140} 
                     height={36}
                     className="logo-img"
@@ -487,8 +487,8 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <span className="logo-wrapper">
                 <Image 
-                  src="/fadetrack-wordmark.svg" 
-                  alt="Fadetrack Wordmark" 
+                  src="/logo.png" 
+                  alt="Fadetrack Logo" 
                   width={140} 
                   height={36}
                   className="logo-img transition-transform hover:scale-[1.02]"
