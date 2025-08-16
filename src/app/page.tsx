@@ -72,7 +72,7 @@ export default function HomePage() {
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   // Word flip state for hero headline
-  const flipWords = ['Barber', 'Beautician', 'Stylist'];
+  const flipWords = ['Barber', 'Beautician', 'Makeup Artist'];
   const [wordIndex, setWordIndex] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -338,7 +338,7 @@ export default function HomePage() {
           </div>
           {/* Animation styles */}
           <style jsx>{`
-            .flip-word-wrapper { position: relative; display: inline-block; height: 1em; width: 8.7ch; overflow: hidden; vertical-align: baseline; line-height: 1em; }
+            .flip-word-wrapper { position: relative; display: inline-block; height: 1em; width: 13ch; overflow: hidden; vertical-align: baseline; line-height: 1em; }
             .flip-word { position: absolute; left: 0; bottom: -0.065em; font-weight: 700; line-height: 1em; color: #0d3a4a; -webkit-font-smoothing: antialiased; }
             @keyframes wordCycle { 0% { transform: translateY(100%); opacity: 0; } 12% { transform: translateY(0); opacity: 1; } 72% { transform: translateY(0); opacity: 1; } 88% { transform: translateY(-100%); opacity: 0; } 100% { transform: translateY(-100%); opacity: 0; } }
             .animate-word-cycle { animation: wordCycle 2.4s cubic-bezier(.77,.03,.22,1) forwards; will-change: transform, opacity; }
