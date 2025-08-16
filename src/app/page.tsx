@@ -270,10 +270,10 @@ export default function HomePage() {
                   <Image 
                     src="/fadetrack-logo-new.svg" 
                     alt="Fadetrack Logo" 
-                    width={120} 
-                    height={30}
+                    width={100} 
+                    height={24}
                     priority
-                    className="logo-img"  
+                    className="logo-img max-h-6"  
                   />
                 </span>
               </div>
@@ -490,8 +490,8 @@ export default function HomePage() {
                   src="/fadetrack-logo-new.svg" 
                   alt="Fadetrack Logo" 
                   width={100} 
-                  height={26}
-                  className="logo-img"
+                  height={24}
+                  className="logo-img max-h-6"
                 />
               </span>
             </div>
