@@ -19,27 +19,29 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/fadetrack-logo-new.svg", type: "image/svg+xml" }
+      // Use the smaller mark for app/browser icons for better visibility
+      { url: "/fadetrack-logo.svg", type: "image/svg+xml" }
     ],
     shortcut: ["/favicon.ico"],
-    apple: ["/fadetrack-logo-new.svg"],
+    apple: ["/fadetrack-logo.svg"],
   },
   openGraph: {
     title: "Fadetrack",
     description: "Log your haircuts, find professionals, and stay sharp.",
     url: "https://your-domain.example", // update with real domain
     siteName: "Fadetrack",
+    // Use a raster image for social previews (SVG can cause issues / appear blank)
     images: [
-      { url: "/fadetrack-logo-new.svg", width: 1200, height: 630, alt: "Fadetrack Logo" },
+      { url: "/logo.png", width: 1200, height: 630, alt: "Fadetrack Social Preview" },
     ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Fadetrack",
     description: "Log your haircuts, find professionals, and stay sharp.",
-    images: ["/fadetrack-logo-new.svg"],
+    images: ["/logo.png"],
   },
 };
 
@@ -51,7 +53,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/fadetrack-logo-new.svg" type="image/svg+xml" />
+        {/* Primary favicon / app icon */}
+        <link rel="icon" href="/fadetrack-logo.svg" type="image/svg+xml" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
