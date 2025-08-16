@@ -270,11 +270,12 @@ export default function HomePage() {
                   <Image 
                     src="/logo.png" 
                     alt="Fadetrack Logo" 
-                    width={160} 
-                    height={40}
+                    width={56} 
+                    height={56}
                     priority
                     className="logo-img transition-transform hover:scale-[1.02]"
                   />
+                  <span className="sr-only">Fadetrack</span>
                 </span>
               </div>
               <div className="flex items-center gap-6">
@@ -449,8 +450,8 @@ export default function HomePage() {
                   <Image 
                     src="/logo.png" 
                     alt="Fadetrack Logo" 
-                    width={140} 
-                    height={36}
+                    width={48} 
+                    height={48}
                     className="logo-img"
                   />
                 </span>
@@ -489,8 +490,8 @@ export default function HomePage() {
                 <Image 
                   src="/logo.png" 
                   alt="Fadetrack Logo" 
-                  width={140} 
-                  height={36}
+                  width={48} 
+                  height={48}
                   className="logo-img transition-transform hover:scale-[1.02]"
                 />
               </span>
