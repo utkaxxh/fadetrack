@@ -43,7 +43,8 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
         const nextProfessional = value;
         const nextServiceOptions = getServiceOptions(nextProfessional);
         const nextService = nextServiceOptions[0]?.value || 'other';
-        setForm({ ...form, professional_type: nextProfessional as any, service_type: nextService });
+  // nextProfessional is already a string; no need for an any cast
+  setForm({ ...form, professional_type: nextProfessional, service_type: nextService });
       } else {
         setForm({ ...form, [name]: value });
       }
