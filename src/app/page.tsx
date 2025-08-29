@@ -461,6 +461,7 @@ export default function HomePage() {
                 <div className="flex items-center gap-4">
                   <Link href="/privacy" className="hover:opacity-100 transition-opacity">Privacy</Link>
                   <Link href="/terms" className="hover:opacity-100 transition-opacity">Terms</Link>
+                  <a href="mailto:support@fadetrack.com" className="hover:opacity-100 transition-opacity">support@fadetrack.com</a>
                   <a 
                     href="https://www.x.com/utkaxxh" 
                     target="_blank" 
@@ -579,6 +580,7 @@ export default function HomePage() {
               <div className="flex items-center gap-4">
                 <Link href="/privacy" className="hover:opacity-80 transition-opacity">Privacy</Link>
                 <Link href="/terms" className="hover:opacity-80 transition-opacity">Terms</Link>
+                <a href="mailto:support@fadetrack.com" className="hover:opacity-80 transition-opacity">support@fadetrack.com</a>
                 <a 
                   href="https://www.x.com/utkaxxh" 
                   target="_blank" 
