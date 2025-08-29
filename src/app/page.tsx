@@ -454,23 +454,27 @@ export default function HomePage() {
                   />
                 </span>
               </div>
-              <p className="text-sm flex items-center gap-1" style={{color: '#f1f5f9', opacity: 0.9}}>
-                Made with 
-                <span className="mx-1" style={{color: '#f1f5f9'}}>♥</span> 
-                in San Francisco
-              </p>
-              <a 
-                href="https://www.x.com/utkaxxh" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm transition-colors duration-200"
-                style={{color: '#f1f5f9', opacity: 0.9}}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                @utkaxxh
-              </a>
+              <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{color:'#f1f5f9', opacity:.9}}>
+                <p className="flex items-center gap-1">
+                  Made with <span className="mx-1">♥</span> in San Francisco
+                </p>
+                <div className="flex items-center gap-4">
+                  <Link href="/privacy" className="hover:opacity-100 transition-opacity">Privacy</Link>
+                  <Link href="/terms" className="hover:opacity-100 transition-opacity">Terms</Link>
+                  <a 
+                    href="https://www.x.com/utkaxxh" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 transition-colors duration-200"
+                    style={{color: '#f1f5f9'}}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    @utkaxxh
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </footer>
@@ -568,23 +572,26 @@ export default function HomePage() {
       <footer className="mt-16" style={{backgroundColor: 'rgba(248, 250, 252, 0.5)', borderTop: '1px solid rgba(17, 75, 95, 0.2)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-sm flex items-center gap-1" style={{color: '#114B5F'}}>
-              Made with 
-              <span className="mx-1" style={{color: '#114B5F'}}>♥</span> 
-              in San Francisco
-            </p>
-            <a 
-              href="https://www.x.com/utkaxxh" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm transition-colors duration-200"
-              style={{color: '#114B5F'}}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-              @utkaxxh
-            </a>
+            <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{color:'#114B5F'}}>
+              <p className="flex items-center gap-1">
+                Made with <span className="mx-1">♥</span> in San Francisco
+              </p>
+              <div className="flex items-center gap-4">
+                <Link href="/privacy" className="hover:opacity-80 transition-opacity">Privacy</Link>
+                <Link href="/terms" className="hover:opacity-80 transition-opacity">Terms</Link>
+                <a 
+                  href="https://www.x.com/utkaxxh" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 transition-colors duration-200"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  @utkaxxh
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
