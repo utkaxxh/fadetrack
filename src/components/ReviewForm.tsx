@@ -38,8 +38,38 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
     } else if (name === 'rating') {
       setForm({ ...form, [name]: parseInt(value) });
     } else {
-      setForm({ ...form, [name]: value });
+      // If professional type changes, adjust service_type to appropriate default
+      if (name === 'professional_type') {
+        const nextProfessional = value;
+        const nextServiceOptions = getServiceOptions(nextProfessional);
+        const nextService = nextServiceOptions[0]?.value || 'other';
+        setForm({ ...form, professional_type: nextProfessional as any, service_type: nextService });
+      } else {
+        setForm({ ...form, [name]: value });
+      }
     }
+  }
+
+  // Dynamic service options per professional type
+  function getServiceOptions(proType?: string) {
+    if (proType === 'makeup_artist') {
+      return [
+        { value: 'bridal_makeup', label: 'Bridal Makeup' },
+        { value: 'sangeet_makeup', label: 'Sangeet Makeup' },
+        { value: 'engagement_makeup', label: 'Engagement Makeup' },
+        { value: 'reception_makeup', label: 'Reception Makeup' },
+        { value: 'casual_makeup', label: 'Casual / Party Makeup' },
+        { value: 'other', label: 'Other' },
+      ];
+    }
+    // Default (barber / stylist / beautician etc.)
+    return [
+      { value: 'haircut', label: 'Haircut' },
+      { value: 'beard_trim', label: 'Beard Trim' },
+      { value: 'shave', label: 'Shave' },
+      { value: 'haircut_beard', label: 'Haircut + Beard' },
+      { value: 'other', label: 'Other' },
+    ];
   }
 
   // Confetti celebration function
@@ -266,11 +296,9 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
               onChange={handleChange}
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="haircut">Haircut</option>
-              <option value="beard_trim">Beard Trim</option>
-              <option value="shave">Shave</option>
-              <option value="haircut_beard">Haircut + Beard</option>
-              <option value="other">Other</option>
+              {getServiceOptions(form.professional_type).map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
             </select>
           </div>
 
