@@ -260,134 +260,211 @@ export default function HomePage() {
   if (!user) {
     // Landing page for non-authenticated users
     return (
-      <div className="min-h-screen font-inter" style={{background:'#fff'}}>
+      <div className="min-h-screen font-inter" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
         {/* Header */}
-        <header className="sticky top-0 z-40 backdrop-blur supports-backdrop-blur:bg-white/70" style={{borderBottom:'1px solid rgba(17,75,95,0.08)'}}>
-          <div className="max-w-6xl mx-auto px-6">
+        <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <Link href="/" className="flex items-center gap-3" aria-label="Fadetrack Home">
+              <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
-                  <Image src="/fadetrack-logo-new.svg" alt="Fadetrack Logo" width={96} height={24} priority className="logo-img max-h-6" />
+                  <Image 
+                    src="/fadetrack-logo-new.svg" 
+                    alt="Fadetrack Logo" 
+                    width={100} 
+                    height={24}
+                    priority
+                    className="logo-img max-h-6"  
+                  />
                 </span>
-              </Link>
-              <nav className="hidden md:flex items-center gap-10 text-sm font-medium" style={{color:'#114B5F'}}>
-                <Link href="#features" className="hover:opacity-70 transition-opacity">Features</Link>
-                <Link href="/directory" className="hover:opacity-70 transition-opacity">Directory</Link>
-                <Link href="#pricing" className="hover:opacity-70 transition-opacity">Pricing</Link>
-                <Link href="#faq" className="hover:opacity-70 transition-opacity">FAQ</Link>
-              </nav>
-              <div className="flex items-center gap-4">
-                <Link href="/login" className="btn-secondary-ghost">Log in</Link>
-                <Link href="/login" className="btn-primary-minimal">Get Started</Link>
+              </div>
+              <div className="flex items-center gap-6">
+                <Link 
+                  href="/directory" 
+                  className="text-sm font-medium transition-colors duration-200 hover:opacity-80"
+                  style={{color: '#114B5F'}}
+                >
+                  Find Professionals
+                </Link>
+                <Link 
+                  href="/login" 
+                  className="btn-primary-teal px-6 py-2.5 text-sm font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
+                >
+                  Get Started
+                </Link>
               </div>
             </div>
           </div>
         </header>
 
         {/* Hero Section */}
-        <section className="relative section pt-32 pb-28 overflow-hidden">
-          <div className="hero-gradient" />
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center flex flex-col items-center">
-              <div className="eyebrow mb-6" style={{color:'#114B5F'}}>Community Grooming Intelligence</div>
-              <h1 className="heading-display-tight font-bold tracking-tight mb-8 text-[clamp(2.8rem,6vw,4.5rem)]" style={{color:'#114B5F'}}>
-                Review Your <PillCarousel words={flipWords} index={wordIndex} />
+        <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto text-center">
+            <div className="animate-fade-in">
+              <h1
+                aria-label="Review Your Barber, Beautician, or Stylist"
+                className="text-5xl md:text-7xl font-bold mb-10 leading-tight tracking-tight"
+                style={{color: '#114B5F'}}
+              >
+                Review Your{' '}
+                <PillCarousel words={flipWords} index={wordIndex} />
               </h1>
-              <p className="subtle-text text-[clamp(1.1rem,2.1vw,1.6rem)] leading-snug max-w-2xl mb-12">
-                Track every cut, surface trusted pros, and stay ahead of your style.
+              <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
+                Honest, recent, community-powered grooming reviews.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
-                <Link href="/login" className="btn-primary-minimal text-base sm:text-lg">Start Free</Link>
-                <Link href="/directory" className="btn-secondary-ghost text-base sm:text-lg">Explore Directory</Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link 
+                  href="/login" 
+                  className="btn-primary-teal px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
+                >
+                  Rate My Barber
+                </Link>
+                <Link 
+                  href="/directory" 
+                  className="btn-secondary-light px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+                >
+                  Find Professionals
+                </Link>
               </div>
             </div>
           </div>
+          {/* Animation styles */}
           <style jsx>{`
-            .pill-carousel { position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:11ch; height:1.4em; padding:0 .75ch; vertical-align:baseline; border-radius:999px; background:#ffffff; border:1px solid rgba(17,75,95,0.15); box-shadow:0 2px 4px -2px rgba(17,75,95,0.20); overflow:hidden; margin-left:.15em; }
-            .pill-word { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%) translateY(12px); font-weight:600; line-height:1; white-space:nowrap; opacity:0; font-size:.9em; letter-spacing:-.01em; }
-            @keyframes pillIn { 0% { transform:translate(-50%,-50%) translateY(16px); opacity:0;} 100% { transform:translate(-50%,-50%) translateY(0); opacity:1;} }
-            @keyframes pillOut { 0% { transform:translate(-50%,-50%) translateY(0); opacity:1;} 100% { transform:translate(-50%,-50%) translateY(-12px); opacity:0;} }
-            .pill-word.incoming { animation: pillIn .7s cubic-bezier(.4,.0,.2,1) forwards; }
-            .pill-word.outgoing { animation: pillOut .6s cubic-bezier(.4,.0,.2,1) forwards; }
-            @media (prefers-reduced-motion: reduce) { .pill-carousel { min-width:auto; height:auto; padding:0; border:none; box-shadow:none; } .pill-word { animation:none !important; opacity:1 !important; position:relative; top:auto; left:auto; transform:none; } }
+            .pill-carousel { position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:13ch; height:1.6em; padding:0 .9ch; vertical-align:baseline; border-radius:999px; background:linear-gradient(135deg,#ffffff,#f1f5f9); box-shadow:0 2px 6px -2px rgba(17,75,95,0.25),0 0 0 1px rgba(17,75,95,0.18); overflow:hidden; }
+            .pill-carousel::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 25%,rgba(17,75,95,.08),transparent 65%); pointer-events:none; }
+            .pill-word { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-weight:700; line-height:1; white-space:nowrap; opacity:0; }
+            @keyframes pillIn { 0% { transform:translate(-50%,-50%) translateX(40%); opacity:0;} 100% { transform:translate(-50%,-50%) translateX(0); opacity:1;} }
+            @keyframes pillOut { 0% { transform:translate(-50%,-50%) translateX(0); opacity:1;} 100% { transform:translate(-50%,-50%) translateX(-40%); opacity:0;} }
+            .pill-word.incoming { animation: pillIn .7s cubic-bezier(.77,.03,.22,1) forwards; }
+            .pill-word.outgoing { animation: pillOut .7s cubic-bezier(.77,.03,.22,1) forwards; }
+            .pill-word.static { opacity:1; position:relative; left:auto; top:auto; transform:none; animation:none; }
+            @media (prefers-reduced-motion: reduce) { .pill-carousel { background:none; box-shadow:none; min-width:auto; height:auto; padding:0; } .pill-word { animation:none !important; opacity:1 !important; position:relative; left:auto; top:auto; transform:none; } }
           `}</style>
+          {/* Floating elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl" style={{background: 'radial-gradient(circle, rgba(17, 75, 95, 0.2), transparent)'}}></div>
+            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl" style={{background: 'radial-gradient(circle, rgba(247, 240, 222, 0.3), transparent)'}}></div>
+          </div>
         </section>
 
         {/* Features Section */}
-        <section id="features" className="section" style={{background:'#fafbfd'}}>
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="mb-20 max-w-3xl">
-              <h2 className="font-bold heading-display-tight text-[clamp(2rem,4.4vw,3.2rem)] mb-6" style={{color:'#114B5F'}}>The toolkit for maintaining a consistently great look</h2>
-              <p className="subtle-text text-lg leading-relaxed">Purpose‑built features that remove guesswork, capture detail, and surface trustworthy professional talent.</p>
+        <section id="features" className="py-24 px-4 sm:px-6 lg:px-8" style={{backgroundColor: 'rgba(248, 250, 252, 0.5)'}}>
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{color: '#114B5F'}}>
+                Everything You Need to Track Your Style
+              </h2>
+              <p className="text-xl max-w-2xl mx-auto" style={{color: '#114B5F'}}>
+                Comprehensive tools to help you maintain your perfect look and discover amazing barbers
+              </p>
             </div>
-            <div className="feature-grid">
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
-                { icon:'✂️', title:'Haircut History', description:'Remember every cut—style, notes, cost, and what to repeat next time.'},
-                { icon:'🔔', title:'Smart Reminders', description:'Adaptive intervals so you never miss the perfect maintenance window.'},
-                { icon:'⭐', title:'Authentic Reviews', description:'Recent, signal‑rich feedback focused on craftsmanship and consistency.'},
-                { icon:'📍', title:'Professional Directory', description:'Filter real talent by rating, location, and specialization.'},
-                { icon:'💾', title:'Style Memory', description:'Capture photos & preferences so any chair becomes your chair.'},
-                { icon:'📊', title:'Cost Insights', description:'Track spend trends and optimize quality vs. price.'}
-              ].map(item => (
-                <div key={item.title} className="feature-card">
-                  <div className="feature-icon" aria-hidden="true">{item.icon}</div>
-                  <div>
-                    <h3 className="feature-title" style={{color:'#114B5F'}}>{item.title}</h3>
-                    <p className="feature-desc" style={{color:'#114B5F'}}>{item.description}</p>
-                  </div>
+                {
+                  icon: "�",
+                  title: "Haircut History",
+                  description: "Keep detailed records of every haircut including style, cost, and notes"
+                },
+                {
+                  icon: "🔔",
+                  title: "Smart Reminders",
+                  description: "Get notified when it's time for your next cut based on your schedule"
+                },
+                {
+                  icon: "✂️",
+                  title: "Barber Reviews",
+                  description: "Rate and review barbers, discover top-rated professionals near you"
+                },
+                {
+                  icon: "📱",
+                  title: "Mobile Friendly",
+                  description: "Access your haircut history and reminders from any device, anywhere"
+                },
+                {
+                  icon: "🏪",
+                  title: "Barber Directory",
+                  description: "Browse verified barber shops and read authentic customer reviews"
+                },
+                {
+                  icon: "💰",
+                  title: "Cost Tracking",
+                  description: "Monitor your grooming expenses and find the best value for money"
+                }
+              ].map((feature, index) => (
+                <div 
+                  key={index}
+                  className="backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                  style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+                >
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-bold mb-3" style={{color: '#114B5F'}}>{feature.title}</h3>
+                  <p className="leading-relaxed" style={{color: '#114B5F'}}>{feature.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Social Proof / Journey Section */}
-        <section className="section-tight" style={{background:'#fff'}}>
-          <div className="max-w-6xl mx-auto px-6 grid gap-16 md:grid-cols-2 items-start">
-            <div>
-              <h2 className="heading-display-tight font-semibold tracking-tight text-[clamp(1.9rem,3.4vw,2.6rem)] mb-6" style={{color:'#114B5F'}}>Designed for people who care about the details</h2>
-              <p className="subtle-text text-lg leading-relaxed mb-8">From first fade through years of evolution, Fadetrack preserves preference and progress so you can iterate—never guess.</p>
-              <div className="flex gap-4">
-                <Link href="/login" className="btn-primary-minimal">Create Account</Link>
-                <Link href="/directory" className="btn-secondary-ghost">Browse Barbers</Link>
-              </div>
-            </div>
-            <div className="grid gap-6 text-sm" style={{color:'#114B5F'}}>
-              {[
-                '“I finally stopped scrolling old photos to remember what to ask for.”',
-                '“Reminder hit exactly when the fade started looking soft.”',
-                '“Directory reviews feel current—not years old fluff.”'
-              ].map(q => (
-                <div key={q} className="p-6 rounded-2xl" style={{background:'#f5f7f9'}}>{q}</div>
-              ))}
-            </div>
+        {/* Journey Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{color: '#114B5F'}}>
+              Your Haircut Journey Starts Here
+            </h2>
+            <p className="text-xl md:text-2xl max-w-2xl mx-auto" style={{color: '#114B5F', opacity: 0.8}}>
+              Log every cut, discover great barbers, never settle for less
+            </p>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="section" style={{background:'#0d3a4a'}}>
-          <div className="max-w-6xl mx-auto px-6 text-center">
-            <h2 className="font-semibold heading-display-tight tracking-tight text-[clamp(2.2rem,4.6vw,3.4rem)] text-white mb-8">Own your look. Keep the standard high.</h2>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto mb-10">Join early adopters refining how grooming quality is tracked, compared, and improved.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/login" className="btn-primary-minimal" style={{background:'#114B5F'}}>Get Started</Link>
-              <Link href="/directory" className="btn-secondary-ghost" style={{background:'rgba(255,255,255,0.12)', color:'#fff'}}>Explore Talent</Link>
-            </div>
+        <section className="py-24 px-4 sm:px-6 lg:px-8" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+              Ready to Track Your Perfect Cut?
+            </h2>
+            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#ffffff', opacity: 0.9}}>
+              Start your personalized haircut tracking journey today
+            </p>
+            <Link 
+              href="/login" 
+              className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105 btn-secondary-light focus:outline-none focus:ring-2 focus:ring-teal-500/40"
+            >
+              Get Started for Free
+            </Link>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="py-14" style={{background:'#fff', borderTop:'1px solid rgba(17,75,95,0.08)'}}>
-          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-sm" style={{color:'#114B5F'}}>
-            <div className="flex items-center gap-3">
-              <Image src="/fadetrack-logo-new.svg" alt="Fadetrack Logo" width={88} height={22} />
-              <span className="opacity-60">© {new Date().getFullYear()} Fadetrack</span>
-            </div>
-            <div className="flex gap-8 opacity-70">
-              <a href="#privacy" className="hover:opacity-100 transition-opacity">Privacy</a>
-              <a href="#terms" className="hover:opacity-100 transition-opacity">Terms</a>
-              <a href="https://www.x.com/utkaxxh" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity flex items-center gap-1">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <footer className="py-12" style={{backgroundColor: '#114B5F', color: '#f1f5f9'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-3">
+                <span className="logo-wrapper">
+                  <Image 
+                    src="/fadetrack-logo-new.svg" 
+                    alt="Fadetrack Logo" 
+                    width={100} 
+                    height={26}
+                    className="logo-img"
+                  />
+                </span>
+              </div>
+              <p className="text-sm flex items-center gap-1" style={{color: '#f1f5f9', opacity: 0.9}}>
+                Made with 
+                <span className="mx-1" style={{color: '#f1f5f9'}}>♥</span> 
+                in San Francisco
+              </p>
+              <a 
+                href="https://www.x.com/utkaxxh" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm transition-colors duration-200"
+                style={{color: '#f1f5f9', opacity: 0.9}}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
                 @utkaxxh
               </a>
             </div>
