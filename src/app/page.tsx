@@ -260,7 +260,7 @@ export default function HomePage() {
   if (!user) {
     // Landing page for non-authenticated users
     return (
-      <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
+      <div className="min-h-screen font-inter" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
         {/* Header */}
         <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', borderBottom: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
