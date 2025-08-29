@@ -191,7 +191,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
             <select
               id="professional_type"
               name="professional_type"
-              value={form.professional_type as any}
+              value={form.professional_type || 'barber'}
               onChange={handleChange}
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >

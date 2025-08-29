@@ -65,6 +65,9 @@ export type Haircut = {
 
 
 
+// Static list of rotating words for hero animation (module-level avoids hook deps warnings)
+const FLIP_WORDS = ['Barber', 'Beautician', 'Makeup Artist'];
+
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<TabType>('log');
   const [showAccountSettings, setShowAccountSettings] = useState(false);
@@ -73,11 +76,11 @@ export default function HomePage() {
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   // Word flip state for hero headline
-  const flipWords = ['Barber', 'Beautician', 'Makeup Artist'];
+  const flipWords = FLIP_WORDS; // alias for clarity inside component
   const [wordIndex, setWordIndex] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
-      setWordIndex(i => (i + 1) % flipWords.length);
+  setWordIndex(i => (i + 1) % FLIP_WORDS.length);
     }, 2400); // cycle every 2.4s
     return () => clearInterval(interval);
   }, []);
