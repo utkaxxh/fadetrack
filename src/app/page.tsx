@@ -306,15 +306,15 @@ export default function HomePage() {
                 style={{color: '#114B5F'}}
               >
                 Review Your{' '}
-                <span
-                  className="flip-word-wrapper"
-                >
-                  <span
-                    key={wordIndex}
-                    className="flip-word animate-word-cycle"
-                  >
-                    {flipWords[wordIndex]}
-                  </span>
+                <span className="crossfade-wrapper" aria-hidden="true">
+                  {flipWords.map((w, i) => (
+                    <span
+                      key={w}
+                      className={`crossfade-word ${i === wordIndex ? 'active' : ''}`}
+                    >
+                      {w}
+                    </span>
+                  ))}
                 </span>
               </h1>
               <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
@@ -338,11 +338,10 @@ export default function HomePage() {
           </div>
           {/* Animation styles */}
           <style jsx>{`
-            .flip-word-wrapper { position: relative; display: inline-block; height: 1em; width: 13ch; overflow: hidden; vertical-align: baseline; line-height: 1em; }
-            .flip-word { position: absolute; left: 0; bottom: 0; font-weight: 700; line-height: 1em; color: #0d3a4a; -webkit-font-smoothing: antialiased; }
-            @keyframes wordCycle { 0% { transform: translateY(100%); opacity: 0; } 12% { transform: translateY(0); opacity: 1; } 72% { transform: translateY(0); opacity: 1; } 88% { transform: translateY(-100%); opacity: 0; } 100% { transform: translateY(-100%); opacity: 0; } }
-            .animate-word-cycle { animation: wordCycle 2.4s cubic-bezier(.77,.03,.22,1) forwards; will-change: transform, opacity; }
-            @media (prefers-reduced-motion: reduce) { .animate-word-cycle { animation: none; } }
+            .crossfade-wrapper { position: relative; display:inline-block; height:1em; width:13ch; vertical-align:baseline; }
+            .crossfade-word { position:absolute; inset:0; display:flex; align-items:flex-end; font-weight:700; line-height:1em; color:#0d3a4a; opacity:0; transform:translateY(.35em); transition:opacity .7s ease, transform .7s ease; will-change:opacity, transform; }
+            .crossfade-word.active { opacity:1; transform:translateY(0); }
+            @media (prefers-reduced-motion: reduce) { .crossfade-word { transition:none; transform:none !important; opacity:1 !important; } .crossfade-wrapper { width:auto; } }
           `}</style>
           {/* Floating elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
