@@ -25,7 +25,7 @@ const getTabsForRole = (role: UserRole): { label: string; value: TabType }[] => 
     { label: 'Log Haircut', value: 'log' as TabType },
     { label: 'History', value: 'history' as TabType },
     { label: 'Reminders', value: 'reminders' as TabType },
-    { label: 'Post Review', value: 'reviews' as TabType },
+    { label: 'Review a Pro', value: 'reviews' as TabType },
     ...commonTabs,
   ];
 };

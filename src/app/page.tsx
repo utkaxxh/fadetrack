@@ -38,6 +38,7 @@ export type Review = {
   barber_name: string;
   shop_name: string;
   location: string;
+  professional_type?: string; // barber, makeup_artist, stylist, etc.
   service_type: string; // haircut, beard trim, etc.
   rating: number; // 1-5 stars
   cost: string;
@@ -372,8 +373,8 @@ export default function HomePage() {
                 },
                 {
                   icon: "✂️",
-                  title: "Barber Reviews",
-                  description: "Rate and review barbers, discover top-rated professionals near you"
+                  title: "Pro Reviews",
+                  description: "Rate and review barbers, makeup artists, stylists—discover top talent near you"
                 },
                 {
                   icon: "📱",
@@ -382,8 +383,8 @@ export default function HomePage() {
                 },
                 {
                   icon: "🏪",
-                  title: "Barber Directory",
-                  description: "Browse verified barber shops and read authentic customer reviews"
+                  title: "Professional Directory",
+                  description: "Browse verified grooming professionals and read authentic customer reviews"
                 },
                 {
                   icon: "💰",

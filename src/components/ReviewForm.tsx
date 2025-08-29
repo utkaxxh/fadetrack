@@ -15,6 +15,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
     barber_name: '',
     shop_name: '',
     location: '',
+    professional_type: 'barber',
     service_type: 'haircut',
     rating: 5,
     cost: '',
@@ -132,6 +133,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
         barber_name: '', 
         shop_name: '',
         location: '', 
+        professional_type: form.professional_type || 'barber',
         service_type: 'haircut',
         rating: 5,
         cost: '',
@@ -183,8 +185,27 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
+            <label htmlFor="professional_type" className="block text-sm font-medium text-gray-700 mb-2">
+              Professional Type
+            </label>
+            <select
+              id="professional_type"
+              name="professional_type"
+              value={form.professional_type as any}
+              onChange={handleChange}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="barber">Barber</option>
+              <option value="makeup_artist">Makeup Artist</option>
+              <option value="stylist">Stylist</option>
+              <option value="beautician">Beautician</option>
+              <option value="nail_tech">Nail Tech</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
             <label htmlFor="barber_name" className="block text-sm font-medium text-gray-700 mb-2">
-              Barber Name
+              {form.professional_type === 'barber' ? 'Barber Name' : form.professional_type === 'makeup_artist' ? 'Makeup Artist Name' : form.professional_type === 'stylist' ? 'Stylist Name' : 'Professional Name'}
             </label>
             <input
               id="barber_name"
