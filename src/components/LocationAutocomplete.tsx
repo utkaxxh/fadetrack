@@ -36,6 +36,9 @@ export default function LocationAutocomplete({
 }: LocationAutocompleteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const onChangeRef = useRef(onChange);
+  // Keep latest onChange without retriggering effect
+  useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingError, setLoadingError] = useState<string | null>(null);
 
@@ -76,7 +79,7 @@ export default function LocationAutocomplete({
         }
 
         // Listen for place selection
-        autocompleteRef.current.addListener('place_changed', () => {
+  autocompleteRef.current.addListener('place_changed', () => {
           const place = autocompleteRef.current?.getPlace();
           
           if (place && place.formatted_address) {
@@ -110,7 +113,7 @@ export default function LocationAutocomplete({
               place_id: place.place_id
             };
 
-            onChange(formattedLocation, locationData);
+            onChangeRef.current(formattedLocation, locationData);
           }
         });
 
@@ -162,7 +165,8 @@ export default function LocationAutocomplete({
         google.maps.event.clearInstanceListeners(autocompleteRef.current);
       }
     };
-  }, [onChange]);
+  // Run only once on mount; onChange handled via ref so we don't re-init and lose suggestions
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
