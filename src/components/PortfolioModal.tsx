@@ -4,7 +4,8 @@ import Image from 'next/image';
 interface PortfolioItem {
   id?: number;
   image_url: string;
-  caption: string;
+  caption?: string;
+  description?: string;
   service_type: string;
   created_at?: string;
 }
@@ -28,11 +29,13 @@ export default function PortfolioModal({
 }: PortfolioModalProps) {
   const [formData, setFormData] = useState({
     image_url: item?.image_url || '',
-    caption: item?.caption || '',
+    caption: item?.caption || item?.description || '',
     service_type: item?.service_type || 'haircut'
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const serviceTypes = [
     { value: 'haircut', label: 'Haircut' },
@@ -73,13 +76,67 @@ export default function PortfolioModal({
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // For demo purposes, we'll just use a placeholder URL
-      // In a real app, you'd upload to a service like Supabase Storage
-      const placeholderUrl = `https://via.placeholder.com/400x400.png?text=${encodeURIComponent(file.name)}`;
-      handleChange('image_url', placeholderUrl);
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      setErrors(prev => ({ ...prev, image_url: 'Please select a valid image file (JPEG, PNG, WebP, or GIF)' }));
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors(prev => ({ ...prev, image_url: 'File size must be less than 5MB' }));
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress(0);
+    setErrors(prev => ({ ...prev, image_url: '' }));
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'portfolio'); // Organize images in folders
+
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => Math.min(prev + 10, 90));
+      }, 100);
+
+      const response = await fetch('/api/uploadImage', {
+        method: 'POST',
+        body: formData,
+      });
+
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload image');
+      }
+
+      const result = await response.json();
+      handleChange('image_url', result.url);
+      
+      // Reset upload state after a brief delay
+      setTimeout(() => {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }, 500);
+
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setErrors(prev => ({ 
+        ...prev, 
+        image_url: error instanceof Error ? error.message : 'Failed to upload image' 
+      }));
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -119,20 +176,38 @@ export default function PortfolioModal({
                 type="file"
                 accept="image/*"
                 onChange={handleImageUpload}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
+                disabled={isUploading}
+                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
                   borderColor: 'rgba(17, 75, 95, 0.3)', 
                   color: '#114B5F'
                 }}
               />
+              
+              {isUploading && (
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-sm" style={{color: '#114B5F'}}>
+                    <span>Uploading...</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+              
               <p className="text-xs" style={{color: '#114B5F', opacity: 0.6}}>
-                Or paste an image URL below
+                Or paste an image URL below (Max size: 5MB, formats: JPEG, PNG, WebP, GIF)
               </p>
               <input
                 type="url"
                 value={formData.image_url}
                 onChange={(e) => handleChange('image_url', e.target.value)}
-                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white"
+                disabled={isUploading}
+                className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 bg-slate-100 focus:bg-white disabled:opacity-50"
                 style={{
                   borderColor: errors.image_url ? '#ef4444' : 'rgba(17, 75, 95, 0.3)', 
                   color: '#114B5F'
@@ -213,7 +288,8 @@ export default function PortfolioModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 rounded-lg font-semibold transition-all duration-200"
+              disabled={isUploading}
+              className="px-6 py-3 rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: 'rgba(17, 75, 95, 0.08)', 
                 color: '#114B5F',
@@ -224,9 +300,10 @@ export default function PortfolioModal({
             </button>
             <button
               type="submit"
-              className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 btn-primary-teal"
+              disabled={isUploading}
+              className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200 btn-primary-teal disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {item ? 'Update Item' : 'Add to Portfolio'}
+              {isUploading ? 'Uploading...' : (item ? 'Update Item' : 'Add to Portfolio')}
             </button>
           </div>
         </form>

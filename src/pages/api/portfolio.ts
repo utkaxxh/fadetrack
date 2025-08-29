@@ -30,16 +30,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-  const { professionalId } = req.query;
+  const { professionalEmail } = req.query;
 
-  if (!professionalId) {
-    return res.status(400).json({ error: 'Professional ID is required' });
+  if (!professionalEmail) {
+    return res.status(400).json({ error: 'Professional email is required' });
   }
 
   const { data: portfolio, error } = await supabase
-    .from('professional_portfolio')
+    .from('portfolio')
     .select('*')
-    .eq('professional_id', professionalId)
+    .eq('professional_email', professionalEmail)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -51,18 +51,18 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-  const { professionalId, image_url, caption, service_type } = req.body;
+  const { professionalEmail, image_url, caption, service_type } = req.body;
 
-  if (!professionalId || !image_url || !caption) {
+  if (!professionalEmail || !image_url || !caption) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   const { data: portfolioItem, error } = await supabase
-    .from('professional_portfolio')
+    .from('portfolio')
     .insert([{
-      professional_id: professionalId,
+      professional_email: professionalEmail,
       image_url,
-      caption,
+      description: caption, // Note: the DB field is 'description', not 'caption'
       service_type: service_type || 'general'
     }])
     .select()
@@ -84,11 +84,11 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const updates: Record<string, unknown> = {};
-  if (caption !== undefined) updates.caption = caption;
+  if (caption !== undefined) updates.description = caption; // DB field is 'description'
   if (service_type !== undefined) updates.service_type = service_type;
 
   const { data: portfolioItem, error } = await supabase
-    .from('professional_portfolio')
+    .from('portfolio')
     .update(updates)
     .eq('id', id)
     .select()
@@ -110,7 +110,7 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { error } = await supabase
-    .from('professional_portfolio')
+    .from('portfolio')
     .delete()
     .eq('id', id);
 

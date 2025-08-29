@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import type { User } from '@supabase/supabase-js';
 import ServiceModal from './ServiceModal';
 import PortfolioModal from './PortfolioModal';
@@ -42,9 +43,10 @@ interface Service {
 interface PortfolioItem {
   id: number;
   image_url: string;
-  caption: string;
+  description?: string; // Database field name
+  caption?: string; // Legacy field name for compatibility
   service_type: string;
-  created_at: string;
+  created_at?: string;
 }
 
 interface Review {
@@ -185,13 +187,13 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
     caption: string;
     service_type: string;
   }) => {
-    if (!profile?.id) return;
+    if (!user?.email) return;
 
     try {
       const method = editingPortfolioItem ? 'PUT' : 'POST';
       const body = editingPortfolioItem 
         ? { ...itemData, id: editingPortfolioItem.id }
-        : { ...itemData, professionalId: profile.id };
+        : { ...itemData, professionalEmail: user.email };
 
       const response = await fetch('/api/portfolio', {
         method,
@@ -202,9 +204,14 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
       if (response.ok) {
         await fetchProfile();
         setEditingPortfolioItem(undefined);
+      } else {
+        const errorData = await response.json();
+        console.error('Error saving portfolio item:', errorData);
+        alert('Failed to save portfolio item: ' + (errorData.error || 'Unknown error'));
       }
     } catch (err) {
       console.error('Error saving portfolio item:', err);
+      alert('Network error while saving portfolio item');
     }
   };
 
@@ -810,21 +817,58 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
               className="rounded-lg overflow-hidden"
               style={{backgroundColor: 'rgba(17, 75, 95, 0.05)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
             >
-              <div className="aspect-square bg-gray-200 flex items-center justify-center">
-                <span style={{color: '#114B5F', opacity: 0.5}}>📷 Image</span>
+              <div className="aspect-square bg-gray-200 flex items-center justify-center overflow-hidden">
+                {item.image_url ? (
+                  <Image
+                    src={item.image_url}
+                    alt={item.description || item.caption || 'Portfolio item'}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = '<span style="color: #114B5F; opacity: 0.5;">📷 Image Failed to Load</span>';
+                      }
+                    }}
+                  />
+                ) : (
+                  <span style={{color: '#114B5F', opacity: 0.5}}>📷 No Image</span>
+                )}
               </div>
               <div className="p-4">
-                <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.caption}</p>
+                <p className="text-sm mb-2" style={{color: '#114B5F'}}>
+                  {item.description || item.caption || 'No description'}
+                </p>
                 <div className="flex justify-between items-center">
                   <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}>
                     {item.service_type}
                   </span>
-                  <button 
-                    onClick={() => handleDeletePortfolioItem(item.id)}
-                    className="text-xs text-red-600"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => {
+                        setEditingPortfolioItem({
+                          id: item.id,
+                          image_url: item.image_url,
+                          caption: item.description || item.caption || '',
+                          service_type: item.service_type,
+                          created_at: item.created_at
+                        });
+                        setShowPortfolioModal(true);
+                      }}
+                      className="text-xs text-blue-600 hover:text-blue-800"
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      onClick={() => handleDeletePortfolioItem(item.id)}
+                      className="text-xs text-red-600 hover:text-red-800"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
