@@ -1,5 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { supabase } from '../../components/supabaseClient';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'DELETE') {
@@ -14,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // First, get the review to verify ownership and get barber info for stats update
-    const { data: review, error: fetchError } = await supabase
+    const { data: review, error: fetchError } = await supabaseAdmin
       .from('reviews')
       .select('*')
       .eq('id', id)
@@ -22,11 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .single();
 
     if (fetchError || !review) {
+      console.error('Error fetching review for deletion:', fetchError);
       return res.status(404).json({ error: 'Review not found or access denied' });
     }
 
     // Delete the review
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await supabaseAdmin
       .from('reviews')
       .delete()
       .eq('id', id)
@@ -38,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Update barber stats after review deletion
-    const { data: existingBarber } = await supabase
+    const { data: existingBarber } = await supabaseAdmin
       .from('barbers')
       .select('*')
       .eq('name', review.barber_name)
@@ -51,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const newTotalRating = (existingBarber.average_rating * existingBarber.total_reviews) - review.rating;
       const newAverageRating = newTotalRating / newTotalReviews;
 
-      const { error: updateError } = await supabase
+      const { error: updateError } = await supabaseAdmin
         .from('barbers')
         .update({
           total_reviews: newTotalReviews,
@@ -65,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     } else if (existingBarber && existingBarber.total_reviews === 1) {
       // Delete barber record if this was their only review
-      const { error: deleteBarberError } = await supabase
+      const { error: deleteBarberError } = await supabaseAdmin
         .from('barbers')
         .delete()
         .eq('id', existingBarber.id);

@@ -176,15 +176,16 @@ export default function HomePage() {
   }, [user]);
 
   // Fetch reviews for the directory/browse functionality
+  const fetchReviews = async () => {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('is_public', true)
+      .order('created_at', { ascending: false });
+    if (!error && data) setReviews(data);
+  };
+
   useEffect(() => {
-    async function fetchReviews() {
-      const { data, error } = await supabase
-        .from('reviews')
-        .select('*')
-        .eq('is_public', true)
-        .order('created_at', { ascending: false });
-      if (!error && data) setReviews(data);
-    }
     fetchReviews();
   }, []);
 
@@ -218,7 +219,8 @@ export default function HomePage() {
       });
 
       if (response.ok) {
-        setReviews(reviews.filter(review => review.id !== reviewId));
+        // Refetch reviews from database to ensure consistency
+        await fetchReviews();
       } else {
         const errorData = await response.json();
         alert('Failed to delete review: ' + errorData.error);
