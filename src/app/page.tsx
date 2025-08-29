@@ -306,16 +306,7 @@ export default function HomePage() {
                 style={{color: '#114B5F'}}
               >
                 Review Your{' '}
-                <span className="crossfade-wrapper" aria-hidden="true">
-                  {flipWords.map((w, i) => (
-                    <span
-                      key={w}
-                      className={`crossfade-word ${i === wordIndex ? 'active' : ''}`}
-                    >
-                      {w}
-                    </span>
-                  ))}
-                </span>
+                <PillCarousel words={flipWords} index={wordIndex} />
               </h1>
               <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
                 Honest, recent, community-powered grooming reviews.
@@ -338,10 +329,15 @@ export default function HomePage() {
           </div>
           {/* Animation styles */}
           <style jsx>{`
-            .crossfade-wrapper { position: relative; display:inline-block; height:1em; width:13ch; vertical-align:baseline; }
-            .crossfade-word { position:absolute; inset:0; display:flex; align-items:flex-end; font-weight:700; line-height:1em; color:#0d3a4a; opacity:0; transform:translateY(.35em); transition:opacity .7s ease, transform .7s ease; will-change:opacity, transform; }
-            .crossfade-word.active { opacity:1; transform:translateY(0); }
-            @media (prefers-reduced-motion: reduce) { .crossfade-word { transition:none; transform:none !important; opacity:1 !important; } .crossfade-wrapper { width:auto; } }
+            .pill-carousel { position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:13ch; height:1.6em; padding:0 .9ch; vertical-align:baseline; border-radius:999px; background:linear-gradient(135deg,#ffffff,#f1f5f9); box-shadow:0 2px 6px -2px rgba(17,75,95,0.25),0 0 0 1px rgba(17,75,95,0.18); overflow:hidden; }
+            .pill-carousel::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 25%,rgba(17,75,95,.08),transparent 65%); pointer-events:none; }
+            .pill-word { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-weight:700; line-height:1; white-space:nowrap; opacity:0; }
+            @keyframes pillIn { 0% { transform:translate(-50%,-50%) translateX(40%); opacity:0;} 100% { transform:translate(-50%,-50%) translateX(0); opacity:1;} }
+            @keyframes pillOut { 0% { transform:translate(-50%,-50%) translateX(0); opacity:1;} 100% { transform:translate(-50%,-50%) translateX(-40%); opacity:0;} }
+            .pill-word.incoming { animation: pillIn .7s cubic-bezier(.77,.03,.22,1) forwards; }
+            .pill-word.outgoing { animation: pillOut .7s cubic-bezier(.77,.03,.22,1) forwards; }
+            .pill-word.static { opacity:1; position:relative; left:auto; top:auto; transform:none; animation:none; }
+            @media (prefers-reduced-motion: reduce) { .pill-carousel { background:none; box-shadow:none; min-width:auto; height:auto; padding:0; } .pill-word { animation:none !important; opacity:1 !important; position:relative; left:auto; top:auto; transform:none; } }
           `}</style>
           {/* Floating elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -589,5 +585,32 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Local component for pill carousel headline animation
+function PillCarousel({ words, index }: { words: string[]; index: number }) {
+  // Keep track of previous index to apply outgoing animation
+  const [prevIndex, setPrevIndex] = React.useState(index);
+  React.useEffect(() => {
+    if (index !== prevIndex) {
+      setPrevIndex(index);
+    }
+  }, [index, prevIndex]);
+  return (
+    <span className="pill-carousel" aria-live="polite" aria-atomic="true">
+      {words.map((w, i) => {
+        const state = i === index ? 'incoming' : i === prevIndex ? 'outgoing' : 'hidden';
+        if (state === 'hidden') return null;
+        return (
+          <span
+            key={w + i + state}
+            className={`pill-word ${state === 'incoming' ? 'incoming' : state === 'outgoing' ? 'outgoing' : ''}`}
+          >
+            {w}
+          </span>
+        );
+      })}
+    </span>
   );
 }
