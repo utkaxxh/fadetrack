@@ -66,7 +66,7 @@ export type Haircut = {
 
 
 // Static list of rotating words for hero animation (module-level avoids hook deps warnings)
-const FLIP_WORDS = ['Makeup Artist', 'Beauty Expert', 'MUA'];
+const FLIP_WORDS = ['Barber', 'Beautician', 'Makeup Artist'];
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<TabType>('log');
@@ -289,7 +289,7 @@ export default function HomePage() {
                   className="text-sm font-medium transition-colors duration-200 hover:opacity-80"
                   style={{color: '#114B5F'}}
                 >
-                  Find Makeup Artists
+                  Find Professionals
                 </Link>
                 <Link 
                   href="/login" 
@@ -307,42 +307,29 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto text-center">
             <div className="animate-fade-in">
               <h1
-                aria-label="The Ultimate Platform for Makeup Artists and Clients"
+                aria-label="Review Your Barber, Beautician, or Stylist"
                 className="text-5xl md:text-7xl font-bold mb-10 leading-tight tracking-tight"
                 style={{color: '#114B5F'}}
               >
-                Makeup Meets{' '}
-                <span className="text-gradient bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Reviews</span>
+                Review Your{' '}
+                <PillCarousel words={flipWords} index={wordIndex} />
               </h1>
-              <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
-                The platform where clients discover and review top makeup artists, and where talented 
-                <PillCarousel words={flipWords} index={wordIndex} /> showcase their expertise
+              <p className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
+                Honest, recent, community-powered grooming reviews.
               </p>
-              <div className="flex flex-col lg:flex-row gap-6 justify-center items-center mb-8">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link 
-                    href="/login" 
-                    className="btn-primary-teal px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
-                  >
-                    Find & Review Makeup Artists
-                  </Link>
-                  <Link 
-                    href="/directory" 
-                    className="btn-secondary-light px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/30"
-                  >
-                    Browse Directory
-                  </Link>
-                </div>
-                <div className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>or</div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link 
                   href="/login" 
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500/40 hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                  className="btn-primary-teal px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
                 >
-                  Create Makeup Artist Profile
+                  Rate My Stylist
                 </Link>
-              </div>
-              <div className="text-sm" style={{color: '#114B5F', opacity: 0.7}}>
-                Join thousands of makeup artists showcasing their work
+                <Link 
+                  href="/directory" 
+                  className="btn-secondary-light px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+                >
+                  Find Professionals
+                </Link>
               </div>
             </div>
           </div>
@@ -370,217 +357,87 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-20">
               <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{color: '#114B5F'}}>
-                The Ultimate Makeup Artist Platform
+                Everything You Need to Track Your Style
               </h2>
-              <p className="text-xl max-w-3xl mx-auto" style={{color: '#114B5F'}}>
-                Whether you&apos;re seeking the perfect makeup artist for your special day or showcasing your makeup artistry, 
-                Fadetrack provides the tools you need to succeed
+              <p className="text-xl max-w-2xl mx-auto" style={{color: '#114B5F'}}>
+                Comprehensive tools to help you maintain your perfect look and discover amazing barbers
               </p>
             </div>
             
-            {/* For Clients Section */}
-            <div className="mb-16">
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold mb-4" style={{color: '#114B5F'}}>
-                  � For Clients
-                </h3>
-                <p className="text-lg" style={{color: '#114B5F', opacity: 0.8}}>
-                  Discover, review, and book talented makeup artists
-                </p>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    icon: "🔍",
-                    title: "Find Top Makeup Artists",
-                    description: "Browse verified makeup artists in your area with authentic reviews and portfolios"
-                  },
-                  {
-                    icon: "⭐",
-                    title: "Leave Honest Reviews",
-                    description: "Share your makeup experience and help others discover amazing artists"
-                  },
-                  {
-                    icon: "📝",
-                    title: "Track Your Makeup History",
-                    description: "Keep detailed records of every makeup session including photos, costs, and notes"
-                  },
-                  {
-                    icon: "🎨",
-                    title: "Browse Makeup Styles",
-                    description: "Explore different makeup looks and find artists who specialize in your preferred style"
-                  },
-                  {
-                    icon: "💰",
-                    title: "Compare Pricing",
-                    description: "Find makeup artists that fit your budget for any occasion"
-                  },
-                  {
-                    icon: "📱",
-                    title: "Mobile Experience",
-                    description: "Book and review makeup artists on-the-go with our mobile-friendly platform"
-                  }
-                ].map((feature, index) => (
-                  <div 
-                    key={index}
-                    className="backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                    style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
-                  >
-                    <div className="text-3xl mb-4">{feature.icon}</div>
-                    <h4 className="text-lg font-bold mb-3" style={{color: '#114B5F'}}>{feature.title}</h4>
-                    <p className="text-sm leading-relaxed" style={{color: '#114B5F'}}>{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* For Professionals Section */}
-            <div>
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold mb-4" style={{color: '#114B5F'}}>
-                  💄 For Makeup Artists
-                </h3>
-                <p className="text-lg" style={{color: '#114B5F', opacity: 0.8}}>
-                  Showcase your artistry and grow your makeup business
-                </p>
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[
-                  {
-                    icon: "🎨",
-                    title: "Makeup Portfolio Showcase",
-                    description: "Upload your best makeup looks and create a stunning visual portfolio of your artistry"
-                  },
-                  {
-                    icon: "👥",
-                    title: "Client Reviews & Ratings",
-                    description: "Build trust with authentic client reviews and maintain a stellar reputation"
-                  },
-                  {
-                    icon: "📊",
-                    title: "Business Analytics",
-                    description: "Track your performance, review trends, and understand your client demographics"
-                  },
-                  {
-                    icon: "�",
-                    title: "Service & Style Management",
-                    description: "List your makeup services, specialties, and pricing to attract the right clients"
-                  },
-                  {
-                    icon: "🌟",
-                    title: "Verified Artist Badge",
-                    description: "Stand out with our verification system that builds credibility and trust with clients"
-                  },
-                  {
-                    icon: "📞",
-                    title: "Direct Client Booking",
-                    description: "Let clients contact and book you directly through your professional profile"
-                  }
-                ].map((feature, index) => (
-                  <div 
-                    key={index}
-                    className="backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                    style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(147, 51, 234, 0.2)'}}
-                  >
-                    <div className="text-3xl mb-4">{feature.icon}</div>
-                    <h4 className="text-lg font-bold mb-3" style={{color: '#114B5F'}}>{feature.title}</h4>
-                    <p className="text-sm leading-relaxed" style={{color: '#114B5F'}}>{feature.description}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  icon: "✍️",
+                  title: "Haircut History",
+                  description: "Keep detailed records of every haircut including style, cost, and notes"
+                },
+                {
+                  icon: "🔔",
+                  title: "Smart Reminders",
+                  description: "Get notified when it's time for your next cut based on your schedule"
+                },
+                {
+                  icon: "✂️",
+                  title: "Pro Reviews",
+                  description: "Rate and review barbers, makeup artists, stylists—discover top talent near you"
+                },
+                {
+                  icon: "📱",
+                  title: "Mobile Friendly",
+                  description: "Access your haircut history and reminders from any device, anywhere"
+                },
+                {
+                  icon: "🏪",
+                  title: "Professional Directory",
+                  description: "Browse verified grooming professionals and read authentic customer reviews"
+                },
+                {
+                  icon: "💰",
+                  title: "Cost Tracking",
+                  description: "Monitor your grooming expenses and find the best value for money"
+                }
+              ].map((feature, index) => (
+                <div 
+                  key={index}
+                  className="backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                  style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
+                >
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-bold mb-3" style={{color: '#114B5F'}}>{feature.title}</h3>
+                  <p className="leading-relaxed" style={{color: '#114B5F'}}>{feature.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Journey Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Client Journey */}
-              <div className="text-center lg:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{color: '#114B5F'}}>
-                  🌟 Your Makeup Journey Starts Here
-                </h2>
-                <p className="text-lg md:text-xl mb-8" style={{color: '#114B5F', opacity: 0.8}}>
-                  Discover talented makeup artists, share your experiences, and build a community around authentic makeup artistry reviews.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Link 
-                    href="/login" 
-                    className="btn-primary-teal px-6 py-3 text-base font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/40"
-                  >
-                    Start Reviewing
-                  </Link>
-                  <Link 
-                    href="/directory" 
-                    className="btn-secondary-light px-6 py-3 text-base font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500/30"
-                  >
-                    Browse Makeup Artists
-                  </Link>
-                </div>
-              </div>
-              
-              {/* Professional Journey */}
-              <div className="text-center lg:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{color: '#114B5F'}}>
-                  � Grow Your Makeup Artistry Brand
-                </h2>
-                <p className="text-lg md:text-xl mb-8" style={{color: '#114B5F', opacity: 0.8}}>
-                  Showcase your makeup portfolio, earn authentic reviews, and connect with clients who appreciate your artistry and creativity.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <Link 
-                    href="/login" 
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 text-base font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500/40 hover:shadow-lg transition-all duration-200"
-                  >
-                    Create Artist Profile
-                  </Link>
-                  <Link 
-                    href="/directory" 
-                    className="border-2 border-purple-600 text-purple-600 px-6 py-3 text-base font-semibold rounded-full hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-all duration-200"
-                  >
-                    See Artist Examples
-                  </Link>
-                </div>
-              </div>
-            </div>
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{color: '#114B5F'}}>
+              Your Haircut Journey Starts Here
+            </h2>
+            <p className="text-xl md:text-2xl max-w-2xl mx-auto" style={{color: '#114B5F', opacity: 0.8}}>
+              Log every cut, discover great barbers, never settle for less
+            </p>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8" style={{background: 'linear-gradient(135deg, #114B5F, #0d3a4a, #2c1810)'}}>
-          <div className="max-w-5xl mx-auto text-center">
+        <section className="py-24 px-4 sm:px-6 lg:px-8" style={{background: 'linear-gradient(to right, #114B5F, #0d3a4a)'}}>
+          <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-              Join the Makeup Artistry Revolution
+              Ready to Track Your Perfect Cut?
             </h2>
-            <p className="text-xl mb-12 max-w-3xl mx-auto" style={{color: '#ffffff', opacity: 0.9}}>
-              Whether you&apos;re discovering your next favorite makeup artist or building your artistry brand, 
-              Fadetrack connects authentic reviews with exceptional makeup talent.
+            <p className="text-xl mb-10 max-w-2xl mx-auto" style={{color: '#ffffff', opacity: 0.9}}>
+              Start your personalized haircut tracking journey today
             </p>
-            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-              <div className="text-center">
-                <p className="text-sm text-white opacity-75 mb-3">For Clients</p>
-                <Link 
-                  href="/login" 
-                  className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105 btn-secondary-light focus:outline-none focus:ring-2 focus:ring-teal-500/40"
-                >
-                  Find & Review Makeup Artists
-                </Link>
-              </div>
-              <div className="text-white opacity-50 text-lg">•</div>
-              <div className="text-center">
-                <p className="text-sm text-white opacity-75 mb-3">For Makeup Artists</p>
-                <Link 
-                  href="/login" 
-                  className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500/40 hover:shadow-2xl transition-all duration-200 transform hover:scale-105"
-                >
-                  Showcase Your Artistry
-                </Link>
-              </div>
-            </div>
-            <div className="mt-8 text-sm text-white opacity-60">
-              Free to join • Thousands of makeup artists already trust Fadetrack
-            </div>
+            <Link 
+              href="/login" 
+              className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105 btn-secondary-light focus:outline-none focus:ring-2 focus:ring-teal-500/40"
+            >
+              Get Started for Free
+            </Link>
           </div>
         </section>
 
