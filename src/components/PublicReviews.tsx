@@ -74,13 +74,44 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
 
   const getServiceTypeDisplay = (serviceType: string) => {
     const types: { [key: string]: string } = {
+      // Hair services
       'haircut': 'Haircut',
       'beard_trim': 'Beard Trim',
       'shave': 'Shave',
       'haircut_beard': 'Haircut + Beard',
+      // Makeup services
+      'bridal_makeup': 'Bridal Makeup',
+      'sangeet_makeup': 'Sangeet Makeup',
+      'engagement_makeup': 'Engagement Makeup',
+      'reception_makeup': 'Reception Makeup',
+      'casual_makeup': 'Casual / Party Makeup',
       'other': 'Other'
     };
-    return types[serviceType] || serviceType;
+    return types[serviceType] || serviceType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  const getProfessionalTypeDisplay = (professionalType?: string) => {
+    const types: { [key: string]: string } = {
+      'barber': 'Barber',
+      'makeup_artist': 'Makeup Artist',
+      'stylist': 'Stylist',
+      'beautician': 'Beautician',
+      'nail_tech': 'Nail Tech',
+      'other': 'Professional'
+    };
+    return types[professionalType || 'barber'] || 'Professional';
+  };
+
+  const getServiceEmoji = (professionalType?: string) => {
+    const emojis: { [key: string]: string } = {
+      'barber': '✂️',
+      'makeup_artist': '💄',
+      'stylist': '💇‍♀️',
+      'beautician': '✨',
+      'nail_tech': '💅',
+      'other': '🎨'
+    };
+    return emojis[professionalType || 'barber'] || '✂️';
   };
 
   if (filteredAndSortedReviews.length === 0) {
@@ -200,14 +231,14 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
                 
                 <div className="space-y-1 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium">Barber:</span>
+                    <span className="font-medium">{getProfessionalTypeDisplay(review.professional_type)}:</span>
                     <span className="text-blue-600">{review.barber_name}</span>
                     <span className="text-gray-400">at</span>
                     <span className="font-medium">{review.shop_name}</span>
                   </div>
                   <div className="flex items-center gap-4">
                     <span>📍 {review.location}</span>
-                    <span>✂️ {getServiceTypeDisplay(review.service_type)}</span>
+                    <span>{getServiceEmoji(review.professional_type)} {getServiceTypeDisplay(review.service_type)}</span>
                     <span>💰 {review.cost.startsWith('₹') ? review.cost : `₹${review.cost}`}</span>
                   </div>
                 </div>
