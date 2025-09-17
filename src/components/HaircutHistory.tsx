@@ -71,7 +71,7 @@ export default function HaircutHistory({ haircuts, user, onDelete }: HaircutHist
                 </div>
               </div>
               <div className="text-right flex flex-col items-end gap-2">
-                <div className="text-2xl font-bold text-green-600">${cut.cost}</div>
+                <div className="text-2xl font-bold text-green-600">₹{cut.cost}</div>
                 {cut.id && (
                   <button
                     onClick={() => handleDelete(cut.id!)}

@@ -19,7 +19,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
     service_type: 'haircut',
     rating: 5,
     cost: '',
-    date: new Date().toISOString().split('T')[0],
+    date: '',
     title: '',
     review_text: '',
     is_public: true,
@@ -28,6 +28,14 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
   const [locationData, setLocationData] = useState<LocationData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  // Set today's date after component mounts to avoid hydration mismatch
+  React.useEffect(() => {
+    setForm(prev => ({
+      ...prev,
+      date: new Date().toISOString().split('T')[0]
+    }));
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     const { name, value, type } = e.target;
@@ -329,7 +337,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
               value={form.cost}
               onChange={handleChange}
               required
-              placeholder="$25"
+              placeholder="₹1500"
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>

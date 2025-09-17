@@ -167,7 +167,7 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
               value={form.cost} 
               onChange={handleChange} 
               required 
-              placeholder="25.00" 
+              placeholder="1500" 
               className="block w-full px-3 py-2 border rounded-lg shadow-sm transition-all duration-200 bg-slate-100 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-700/30"
               style={{
                 color: '#114B5F',
@@ -176,6 +176,7 @@ export default function HaircutForm({ onSubmit, user }: HaircutFormProps) {
               onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(17, 75, 95, 0.3)'}
               onBlur={(e) => e.target.style.boxShadow = 'none'}
             />
+            <p className="mt-1 text-xs text-gray-500">Amount in Indian Rupees (₹)</p>
           </div>
         </div>
 

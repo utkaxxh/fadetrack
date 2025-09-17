@@ -178,10 +178,10 @@ export default function ProfessionalDirectory() {
             <h1 className="text-6xl md:text-7xl font-black mb-8 leading-tight">
               <span className="text-[#114B5F]">Find Your Perfect</span>
               <br />
-              <span className="text-4xl md:text-5xl text-[#0d3a4a]">Hair Professional</span>
+              <span className="text-4xl md:text-5xl text-[#0d3a4a]">Beauty Professional</span>
             </h1>
             <p className="text-xl max-w-3xl mx-auto leading-relaxed mb-12" style={{color:'#114B5F'}}>
-              Discover talented barbers, stylists, and beauticians. Browse reviews, compare services, and book your next perfect cut.
+              Discover talented makeup artists, barbers, stylists, and beauty professionals. Browse reviews, compare services, and book your next perfect appointment.
             </p>
           </div>
         </div>

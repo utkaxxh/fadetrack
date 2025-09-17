@@ -53,10 +53,10 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
   ];
 
   const priceRanges = [
-    { value: '$', label: '$ - Budget Friendly ($20-$40)' },
-    { value: '$$', label: '$$ - Moderate ($40-$80)' },
-    { value: '$$$', label: '$$$ - Premium ($80-$150)' },
-    { value: '$$$$', label: '$$$$ - Luxury ($150+)' }
+    { value: '₹', label: '₹ - Budget Friendly (₹500-₹1,500)' },
+    { value: '₹₹', label: '₹₹ - Moderate (₹1,500-₹3,000)' },
+    { value: '₹₹₹', label: '₹₹₹ - Premium (₹3,000-₹6,000)' },
+    { value: '₹₹₹₹', label: '₹₹₹₹ - Luxury (₹6,000+)' }
   ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

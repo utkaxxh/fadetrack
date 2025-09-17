@@ -208,7 +208,7 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
                   <div className="flex items-center gap-4">
                     <span>📍 {review.location}</span>
                     <span>✂️ {getServiceTypeDisplay(review.service_type)}</span>
-                    <span>💰 {review.cost}</span>
+                    <span>💰 {review.cost.startsWith('₹') ? review.cost : `₹${review.cost}`}</span>
                   </div>
                 </div>
               </div>
