@@ -346,8 +346,7 @@ export default function HomePage() {
                 The Ultimate Makeup Artist Platform
               </h2>
               <p className="text-xl max-w-3xl mx-auto" style={{color: '#114B5F'}}>
-                Whether you&apos;re seeking the perfect makeup artist for your special day or showcasing your makeup artistry, 
-                RateMyMUA.com provides the tools you need to succeed
+                Discover vetted makeup artists, explore real client results, compare services & pricing, and build a credible professional brand—all in one place.
               </p>
             </div>
             
@@ -355,7 +354,7 @@ export default function HomePage() {
             <div className="mb-16">
               <div className="text-center mb-12">
                 <h3 className="text-3xl font-bold mb-4" style={{color: '#114B5F'}}>
-                  � For Clients
+                  💁‍♀️ For Clients
                 </h3>
                 <p className="text-lg" style={{color: '#114B5F', opacity: 0.8}}>
                   Discover, review, and book talented makeup artists
@@ -365,33 +364,33 @@ export default function HomePage() {
                 {[
                   {
                     icon: "🔍",
-                    title: "Find Top Makeup Artists",
-                    description: "Browse verified makeup artists in your area with authentic reviews and portfolios"
+                    title: "Smart Artist Discovery",
+                    description: "Filter by occasion (bridal, reception, party), style specialty, location & price range"
                   },
                   {
-                    icon: "⭐",
-                    title: "Leave Honest Reviews",
-                    description: "Share your makeup experience and help others discover amazing artists"
+                    icon: "💬",
+                    title: "Authentic Reviews",
+                    description: "Photo-backed client feedback you can trust—no inflated testimonials"
                   },
                   {
-                    icon: "📝",
-                    title: "Track Your Makeup History",
-                    description: "Keep detailed records of every makeup session including photos, costs, and notes"
+                    icon: "�️",
+                    title: "Before / After Portfolios",
+                    description: "Evaluate artistry quality through transformation galleries and real outcomes"
                   },
                   {
-                    icon: "🎨",
-                    title: "Browse Makeup Styles",
-                    description: "Explore different makeup looks and find artists who specialize in your preferred style"
+                    icon: "�",
+                    title: "Occasion Matching",
+                    description: "Quickly spot artists specializing in bridal, sangeet, editorial or casual looks"
                   },
                   {
-                    icon: "💰",
-                    title: "Compare Pricing",
-                    description: "Find makeup artists that fit your budget for any occasion"
+                    icon: "�",
+                    title: "Transparent Pricing Signals",
+                    description: "See pricing tiers & value positioning before you reach out"
                   },
                   {
-                    icon: "📱",
-                    title: "Mobile Experience",
-                    description: "Book and review makeup artists on-the-go with our mobile-friendly platform"
+                    icon: "�",
+                    title: "Secure Google Sign-In",
+                    description: "Fast onboarding—no passwords or forms to maintain"
                   }
                 ].map((feature, index) => (
                   <div 
@@ -420,34 +419,34 @@ export default function HomePage() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
                   {
-                    icon: "🎨",
-                    title: "Makeup Portfolio Showcase",
-                    description: "Upload your best makeup looks and create a stunning visual portfolio of your artistry"
+                    icon: "🖼️",
+                    title: "Portfolio & Media Showcase",
+                    description: "Highlight technique, versatility & signature looks with curated visuals"
                   },
                   {
-                    icon: "👥",
-                    title: "Client Reviews & Ratings",
-                    description: "Build trust with authentic client reviews and maintain a stellar reputation"
+                    icon: "⭐",
+                    title: "Reputation Engine",
+                    description: "Grow visibility through authentic reviews tied to real client sessions"
+                  },
+                  {
+                    icon: "�️",
+                    title: "Service & Pricing Manager",
+                    description: "Clearly present offerings so clients know exactly what you provide"
                   },
                   {
                     icon: "📊",
-                    title: "Business Analytics",
-                    description: "Track your performance, review trends, and understand your client demographics"
-                  },
-                  {
-                    icon: "�",
-                    title: "Service & Style Management",
-                    description: "List your makeup services, specialties, and pricing to attract the right clients"
+                    title: "Performance Insights (Soon)",
+                    description: "Track engagement & review quality to refine positioning"
                   },
                   {
                     icon: "🌟",
-                    title: "Verified Artist Badge",
-                    description: "Stand out with our verification system that builds credibility and trust with clients"
+                    title: "Credibility Badges",
+                    description: "Earn verification & quality markers as you build trust"
                   },
                   {
-                    icon: "📞",
-                    title: "Direct Client Booking",
-                    description: "Let clients contact and book you directly through your professional profile"
+                    icon: "�",
+                    title: "Lead & Inquiry Channel",
+                    description: "Convert profile views into meaningful client conversations"
                   }
                 ].map((feature, index) => (
                   <div 
