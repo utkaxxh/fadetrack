@@ -67,8 +67,7 @@ export type Haircut = {
 
 
 
-// Static list of rotating words for hero animation (module-level avoids hook deps warnings)
-const FLIP_WORDS = ['Makeup Artist', 'Beauty Expert', 'MUA'];
+// Removed rotating hero word animation; keeping file lean
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<TabType>('myreviews');
@@ -77,15 +76,7 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
-  // Word flip state for hero headline
-  const flipWords = FLIP_WORDS; // alias for clarity inside component
-  const [wordIndex, setWordIndex] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-  setWordIndex(i => (i + 1) % FLIP_WORDS.length);
-    }, 2400); // cycle every 2.4s
-    return () => clearInterval(interval);
-  }, []);
+  // Removed flip word animation state & interval
   const user = useSupabaseUser();
   const { role, updateUserRole, isProfessional, isLoading: roleLoading } = useUserRole(user);
 
@@ -288,8 +279,7 @@ export default function HomePage() {
                 <span className="text-gradient bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Makeup Artist</span>
               </h1>
               <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed" style={{color: '#114B5F'}}>
-                The platform where clients discover and review top makeup artists, and where talented  
-                <PillCarousel words={flipWords} index={wordIndex} /> showcase their expertise
+                The platform where clients discover and review top makeup artists, and where talented <span className="font-semibold">Makeup Artist</span> profiles showcase their expertise
               </p>
               <div className="flex flex-col lg:flex-row gap-6 justify-center items-center mb-8">
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -319,18 +309,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          {/* Animation styles */}
-          <style jsx>{`
-            .pill-carousel { position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:13ch; height:1.6em; padding:0 .9ch; vertical-align:baseline; border-radius:999px; background:linear-gradient(135deg,#ffffff,#f1f5f9); box-shadow:0 2px 6px -2px rgba(17,75,95,0.25),0 0 0 1px rgba(17,75,95,0.18); overflow:hidden; }
-            .pill-carousel::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 25%,rgba(17,75,95,.08),transparent 65%); pointer-events:none; }
-            .pill-word { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-weight:700; line-height:1; white-space:nowrap; opacity:0; }
-            @keyframes pillIn { 0% { transform:translate(-50%,-50%) translateX(40%); opacity:0;} 100% { transform:translate(-50%,-50%) translateX(0); opacity:1;} }
-            @keyframes pillOut { 0% { transform:translate(-50%,-50%) translateX(0); opacity:1;} 100% { transform:translate(-50%,-50%) translateX(-40%); opacity:0;} }
-            .pill-word.incoming { animation: pillIn .7s cubic-bezier(.77,.03,.22,1) forwards; }
-            .pill-word.outgoing { animation: pillOut .7s cubic-bezier(.77,.03,.22,1) forwards; }
-            .pill-word.static { opacity:1; position:relative; left:auto; top:auto; transform:none; animation:none; }
-            @media (prefers-reduced-motion: reduce) { .pill-carousel { background:none; box-shadow:none; min-width:auto; height:auto; padding:0; } .pill-word { animation:none !important; opacity:1 !important; position:relative; left:auto; top:auto; transform:none; } }
-          `}</style>
+          {/* Removed animation styles */}
           {/* Floating elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl" style={{background: 'radial-gradient(circle, rgba(17, 75, 95, 0.2), transparent)'}}></div>
@@ -651,29 +630,4 @@ export default function HomePage() {
   );
 }
 
-// Local component for pill carousel headline animation
-function PillCarousel({ words, index }: { words: string[]; index: number }) {
-  // Keep track of previous index to apply outgoing animation
-  const [prevIndex, setPrevIndex] = React.useState(index);
-  React.useEffect(() => {
-    if (index !== prevIndex) {
-      setPrevIndex(index);
-    }
-  }, [index, prevIndex]);
-  return (
-    <span className="pill-carousel" aria-live="polite" aria-atomic="true">
-      {words.map((w, i) => {
-        const state = i === index ? 'incoming' : i === prevIndex ? 'outgoing' : 'hidden';
-        if (state === 'hidden') return null;
-        return (
-          <span
-            key={w + i + state}
-            className={`pill-word ${state === 'incoming' ? 'incoming' : state === 'outgoing' ? 'outgoing' : ''}`}
-          >
-            {w}
-          </span>
-        );
-      })}
-    </span>
-  );
-}
+// Removed PillCarousel component (animation no longer used)
