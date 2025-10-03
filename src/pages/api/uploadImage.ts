@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
-import formidable, { File } from 'formidable';
+import formidable from 'formidable';
 import fs from 'fs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -34,8 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       keepExtensions: true,
     });
 
-    const [fields, files] = await form.parse(req);
-    const file = Array.isArray(files.file) ? files.file[0] : files.file;
+  const [fields, files] = await form.parse(req);
+  const file = Array.isArray((files as any).file) ? (files as any).file[0] : (files as any).file;
     const folder = Array.isArray(fields.folder) ? fields.folder[0] : fields.folder || '';
 
     if (!file) {

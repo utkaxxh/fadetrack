@@ -48,7 +48,7 @@ export default function MyReviews({ reviews, user, onDeleteReview }: MyReviewsPr
   if (myReviews.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-gray-600 font-medium mb-2">You haven't written any reviews yet.</div>
+  <div className="text-gray-600 font-medium mb-2">You haven&apos;t written any reviews yet.</div>
         <div className="text-gray-500 text-sm">Share your experience with a makeup artist to see it here.</div>
       </div>
     );
@@ -64,7 +64,7 @@ export default function MyReviews({ reviews, user, onDeleteReview }: MyReviewsPr
             <label className="text-xs font-medium text-gray-600 mb-1">Sort By</label>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest' | 'rating')}
               className="px-3 py-2 border rounded-md text-sm bg-slate-100 focus:bg-white focus:outline-none"
               style={{ borderColor: 'rgba(17,75,95,0.3)', color: '#114B5F' }}
             >
