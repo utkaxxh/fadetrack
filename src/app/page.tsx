@@ -360,37 +360,22 @@ export default function HomePage() {
                   Discover, review, and book talented makeup artists
                 </p>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 {[
                   {
                     icon: "🔍",
                     title: "Smart Artist Discovery",
-                    description: "Filter by occasion (bridal, reception, party), style specialty, location & price range"
+                    description: "Filter by style, occasion & location to quickly find the right MUA"
                   },
                   {
                     icon: "💬",
                     title: "Authentic Reviews",
-                    description: "Photo-backed client feedback you can trust—no inflated testimonials"
+                    description: "Real client feedback with context so you can book confidently"
                   },
                   {
-                    icon: "�️",
-                    title: "Before / After Portfolios",
-                    description: "Evaluate artistry quality through transformation galleries and real outcomes"
-                  },
-                  {
-                    icon: "�",
+                    icon: "🎯",
                     title: "Occasion Matching",
-                    description: "Quickly spot artists specializing in bridal, sangeet, editorial or casual looks"
-                  },
-                  {
-                    icon: "�",
-                    title: "Transparent Pricing Signals",
-                    description: "See pricing tiers & value positioning before you reach out"
-                  },
-                  {
-                    icon: "�",
-                    title: "Secure Google Sign-In",
-                    description: "Fast onboarding—no passwords or forms to maintain"
+                    description: "Bridal, reception, party or editorial—see specialists instantly"
                   }
                 ].map((feature, index) => (
                   <div 
@@ -416,37 +401,22 @@ export default function HomePage() {
                   Showcase your artistry and grow your makeup business
                 </p>
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 {[
                   {
                     icon: "🖼️",
                     title: "Portfolio & Media Showcase",
-                    description: "Highlight technique, versatility & signature looks with curated visuals"
+                    description: "Curate your best work & demonstrate range with high-impact visuals"
                   },
                   {
                     icon: "⭐",
                     title: "Reputation Engine",
-                    description: "Grow visibility through authentic reviews tied to real client sessions"
-                  },
-                  {
-                    icon: "�️",
-                    title: "Service & Pricing Manager",
-                    description: "Clearly present offerings so clients know exactly what you provide"
-                  },
-                  {
-                    icon: "📊",
-                    title: "Performance Insights (Soon)",
-                    description: "Track engagement & review quality to refine positioning"
+                    description: "Build trust through verified client reviews that elevate your profile"
                   },
                   {
                     icon: "🌟",
                     title: "Credibility Badges",
-                    description: "Earn verification & quality markers as you build trust"
-                  },
-                  {
-                    icon: "�",
-                    title: "Lead & Inquiry Channel",
-                    description: "Convert profile views into meaningful client conversations"
+                    description: "Earn verification & quality markers to stand out in searches"
                   }
                 ].map((feature, index) => (
                   <div 
@@ -519,42 +489,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8" style={{background: 'linear-gradient(135deg, #114B5F, #0d3a4a, #2c1810)'}}>
-          <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-              Join the Makeup Artistry Revolution
-            </h2>
-            <p className="text-xl mb-12 max-w-3xl mx-auto" style={{color: '#ffffff', opacity: 0.9}}>
-              Whether you&apos;re discovering your next favorite makeup artist or building your artistry brand, 
-              RateMyMUA.com connects authentic reviews with exceptional makeup talent.
-            </p>
-            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-              <div className="text-center">
-                <p className="text-sm text-white opacity-75 mb-3">For Clients</p>
-                <Link 
-                  href="/login" 
-                  className="inline-block px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200 shadow-2xl transform hover:scale-105 btn-secondary-light focus:outline-none focus:ring-2 focus:ring-teal-500/40"
-                >
-                  Find & Review Makeup Artists
-                </Link>
-              </div>
-              <div className="text-white opacity-50 text-lg">•</div>
-              <div className="text-center">
-                <p className="text-sm text-white opacity-75 mb-3">For Makeup Artists</p>
-                <Link 
-                  href="/login" 
-                  className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500/40 hover:shadow-2xl transition-all duration-200 transform hover:scale-105"
-                >
-                  Showcase Your Artistry
-                </Link>
-              </div>
-            </div>
-            <div className="mt-8 text-sm text-white opacity-60">
-              Free to join • Thousands of makeup artists already trust RateMyMUA
-            </div>
-          </div>
-        </section>
+        {/* CTA removed per new minimalist landing strategy */}
 
         {/* Footer */}
         <footer className="py-12" style={{backgroundColor: '#114B5F', color: '#f1f5f9'}}>
