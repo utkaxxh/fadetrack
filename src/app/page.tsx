@@ -5,9 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '../components/supabaseClient';
 import TabNavigation, { TabType } from '../components/TabNavigation';
-import HaircutForm from '../components/HaircutForm';
-import HaircutHistory from '../components/HaircutHistory';
-import ReminderSettings from '../components/ReminderSettings';
+// Removed haircut & reminder related imports
+// import HaircutForm from '../components/HaircutForm';
+// import HaircutHistory from '../components/HaircutHistory';
+// import ReminderSettings from '../components/ReminderSettings';
 import AccountSettings from '../components/AccountSettings';
 import AccountDropdown from '../components/AccountDropdown';
 import ReviewForm from '../components/ReviewForm';
@@ -15,6 +16,7 @@ import PublicReviews from '../components/PublicReviews';
 import UserRoleSelection from '../components/UserRoleSelection';
 import ProfessionalProfileSetup from '../components/ProfessionalProfileSetup';
 import ProfessionalDashboard from '../components/ProfessionalDashboard';
+import MyReviews from '../components/MyReviews';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 import { useUserRole } from '../hooks/useUserRole';
 
@@ -69,9 +71,9 @@ export type Haircut = {
 const FLIP_WORDS = ['Makeup Artist', 'Beauty Expert', 'MUA'];
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<TabType>('log');
+  const [activeTab, setActiveTab] = useState<TabType>('myreviews');
   const [showAccountSettings, setShowAccountSettings] = useState(false);
-  const [haircuts, setHaircuts] = useState<Haircut[]>([]);
+  // Removed haircut state
   const [reviews, setReviews] = useState<Review[]>([]);
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
@@ -90,10 +92,10 @@ export default function HomePage() {
   // Set default tab based on user role
   useEffect(() => {
     if (!roleLoading) {
-      if (isProfessional && activeTab === 'log') {
+      if (isProfessional && activeTab !== 'dashboard') {
         setActiveTab('dashboard');
       } else if (!isProfessional && activeTab === 'dashboard') {
-        setActiveTab('log');
+        setActiveTab('myreviews');
       }
     }
   }, [isProfessional, roleLoading, activeTab]);
@@ -158,22 +160,7 @@ export default function HomePage() {
     };
   }, [showAccountSettings]);
 
-  // Fetch haircuts from Supabase when user logs in
-  useEffect(() => {
-    async function fetchHaircuts() {
-      if (!user || !user.email) {
-        setHaircuts([]);
-        return;
-      }
-      const { data, error } = await supabase
-        .from('haircuts')
-        .select('*')
-        .eq('user_email', user.email)
-        .order('date', { ascending: false });
-      if (!error && data) setHaircuts(data);
-    }
-    fetchHaircuts();
-  }, [user]);
+  // Removed haircut fetching logic
 
   // Fetch reviews for the directory/browse functionality
   const fetchReviews = async () => {
@@ -189,11 +176,7 @@ export default function HomePage() {
     fetchReviews();
   }, []);
 
-  function handleLogHaircut(data: Omit<Haircut, 'user_email'>) {
-    if (!user || !user.email) return;
-    const haircutWithEmail: Haircut = { ...data, user_email: user.email };
-    setHaircuts([haircutWithEmail, ...haircuts]);
-  }
+  // Removed handleLogHaircut
 
   function handleReviewSubmitted(data: Omit<Review, 'user_email'>) {
     if (!user || !user.email) return;
@@ -231,33 +214,7 @@ export default function HomePage() {
     }
   }
 
-  async function handleDeleteHaircut(haircutId: number) {
-    if (!user || !user.email || !haircutId) return;
-
-    try {
-      const response = await fetch('/api/deleteHaircut', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: haircutId,
-          user_email: user.email,
-        }),
-      });
-
-      if (response.ok) {
-        // Remove the deleted haircut from the local state
-        setHaircuts(haircuts.filter(cut => cut.id !== haircutId));
-      } else {
-        const errorData = await response.json();
-        alert('Failed to delete haircut: ' + errorData.error);
-      }
-    } catch (error) {
-      console.error('Error deleting haircut:', error);
-      alert('Failed to delete haircut. Please try again.');
-    }
-  }
+  // Removed handleDeleteHaircut
 
   function handleOpenAccountSettings() {
     setShowAccountSettings(true);
@@ -662,9 +619,7 @@ export default function HomePage() {
         <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} userRole={role} />
           <div className="p-6" style={{backgroundColor: 'rgba(248, 250, 252, 0.3)'}}>
-            {activeTab === 'log' && !isProfessional && <HaircutForm onSubmit={handleLogHaircut} user={user} />}
-            {activeTab === 'history' && !isProfessional && <HaircutHistory haircuts={haircuts} user={user} onDelete={handleDeleteHaircut} />}
-            {activeTab === 'reminders' && !isProfessional && <ReminderSettings user={user} />}
+            {activeTab === 'myreviews' && !isProfessional && <MyReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
             {activeTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
             {activeTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
             {activeTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}

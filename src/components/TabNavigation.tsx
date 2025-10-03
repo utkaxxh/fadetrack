@@ -1,7 +1,8 @@
 import React from 'react';
 import { UserRole } from '../hooks/useUserRole';
 
-export type TabType = 'log' | 'history' | 'reminders' | 'reviews' | 'directory' | 'dashboard'; 
+// Updated tab types: removed haircut & reminder related tabs, added myreviews
+export type TabType = 'myreviews' | 'reviews' | 'directory' | 'dashboard'; 
 interface TabNavigationProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
@@ -20,12 +21,10 @@ const getTabsForRole = (role: UserRole): { label: string; value: TabType }[] => 
     ];
   }
 
-  // Customer tabs
+  // Customer tabs (focused experience: creating & managing reviews)
   return [
-    { label: 'Log Haircut', value: 'log' as TabType },
-    { label: 'History', value: 'history' as TabType },
-    { label: 'Reminders', value: 'reminders' as TabType },
-    { label: 'Review a Pro', value: 'reviews' as TabType },
+    { label: 'My Reviews', value: 'myreviews' as TabType },
+    { label: 'Write Review', value: 'reviews' as TabType },
     ...commonTabs,
   ];
 };
