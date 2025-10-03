@@ -114,9 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         specialties: specialties || [],
         price_range: price_range || '',
         is_active: true,
-        is_verified: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        is_verified: false
       };
 
       console.log('professionalProfileSimple API: Creating profile with data:', profileData);
@@ -131,8 +129,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error('professionalProfileSimple API: Error creating profile:', error);
         return res.status(500).json({ 
           error: 'Failed to create profile', 
-          details: error,
-          profileData 
+          details: error?.message || error,
         });
       }
 

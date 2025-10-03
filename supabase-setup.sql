@@ -93,3 +93,75 @@ CREATE POLICY "Users can update own reviews" ON reviews
 -- Allow users to delete their own reviews
 CREATE POLICY "Users can delete own reviews" ON reviews
     FOR DELETE USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+
+-- =============================
+-- Professional Profiles (Directory)
+-- =============================
+
+-- Create professional_profiles table used for the directory and dashboards
+CREATE TABLE IF NOT EXISTS professional_profiles (
+    id SERIAL PRIMARY KEY,
+    user_email VARCHAR(255) UNIQUE NOT NULL,
+    business_name VARCHAR(255) NOT NULL,
+    display_name VARCHAR(255) NOT NULL,
+    profession_type VARCHAR(50) NOT NULL, -- e.g., makeup_artist, barber, stylist, salon, beautician
+    bio TEXT,
+    phone VARCHAR(50),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    zip_code VARCHAR(20),
+    instagram VARCHAR(255),
+    website VARCHAR(255),
+    profile_image TEXT,
+    years_experience INTEGER DEFAULT 1,
+    specialties TEXT[] DEFAULT '{}',
+    price_range VARCHAR(10),
+    is_verified BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
+    average_rating DECIMAL(3,2) DEFAULT 0.00,
+    total_reviews INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for professional_profiles
+CREATE INDEX IF NOT EXISTS idx_prof_profiles_email ON professional_profiles(user_email);
+CREATE INDEX IF NOT EXISTS idx_prof_profiles_active ON professional_profiles(is_active);
+CREATE INDEX IF NOT EXISTS idx_prof_profiles_city ON professional_profiles(city);
+CREATE INDEX IF NOT EXISTS idx_prof_profiles_profession ON professional_profiles(profession_type);
+
+-- Trigger to auto-update updated_at on profile changes (reuses the function defined above)
+DROP TRIGGER IF EXISTS update_professional_profiles_updated_at ON professional_profiles;
+CREATE TRIGGER update_professional_profiles_updated_at
+        BEFORE UPDATE ON professional_profiles
+        FOR EACH ROW
+        EXECUTE FUNCTION update_updated_at_column();
+
+-- Enable RLS and basic policies for professional_profiles
+ALTER TABLE professional_profiles ENABLE ROW LEVEL SECURITY;
+
+-- Public can read active professional profiles
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'professional_profiles' AND policyname = 'Active profiles are viewable by everyone'
+    ) THEN
+        CREATE POLICY "Active profiles are viewable by everyone" ON professional_profiles
+            FOR SELECT USING (is_active = true);
+    END IF;
+END$$;
+
+-- Users can update their own profile (when using anon key directly)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'professional_profiles' AND policyname = 'Users can update own profile'
+    ) THEN
+        CREATE POLICY "Users can update own profile" ON professional_profiles
+            FOR UPDATE USING (user_email = current_setting('request.jwt.claims', true)::json->>'email')
+            WITH CHECK (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
+END$$;
