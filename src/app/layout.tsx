@@ -60,7 +60,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Primary favicon / app icon */}
-        <link rel="icon" href="/fadetrack-logo-new.svg" type="image/svg+xml" />
+  <link rel="icon" href="/ratemymua-logo.svg" type="image/svg+xml" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}

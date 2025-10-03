@@ -1,4 +1,6 @@
-# fadetrack
+# RateMyMUA
+
+Rebranded from Fadetrack. This repository now powers RateMyMUA.com – a platform to discover and review makeup artists.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
