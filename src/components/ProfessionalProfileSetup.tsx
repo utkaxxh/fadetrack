@@ -150,7 +150,8 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
         onComplete();
       } else {
         console.error('ProfessionalProfileSetup: API error:', data);
-        setError(data.error ? `Failed to create: ${data.error}` : 'Failed to create profile');
+        const extras = [data.details, data.code, data.hint].filter(Boolean).join(' | ');
+        setError(data.error ? `Failed to create: ${data.error}${extras ? ` — ${extras}` : ''}` : 'Failed to create profile');
       }
     } catch (err: unknown) {
       console.error('ProfessionalProfileSetup: Network error:', err);

@@ -130,6 +130,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ 
           error: 'Failed to create profile', 
           details: error?.message || error,
+          code: (error as any)?.code,
+          hint: (error as any)?.hint,
         });
       }
 

@@ -188,3 +188,15 @@ BEGIN
             WITH CHECK (user_email = current_setting('request.jwt.claims', true)::json->>'email');
     END IF;
 END$$;
+
+-- Allow inserts into professional_profiles (API validates input)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'professional_profiles' AND policyname = 'Anyone can insert professional profiles'
+    ) THEN
+        CREATE POLICY "Anyone can insert professional profiles" ON professional_profiles
+            FOR INSERT WITH CHECK (true);
+    END IF;
+END$$;
