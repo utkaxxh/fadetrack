@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: error.message });
       }
 
-      return res.status(200).json({ role: data?.role || 'customer' });
+  return res.status(200).json({ role: data?.role || 'customer', hasRecord: !!data });
     }
 
     if (req.method === 'POST') {
@@ -86,7 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(500).json({ error: error.message, details: error });
         }
 
-        return res.status(200).json({ success: true, role: data.role });
+  return res.status(200).json({ success: true, role: data.role, hasRecord: true });
       } else {
         // Insert new
         const { data, error } = await supabase
@@ -106,7 +106,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(500).json({ error: error.message, details: error });
         }
 
-        return res.status(201).json({ success: true, role: data.role });
+  return res.status(201).json({ success: true, role: data.role, hasRecord: true });
       }
     }
 

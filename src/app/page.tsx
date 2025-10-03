@@ -102,11 +102,16 @@ export default function HomePage() {
 
   // Check if new user needs role selection
   useEffect(() => {
-    if (user && !roleLoading && role === 'customer') {
-      // Check if this is a new user (no previous role set) or if they want to switch
-      const hasSeenRoleSelection = localStorage.getItem(`role-selected-${user.email}`);
-      if (!hasSeenRoleSelection) {
-        setShowRoleSelection(true);
+    if (user && !roleLoading) {
+      try {
+        const seen = localStorage.getItem(`role-selected-${user.email}`);
+        const cached = localStorage.getItem(`cached-role-${user.email}`);
+        // Only show if no prior selection cached AND current role is default customer
+        if (!seen && !cached && role === 'customer') {
+          setShowRoleSelection(true);
+        }
+      } catch (_) {
+        if (role === 'customer') setShowRoleSelection(true);
       }
     }
   }, [user, role, roleLoading]);
@@ -116,7 +121,12 @@ export default function HomePage() {
     console.log('🔄 Current role state:', role);
     
     if (user?.email) {
-      localStorage.setItem(`role-selected-${user.email}`, 'true');
+      try {
+        localStorage.setItem(`role-selected-${user.email}`, 'true');
+        if (selectedRole) {
+          localStorage.setItem(`cached-role-${user.email}`, selectedRole);
+        }
+      } catch (_) { /* ignore storage errors */ }
     }
     setShowRoleSelection(false);
     

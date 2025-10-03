@@ -14,13 +14,21 @@ export function useUserRole(user: User | null) {
 
     try {
       console.log('useUserRole: Fetching role for email:', userEmail);
-      const response = await fetch(`/api/userRoleSimple?email=${encodeURIComponent(userEmail)}`);
+  const response = await fetch(`/api/userRoleSimple?email=${encodeURIComponent(userEmail)}`);
       const data = await response.json();
       
       console.log('useUserRole: Fetch response:', { response: response.status, data });
       
       if (response.ok) {
-        setRole(data.role || 'customer');
+        const resolvedRole: UserRole = data.role || 'customer';
+        setRole(resolvedRole);
+        // Persist locally so future sessions don't flash modal while network fetch occurs
+        try {
+          localStorage.setItem(`cached-role-${userEmail}`, resolvedRole);
+          if (data.hasRecord) {
+            localStorage.setItem(`role-selected-${userEmail}`, 'true');
+          }
+        } catch (_) { /* ignore storage errors */ }
       } else {
         setError(data.error || 'Failed to fetch user role');
         setRole('customer'); // Default fallback
@@ -65,6 +73,10 @@ export function useUserRole(user: User | null) {
       if (response.ok) {
         console.log('useUserRole: Success, setting role to:', newRole);
         setRole(newRole);
+        try {
+          localStorage.setItem(`cached-role-${user.email}`, newRole);
+          localStorage.setItem(`role-selected-${user.email}`, 'true');
+        } catch (_) { /* ignore storage errors */ }
         return true;
       } else {
         console.error('useUserRole: API error:', data);
@@ -89,6 +101,13 @@ export function useUserRole(user: User | null) {
 
   useEffect(() => {
     if (user?.email) {
+      // First seed from cache to avoid UI flicker
+      try {
+        const cached = localStorage.getItem(`cached-role-${user.email}`) as UserRole | null;
+        if (cached) {
+          setRole(cached);
+        }
+      } catch (_) { /* ignore */ }
       fetchUserRole(user.email);
     } else {
       setRole('customer');
