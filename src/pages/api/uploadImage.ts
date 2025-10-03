@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
-import formidable from 'formidable';
+import formidable, { Fields, Files, File as FormidableFile } from 'formidable';
 import fs from 'fs';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -34,9 +34,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       keepExtensions: true,
     });
 
-  const [fields, files] = await form.parse(req);
-  const file = Array.isArray((files as any).file) ? (files as any).file[0] : (files as any).file;
-    const folder = Array.isArray(fields.folder) ? fields.folder[0] : fields.folder || '';
+  const [fields, files]: [Fields, Files] = await form.parse(req);
+  const fileField = files.file; // may be File | File[] | undefined
+  const file: FormidableFile | undefined = Array.isArray(fileField) ? fileField[0] : fileField;
+  const folderRaw = (fields.folder as string | string[] | undefined);
+  const folder = Array.isArray(folderRaw) ? folderRaw[0] : (folderRaw || '');
 
     if (!file) {
       return res.status(400).json({ error: 'No file provided' });
@@ -74,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from(STORAGE_BUCKET)
       .upload(filePath, fileBuffer, {
         contentType: file.mimetype || 'image/jpeg',
