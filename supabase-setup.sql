@@ -51,6 +51,7 @@ END;
 $$ language 'plpgsql';
 
 -- Create trigger to automatically update updated_at when a review is modified
+DROP TRIGGER IF EXISTS update_reviews_updated_at ON reviews;
 CREATE TRIGGER update_reviews_updated_at 
     BEFORE UPDATE ON reviews 
     FOR EACH ROW 
