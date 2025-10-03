@@ -3,8 +3,8 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Terms of Use | Fadetrack',
-  description: 'Read the Terms governing your use of Fadetrack.'
+  title: 'Terms of Use | RateMyMUA',
+  description: 'Read the Terms governing your use of RateMyMUA.com.'
 };
 
 export default function TermsPage() {
@@ -13,7 +13,7 @@ export default function TermsPage() {
       <h1>Terms of Use</h1>
       <p><strong>Last Updated:</strong> {new Date().toISOString().split('T')[0]}</p>
 
-      <p>These Terms of Use ("Terms") govern your access to and use of the Fadetrack platform (the "Service"). By creating an account or using the Service you agree to be bound by these Terms.</p>
+  <p>These Terms of Use ("Terms") govern your access to and use of the RateMyMUA.com platform (the "Service"). By creating an account or using the Service you agree to be bound by these Terms.</p>
 
       <h2>1. Accounts</h2>
       <ul>
@@ -67,7 +67,7 @@ export default function TermsPage() {
       <p>These Terms are governed by the laws of the jurisdiction of our primary business operations (United States), excluding conflicts principles.</p>
 
       <h2>14. Contact</h2>
-      <p>Email: <a href="mailto:support@fadetrack.app">support@fadetrack.app</a></p>
+  <p>Email: <a href="mailto:support@ratemymua.com">support@ratemymua.com</a></p>
 
       <p className="text-xs opacity-70">These Terms are provided for informational purposes and do not constitute legal advice.</p>
       <p><Link href="/">← Back to Home</Link></p>

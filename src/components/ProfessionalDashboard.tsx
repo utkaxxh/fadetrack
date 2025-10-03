@@ -341,7 +341,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
   if (!profile) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold mb-4" style={{color: '#114B5F'}}>Welcome to Fadetrack!</h2>
+  <h2 className="text-2xl font-bold mb-4" style={{color: '#114B5F'}}>Welcome to RateMyMUA!</h2>
         <p className="mb-6" style={{color: '#114B5F', opacity: 0.8}}>
           Complete your professional profile to start receiving reviews and growing your business.
         </p>

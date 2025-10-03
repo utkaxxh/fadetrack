@@ -1,4 +1,4 @@
--- Supabase table setup for Fadetrack barber review platform
+-- Supabase table setup for RateMyMUA makeup artist review platform
 
 -- First, create the barbers table
 CREATE TABLE IF NOT EXISTS barbers (

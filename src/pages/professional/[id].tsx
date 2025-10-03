@@ -34,14 +34,14 @@ export default function ProfessionalProfilePage() {
             <Link href="/" className="flex items-center gap-3">
               <div className="w-8 h-8 rounded" style={{backgroundColor: '#114B5F'}}></div>
               <h1 className="text-2xl font-bold" style={{color: '#114B5F'}}>
-                Fadetrack
+                RateMyMUA
               </h1>
             </Link>
             <Link 
               href="/login" 
               className="px-6 py-2.5 text-sm font-semibold text-white rounded-full transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 btn-primary-teal"
             >
-              Join Fadetrack
+              Join RateMyMUA
             </Link>
           </div>
         </div>

@@ -151,7 +151,7 @@ export default function ProfessionalDirectory() {
                 </div>
               </div>
               <h1 className="text-2xl font-bold" style={{color:'#114B5F'}}>
-                Fadetrack
+                RateMyMUA
               </h1>
             </Link>
             <Link
@@ -160,7 +160,7 @@ export default function ProfessionalDirectory() {
             >
               <div className="absolute inset-0 transition-all duration-300" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}></div>
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300" style={{background:'linear-gradient(90deg,#0d3a4a,#114B5F)'}}></div>
-              <span className="relative z-10">Join Fadetrack</span>
+              <span className="relative z-10">Join RateMyMUA</span>
               <div className="absolute inset-0 rounded-full shadow-lg group-hover:shadow-2xl transition-all duration-300" style={{boxShadow:'0 10px 25px rgba(17,75,95,0.35)'}}></div>
             </Link>
           </div>
@@ -376,7 +376,7 @@ export default function ProfessionalDirectory() {
                   <span className="text-white font-black text-2xl">F</span>
                 </div>
               </div>
-              <span className="text-3xl font-black text-white">Fadetrack</span>
+              <span className="text-3xl font-black text-white">RateMyMUA</span>
             </div>
             
             <div className="text-center">

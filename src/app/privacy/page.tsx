@@ -3,8 +3,8 @@ import React from 'react';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Privacy Policy | Fadetrack',
-  description: 'Learn how Fadetrack collects, uses, and protects your data.'
+  title: 'Privacy Policy | RateMyMUA',
+  description: 'Learn how RateMyMUA.com collects, uses, and protects your data.'
 };
 
 export default function PrivacyPage() {
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <h1>Privacy Policy</h1>
       <p><strong>Last Updated:</strong> {new Date().toISOString().split('T')[0]}</p>
 
-  <p>Fadetrack ("we", "our", "us") helps users discover makeup artists and share authentic reviews. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you use our platform (the "Service").</p>
+  <p>RateMyMUA.com ("we", "our", "us") helps users discover makeup artists and share authentic reviews. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you use our platform (the "Service").</p>
 
       <h2>1. Information We Collect</h2>
       <h3>Account Information</h3>
@@ -58,10 +58,10 @@ export default function PrivacyPage() {
         <li>Opt out of non-essential emails.</li>
         <li>Object to or restrict certain processing (where applicable).</li>
       </ul>
-      <p>Contact us to exercise rights: <a href="mailto:privacy@fadetrack.app">privacy@fadetrack.app</a>.</p>
+  <p>Contact us to exercise rights: <a href="mailto:privacy@ratemymua.com">privacy@ratemymua.com</a>.</p>
 
       <h2>7. Security</h2>
-      <p>We use industry practices (TLS encryption in transit, role-based policies in database) but no system is 100% secure. Report issues to <a href="mailto:security@fadetrack.app">security@fadetrack.app</a>.</p>
+  <p>We use industry practices (TLS encryption in transit, role-based policies in database) but no system is 100% secure. Report issues to <a href="mailto:security@ratemymua.com">security@ratemymua.com</a>.</p>
 
       <h2>8. Children</h2>
       <p>The Service is not directed to individuals under 16. If you believe a minor has provided data, contact us for removal.</p>
@@ -73,7 +73,7 @@ export default function PrivacyPage() {
       <p>We may update this Policy. Material changes will be highlighted within the app or via email. Continued use after posting constitutes acceptance.</p>
 
       <h2>11. Contact</h2>
-      <p>Email: <a href="mailto:support@fadetrack.app">support@fadetrack.app</a></p>
+  <p>Email: <a href="mailto:support@ratemymua.com">support@ratemymua.com</a></p>
 
       <p className="text-xs opacity-70">This Privacy Policy is provided for informational purposes and does not constitute legal advice.</p>
       <p><Link href="/">← Back to Home</Link></p>

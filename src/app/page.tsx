@@ -231,8 +231,8 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-logo-new.svg" 
-                    alt="Fadetrack Logo" 
+                    src="/ratemymua-logo.svg" 
+                    alt="RateMyMUA Logo" 
                     width={100} 
                     height={24}
                     priority
@@ -337,7 +337,7 @@ export default function HomePage() {
               </h2>
               <p className="text-xl max-w-3xl mx-auto" style={{color: '#114B5F'}}>
                 Whether you&apos;re seeking the perfect makeup artist for your special day or showcasing your makeup artistry, 
-                Fadetrack provides the tools you need to succeed
+                RateMyMUA.com provides the tools you need to succeed
               </p>
             </div>
             
@@ -518,7 +518,7 @@ export default function HomePage() {
             </h2>
             <p className="text-xl mb-12 max-w-3xl mx-auto" style={{color: '#ffffff', opacity: 0.9}}>
               Whether you&apos;re discovering your next favorite makeup artist or building your artistry brand, 
-              Fadetrack connects authentic reviews with exceptional makeup talent.
+              RateMyMUA.com connects authentic reviews with exceptional makeup talent.
             </p>
             <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
               <div className="text-center">
@@ -542,7 +542,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mt-8 text-sm text-white opacity-60">
-              Free to join • Thousands of makeup artists already trust Fadetrack
+              Free to join • Thousands of makeup artists already trust RateMyMUA
             </div>
           </div>
         </section>
@@ -554,8 +554,8 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/fadetrack-logo-new.svg" 
-                    alt="Fadetrack Logo" 
+                    src="/ratemymua-logo.svg" 
+                    alt="RateMyMUA Logo" 
                     width={100} 
                     height={26}
                     className="logo-img"
@@ -569,7 +569,7 @@ export default function HomePage() {
                 <div className="flex items-center gap-4">
                   <Link href="/privacy" className="hover:opacity-100 transition-opacity">Privacy</Link>
                   <Link href="/terms" className="hover:opacity-100 transition-opacity">Terms</Link>
-                  <a href="mailto:support@fadetrack.com" className="hover:opacity-100 transition-opacity">support@fadetrack.com</a>
+                  <a href="mailto:support@ratemymua.com" className="hover:opacity-100 transition-opacity">support@ratemymua.com</a>
                   <a 
                     href="https://www.x.com/utkaxxh" 
                     target="_blank" 
@@ -599,8 +599,8 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <span className="logo-wrapper">
                 <Image 
-                  src="/fadetrack-logo-new.svg" 
-                  alt="Fadetrack Logo" 
+                  src="/ratemymua-logo.svg" 
+                  alt="RateMyMUA Logo" 
                   width={100} 
                   height={24}
                   className="logo-img max-h-6"
@@ -686,7 +686,7 @@ export default function HomePage() {
               <div className="flex items-center gap-4">
                 <Link href="/privacy" className="hover:opacity-80 transition-opacity">Privacy</Link>
                 <Link href="/terms" className="hover:opacity-80 transition-opacity">Terms</Link>
-                <a href="mailto:support@fadetrack.com" className="hover:opacity-80 transition-opacity">support@fadetrack.com</a>
+                <a href="mailto:support@ratemymua.com" className="hover:opacity-80 transition-opacity">support@ratemymua.com</a>
                 <a 
                   href="https://www.x.com/utkaxxh" 
                   target="_blank" 
