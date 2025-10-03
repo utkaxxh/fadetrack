@@ -13,16 +13,15 @@ export default function PrivacyPage() {
       <h1>Privacy Policy</h1>
       <p><strong>Last Updated:</strong> {new Date().toISOString().split('T')[0]}</p>
 
-      <p>Fadetrack ("we", "our", "us") helps users log grooming services, discover professionals, and share authentic reviews. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you use our platform (the "Service").</p>
+  <p>Fadetrack ("we", "our", "us") helps users discover makeup artists and share authentic reviews. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you use our platform (the "Service").</p>
 
       <h2>1. Information We Collect</h2>
       <h3>Account Information</h3>
       <p>Email address and (optionally) display name when you sign up via Supabase authentication.</p>
       <h3>Usage & Content</h3>
       <ul>
-        <li>Haircut / service logs (date, style, notes, cost).</li>
-        <li>Reviews (ratings, text, titles, professional names, locations).</li>
-        <li>Professional setup profile fields you voluntarily provide.</li>
+  <li>Reviews (ratings, text, titles, professional names, locations, optional cost).</li>
+  <li>Professional profile fields you voluntarily provide.</li>
       </ul>
       <h3>Location Data</h3>
       <p>When you choose a location via autocomplete we store normalized fields (city, state, country, place_id). We do not collect precise GPS.</p>
@@ -31,10 +30,9 @@ export default function PrivacyPage() {
 
       <h2>2. How We Use Information</h2>
       <ul>
-        <li>Provide core functionality (logs, reminders, reviews, directory rank calculations).</li>
-        <li>Surface relevant professionals and compute average ratings.</li>
-        <li>Improve UX, diagnose performance issues, prevent abuse.</li>
-        <li>Send transactional emails (e.g. reminders) you opt into.</li>
+  <li>Provide core functionality (reviews, professional directory, rating calculations).</li>
+  <li>Surface relevant professionals and compute average ratings.</li>
+  <li>Improve UX, diagnose performance issues, prevent abuse.</li>
       </ul>
 
       <h2>3. Legal Bases (EEA/UK)</h2>
@@ -52,7 +50,7 @@ export default function PrivacyPage() {
       </ul>
 
       <h2>5. Data Retention</h2>
-      <p>We retain account and log data while your account is active. You can request deletion of your account and associated personal data (subject to minimal legal retention obligations).</p>
+  <p>We retain account and review data while your account is active. You can request deletion of your account and associated personal data (subject to minimal legal retention obligations).</p>
 
       <h2>6. Your Rights</h2>
       <ul>
