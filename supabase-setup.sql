@@ -61,39 +61,61 @@ CREATE TRIGGER update_reviews_updated_at
 ALTER TABLE barbers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies for barbers table
--- Allow everyone to read barbers
-CREATE POLICY "Public barbers are viewable by everyone" ON barbers
-    FOR SELECT USING (true);
+-- RLS Policies for barbers table (idempotent)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'barbers' AND policyname = 'Public barbers are viewable by everyone'
+    ) THEN
+        CREATE POLICY "Public barbers are viewable by everyone" ON barbers FOR SELECT USING (true);
+    END IF;
 
--- Allow anyone to insert barbers (needed for review creation)
-CREATE POLICY "Anyone can insert barbers" ON barbers
-    FOR INSERT WITH CHECK (true);
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'barbers' AND policyname = 'Anyone can insert barbers'
+    ) THEN
+        CREATE POLICY "Anyone can insert barbers" ON barbers FOR INSERT WITH CHECK (true);
+    END IF;
 
--- Allow anyone to update barber stats (needed for review aggregation)
-CREATE POLICY "Anyone can update barber stats" ON barbers
-    FOR UPDATE USING (true);
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'barbers' AND policyname = 'Anyone can update barber stats'
+    ) THEN
+        CREATE POLICY "Anyone can update barber stats" ON barbers FOR UPDATE USING (true);
+    END IF;
+END$$;
 
--- RLS Policies for reviews table
--- Allow everyone to read public reviews
-CREATE POLICY "Public reviews are viewable by everyone" ON reviews
-    FOR SELECT USING (is_public = true);
+-- RLS Policies for reviews table (idempotent)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'reviews' AND policyname = 'Public reviews are viewable by everyone'
+    ) THEN
+        CREATE POLICY "Public reviews are viewable by everyone" ON reviews FOR SELECT USING (is_public = true);
+    END IF;
 
--- Allow users to see their own reviews (public or private)
-CREATE POLICY "Users can view own reviews" ON reviews
-    FOR SELECT USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'reviews' AND policyname = 'Users can view own reviews'
+    ) THEN
+        CREATE POLICY "Users can view own reviews" ON reviews FOR SELECT USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
 
--- Allow anyone to insert reviews (we validate user_email in the API)
-CREATE POLICY "Anyone can insert reviews" ON reviews
-    FOR INSERT WITH CHECK (true);
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'reviews' AND policyname = 'Anyone can insert reviews'
+    ) THEN
+        CREATE POLICY "Anyone can insert reviews" ON reviews FOR INSERT WITH CHECK (true);
+    END IF;
 
--- Allow users to update their own reviews
-CREATE POLICY "Users can update own reviews" ON reviews
-    FOR UPDATE USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'reviews' AND policyname = 'Users can update own reviews'
+    ) THEN
+        CREATE POLICY "Users can update own reviews" ON reviews FOR UPDATE USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
 
--- Allow users to delete their own reviews
-CREATE POLICY "Users can delete own reviews" ON reviews
-    FOR DELETE USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'reviews' AND policyname = 'Users can delete own reviews'
+    ) THEN
+        CREATE POLICY "Users can delete own reviews" ON reviews FOR DELETE USING (user_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
+END$$;
 
 -- =============================
 -- Professional Profiles (Directory)
