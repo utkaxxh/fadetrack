@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import EnhancedSearch from '../components/EnhancedSearch';
 
 interface Professional {
   id: string;
@@ -20,19 +19,7 @@ interface Professional {
   distance?: number | null;
 }
 
-interface SearchFilters {
-  searchTerm: string;
-  profession: string;
-  location: string;
-  specialty: string;
-  priceRange: string;
-  rating: string;
-  distance: string;
-  availability: string;
-  sortBy: string;
-  userLat?: number;
-  userLng?: number;
-}
+// Advanced search filters removed – simplifying to basic directory fetch
 
 const Star = ({ filled }: { filled?: boolean }) => (
   <svg aria-hidden="true" className={`w-4 h-4 ${filled ? 'text-amber-400' : 'text-slate-300'}`} fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.803 2.037a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.803-2.037a1 1 0 00-1.175 0l-2.803 2.037c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
@@ -44,60 +31,30 @@ export default function ProfessionalDirectory() {
   const [error, setError] = useState('');
   const [totalResults, setTotalResults] = useState(0);
   const [hasPerformedInitialSearch, setHasPerformedInitialSearch] = useState(false);
-
-  const handleSearch = useCallback(async (filters: SearchFilters) => {
+  const fetchProfessionals = async () => {
     setIsLoading(true);
     setError('');
-
     try {
-      const queryParams = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value && value !== '' && value !== 'all' && value !== '0') {
-          queryParams.append(key, value.toString());
-        }
-      });
-
-      const response = await fetch(`/api/enhancedSearch?${queryParams.toString()}`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+      const response = await fetch('/api/professionalDirectory');
+      if (!response.ok) throw new Error(`Failed to load directory (status ${response.status})`);
       const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      
       setSearchResults(data.professionals || []);
-      setTotalResults(data.total || 0);
+      setTotalResults((data.professionals || []).length);
     } catch (err) {
-      console.error('Error searching professionals:', err);
-      setError(err instanceof Error ? err.message : 'Failed to search professionals');
+      console.error('Error fetching professionals:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load professionals');
       setSearchResults([]);
       setTotalResults(0);
     } finally {
       setIsLoading(false);
       setHasPerformedInitialSearch(true);
     }
-  }, []); // Empty dependency array since this function doesn't depend on any props or state
+  };
 
-  // Initialize with basic search on component mount
+  // Fetch once on mount (advanced filters removed)
   useEffect(() => {
-    const initialFilters = {
-      searchTerm: '',
-      profession: 'all',
-      location: '',
-      specialty: 'all',
-      priceRange: 'all',
-      rating: '0',
-      distance: '25',
-      availability: 'all',
-      sortBy: 'rating'
-    };
-    handleSearch(initialFilters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty dependency array to run only once on mount
+    fetchProfessionals();
+  }, []);
 
   // Show loading only on initial load
   if (!hasPerformedInitialSearch && searchResults.length === 0) {
@@ -189,16 +146,10 @@ export default function ProfessionalDirectory() {
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="mb-16">
-          <div className="relative">
-            <div className="absolute inset-0 rounded-3xl blur-sm" style={{background:'linear-gradient(135deg,rgba(248,250,252,0.7),rgba(248,250,252,0.5))'}}></div>
-            <div className="relative backdrop-blur-xl rounded-3xl shadow-2xl border overflow-hidden" style={{background:'linear-gradient(135deg,rgba(248,250,252,0.85),rgba(248,250,252,0.65))',borderColor:'rgba(17,75,95,0.15)'}}>
-              <div className="absolute inset-0" style={{background:'radial-gradient(circle at 30% 20%,rgba(17,75,95,0.10),transparent 60%)'}}></div>
-              <div className="relative">
-                <EnhancedSearch onSearch={handleSearch} />
-              </div>
-            </div>
-          </div>
+        {/* Simplified header block – advanced search removed */}
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold mb-3" style={{color:'#114B5F'}}>Browse Top Professionals</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">Curated list of active profiles ordered by rating. Advanced filters coming back later if needed.</p>
         </div>
 
         {/* Results */}
@@ -251,12 +202,10 @@ export default function ProfessionalDirectory() {
           <div>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4">
               <div>
-                <h2 className="text-3xl font-black mb-4" style={{color:'#114B5F'}}>
-                  {isLoading ? 'Searching...' : `${totalResults} Professional${totalResults !== 1 ? 's' : ''} Found`}
+                <h2 className="text-3xl font-black mb-2" style={{color:'#114B5F'}}>
+                  {isLoading ? 'Loading Directory...' : `${totalResults} Professional${totalResults !== 1 ? 's' : ''}`}
                 </h2>
-                <p className="text-lg text-gray-600">
-                  {isLoading ? 'Please wait while we find the best matches' : 'Browse and compare top-rated professionals'}
-                </p>
+                <p className="text-lg text-gray-600">{isLoading ? 'Fetching profiles' : 'Ordered by rating (desc)'}</p>
               </div>
               {!isLoading && totalResults > 0 && (
                 <div className="flex items-center gap-3 text-sm bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-2 rounded-full border border-green-200/50">
