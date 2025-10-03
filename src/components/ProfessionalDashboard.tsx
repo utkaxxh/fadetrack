@@ -562,6 +562,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   className="w-full p-3 rounded-lg border focus:outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed"
                   style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                 >
+                  <option value="makeup_artist">Makeup Artist</option>
                   <option value="barber">Barber</option>
                   <option value="beautician">Beautician</option>
                   <option value="stylist">Hair Stylist</option>

@@ -4,7 +4,7 @@ import type { User } from '@supabase/supabase-js';
 interface ProfessionalProfile {
   business_name: string;
   display_name: string;
-  profession_type: 'barber' | 'beautician' | 'stylist' | 'salon';
+  profession_type: 'barber' | 'beautician' | 'stylist' | 'salon' | 'makeup_artist';
   bio: string;
   phone: string;
   address: string;
@@ -32,7 +32,7 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
   const [profile, setProfile] = useState<ProfessionalProfile>({
     business_name: '',
     display_name: '',
-    profession_type: 'barber',
+  profession_type: 'makeup_artist',
     bio: '',
     phone: '',
     address: '',
@@ -198,6 +198,7 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
                 className="input"
                 required
               >
+                <option value="makeup_artist">Makeup Artist</option>
                 <option value="barber">Barber</option>
                 <option value="beautician">Beautician</option>
                 <option value="stylist">Hair Stylist</option>
