@@ -46,11 +46,38 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
     price_range: ''
   });
 
-  const specialtyOptions = [
-    'Haircuts', 'Hair Coloring', 'Hair Styling', 'Beard Trimming', 'Shaves',
-    'Perms', 'Hair Extensions', 'Braiding', 'Wedding Styles', 'Men\'s Cuts',
-    'Women\'s Cuts', 'Kids Cuts', 'Color Correction', 'Highlights', 'Balayage'
-  ];
+  // Specialty option sets keyed by profession type
+  const specialtySets: Record<string, string[]> = {
+    makeup_artist: [
+      'Bridal Makeup',
+      'Sangeet Makeup',
+      'Engagement Makeup',
+      'Reception Makeup',
+      'Party / Casual Makeup',
+      'HD Makeup',
+      'Airbrush Makeup',
+      'Natural Glam',
+      'Full Glam',
+      'Editorial / Photoshoot',
+      'Runway / Fashion',
+      'Pre-Wedding Events'
+    ],
+    barber: [
+      'Fades', 'Classic Cuts', 'Beard Trimming', 'Hot Towel Shaves', 'Line Ups',
+      'Texture / Perm', 'Kids Cuts'
+    ],
+    beautician: [
+      'Facials', 'Skin Treatments', 'Threading', 'Waxing', 'Body Treatments', 'Brow Shaping'
+    ],
+    stylist: [
+      'Hair Coloring', 'Highlights', 'Balayage', 'Hair Styling', 'Extensions', 'Color Correction', 'Keratin Treatments'
+    ],
+    salon: [
+      'Hair Services', 'Makeup Services', 'Skin Care', 'Nails', 'Spa Treatments', 'Bridal Packages'
+    ]
+  };
+
+  const currentSpecialtyOptions = specialtySets[profile.profession_type] || [];
 
   const priceRanges = [
     { value: '₹', label: '₹ - Budget Friendly (₹500-₹1,500)' },
@@ -61,10 +88,22 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setProfile(prev => ({
-      ...prev,
-      [name]: name === 'years_experience' ? parseInt(value) || 1 : value
-    }));
+    setProfile(prev => {
+      // If switching profession type, filter existing specialties to only those valid for new type
+      if (name === 'profession_type') {
+        const nextType = value as ProfessionalProfile['profession_type'];
+        const allowed = new Set((specialtySets[nextType] || []));
+        return {
+          ...prev,
+            profession_type: nextType,
+            specialties: prev.specialties.filter(s => allowed.has(s))
+        };
+      }
+      return {
+        ...prev,
+        [name]: name === 'years_experience' ? (parseInt(value) || 1) : value
+      };
+    });
   };
 
   const handleSpecialtyToggle = (specialty: string) => {
@@ -380,7 +419,7 @@ export default function ProfessionalProfileSetup({ user, onComplete, onSkip }: P
                 Specialties (Select all that apply)
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {specialtyOptions.map((specialty) => (
+                {currentSpecialtyOptions.map((specialty) => (
                   <label key={specialty} className="flex items-center space-x-2 cursor-pointer">
                     <input
                       type="checkbox"

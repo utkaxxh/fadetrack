@@ -321,10 +321,30 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
   };
 
   const handleProfileInputChange = (field: string, value: string | number | boolean | string[]) => {
-    setProfileFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+    setProfileFormData(prev => {
+      if (field === 'profession_type') {
+        // When profession changes, drop specialties not valid for new type (frontend consistency)
+        const specialtySets: Record<string, string[]> = {
+          makeup_artist: [
+            'Bridal Makeup','Sangeet Makeup','Engagement Makeup','Reception Makeup','Party / Casual Makeup','HD Makeup','Airbrush Makeup','Natural Glam','Full Glam','Editorial / Photoshoot','Runway / Fashion','Pre-Wedding Events'
+          ],
+          barber: ['Fades','Classic Cuts','Beard Trimming','Hot Towel Shaves','Line Ups','Texture / Perm','Kids Cuts'],
+          beautician: ['Facials','Skin Treatments','Threading','Waxing','Body Treatments','Brow Shaping'],
+          stylist: ['Hair Coloring','Highlights','Balayage','Hair Styling','Extensions','Color Correction','Keratin Treatments'],
+          salon: ['Hair Services','Makeup Services','Skin Care','Nails','Spa Treatments','Bridal Packages']
+        };
+        const allowed = new Set(specialtySets[String(value)] || []);
+        return {
+          ...prev,
+          profession_type: value as string,
+          specialties: (prev.specialties || []).filter(s => allowed.has(s))
+        };
+      }
+      return {
+        ...prev,
+        [field]: value
+      };
+    });
   };
 
   if (isLoading) {
