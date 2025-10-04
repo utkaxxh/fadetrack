@@ -101,7 +101,7 @@ export default function HomePage() {
         if (!seen && !cached && role === 'customer') {
           setShowRoleSelection(true);
         }
-      } catch (_) {
+      } catch {
         if (role === 'customer') setShowRoleSelection(true);
       }
     }
@@ -117,7 +117,7 @@ export default function HomePage() {
         if (selectedRole) {
           localStorage.setItem(`cached-role-${user.email}`, selectedRole);
         }
-      } catch (_) { /* ignore storage errors */ }
+  } catch { /* ignore storage errors */ }
     }
     setShowRoleSelection(false);
     

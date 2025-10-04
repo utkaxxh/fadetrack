@@ -28,7 +28,7 @@ export function useUserRole(user: User | null) {
           if (data.hasRecord) {
             localStorage.setItem(`role-selected-${userEmail}`, 'true');
           }
-        } catch (_) { /* ignore storage errors */ }
+  } catch { /* ignore storage errors */ }
       } else {
         setError(data.error || 'Failed to fetch user role');
         setRole('customer'); // Default fallback
@@ -76,7 +76,7 @@ export function useUserRole(user: User | null) {
         try {
           localStorage.setItem(`cached-role-${user.email}`, newRole);
           localStorage.setItem(`role-selected-${user.email}`, 'true');
-        } catch (_) { /* ignore storage errors */ }
+  } catch { /* ignore storage errors */ }
         return true;
       } else {
         console.error('useUserRole: API error:', data);
@@ -107,7 +107,7 @@ export function useUserRole(user: User | null) {
         if (cached) {
           setRole(cached);
         }
-      } catch (_) { /* ignore */ }
+  } catch { /* ignore */ }
       fetchUserRole(user.email);
     } else {
       setRole('customer');

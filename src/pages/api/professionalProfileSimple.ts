@@ -127,11 +127,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       if (error) {
         console.error('professionalProfileSimple API: Error creating profile:', error);
+        type SupaErr = { code?: string; hint?: string; message?: string; details?: string | null };
+        const err = error as SupaErr;
         return res.status(500).json({ 
           error: 'Failed to create profile', 
-          details: error?.message || error,
-          code: (error as any)?.code,
-          hint: (error as any)?.hint,
+          details: err?.message || (error as unknown as string),
+          code: err?.code,
+          hint: err?.hint,
         });
       }
 
