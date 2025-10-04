@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data: portfolioData, error: portfolioError } = await supabaseAdmin
       .from('portfolio')
       .select('*')
-      .eq('professional_id', profileData.id);
+      .eq('professional_email', profileData.user_email);
 
     if (portfolioError) {
       console.warn('publicProfile API: Error fetching portfolio:', portfolioError);

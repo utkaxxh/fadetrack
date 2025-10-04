@@ -222,6 +222,43 @@ CREATE TABLE IF NOT EXISTS portfolio (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- If portfolio table already existed without professional_email, add it and backfill
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'portfolio' AND column_name = 'professional_email'
+    ) THEN
+        ALTER TABLE portfolio ADD COLUMN professional_email VARCHAR(255);
+    END IF;
+
+    -- Backfill professional_email from legacy professional_id if that column exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'portfolio' AND column_name = 'professional_id'
+    ) THEN
+        -- Ensure we only attempt backfill when professional_email is NULL
+        UPDATE portfolio p
+        SET professional_email = pr.user_email
+        FROM professional_profiles pr
+        WHERE p.professional_email IS NULL AND p.professional_id = pr.id;
+
+        -- Add FK constraint if missing
+        IF NOT EXISTS (
+            SELECT 1
+            FROM pg_constraint
+            WHERE conrelid = 'public.portfolio'::regclass
+              AND conname = 'portfolio_professional_email_fkey'
+        ) THEN
+            ALTER TABLE portfolio
+            ADD CONSTRAINT portfolio_professional_email_fkey
+            FOREIGN KEY (professional_email)
+            REFERENCES professional_profiles(user_email)
+            ON DELETE CASCADE;
+        END IF;
+    END IF;
+END$$;
+
 -- Indexes for portfolio
 CREATE INDEX IF NOT EXISTS idx_portfolio_professional_email ON portfolio(professional_email);
 CREATE INDEX IF NOT EXISTS idx_portfolio_created_at ON portfolio(created_at);
