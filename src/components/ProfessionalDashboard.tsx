@@ -127,6 +127,18 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
       
       if (response.ok) {
         setProfile(data.profile);
+        // After profile loads, fetch portfolio explicitly to ensure it's present
+        if (user.email) {
+          try {
+            const pResp = await fetch(`/api/portfolio?professionalEmail=${encodeURIComponent(user.email)}`);
+            const pData = await pResp.json();
+            if (pResp.ok) {
+              setProfile(prev => prev ? { ...prev, portfolio: pData.portfolio || [] } : prev);
+            }
+          } catch (e) {
+            console.warn('ProfessionalDashboard: Portfolio fetch failed (non-fatal):', e);
+          }
+        }
         console.log('ProfessionalDashboard: Profile set:', data.profile ? 'Profile found' : 'No profile found');
       } else {
         console.error('ProfessionalDashboard: Failed to fetch profile:', data.error);
@@ -183,6 +195,16 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
 
       if (response.ok) {
         await fetchProfile();
+        // Also refresh portfolio explicitly to minimize race conditions
+        try {
+          if (user.email) {
+            const pResp = await fetch(`/api/portfolio?professionalEmail=${encodeURIComponent(user.email)}`);
+            const pData = await pResp.json();
+            if (pResp.ok) {
+              setProfile(prev => prev ? { ...prev, portfolio: pData.portfolio || [] } : prev);
+            }
+          }
+        } catch {}
         setEditingPortfolioItem(undefined);
       } else {
         const errorData = await response.json();
@@ -206,6 +228,16 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
 
       if (response.ok) {
         await fetchProfile();
+        // Refresh portfolio list
+        try {
+          if (user?.email) {
+            const pResp = await fetch(`/api/portfolio?professionalEmail=${encodeURIComponent(user.email)}`);
+            const pData = await pResp.json();
+            if (pResp.ok) {
+              setProfile(prev => prev ? { ...prev, portfolio: pData.portfolio || [] } : prev);
+            }
+          }
+        } catch {}
       }
     } catch (err) {
       console.error('Error deleting portfolio item:', err);
