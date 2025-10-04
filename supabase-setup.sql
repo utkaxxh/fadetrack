@@ -148,6 +148,13 @@ CREATE TABLE IF NOT EXISTS professional_profiles (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Ensure profession_type CHECK constraint allows current set of roles
+ALTER TABLE professional_profiles
+    DROP CONSTRAINT IF EXISTS professional_profiles_profession_type_check;
+ALTER TABLE professional_profiles
+    ADD CONSTRAINT professional_profiles_profession_type_check
+    CHECK (profession_type IN ('makeup_artist','barber','beautician','stylist','salon'));
+
 -- Indexes for professional_profiles
 CREATE INDEX IF NOT EXISTS idx_prof_profiles_email ON professional_profiles(user_email);
 CREATE INDEX IF NOT EXISTS idx_prof_profiles_active ON professional_profiles(is_active);
