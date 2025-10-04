@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import type { User } from '@supabase/supabase-js';
@@ -26,8 +28,26 @@ export default function AccountDropdown({ user, onAccountSettings }: AccountDrop
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setIsOpen(false);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Sign out error:', error);
+      }
+    } catch (e) {
+      console.error('Unexpected sign out error:', e);
+    } finally {
+      // Clear any cached role selections for this user (best-effort)
+      try {
+        if (user?.email) {
+          localStorage.removeItem(`role-selected-${user.email}`);
+          localStorage.removeItem(`cached-role-${user.email}`);
+        }
+      } catch {/* ignore */}
+
+      setIsOpen(false);
+      // Redirect to home to ensure UI fully resets
+      window.location.href = '/';
+    }
   };
 
   const handleAccountSettings = () => {
