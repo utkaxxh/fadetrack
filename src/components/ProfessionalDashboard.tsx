@@ -762,6 +762,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                     alt={item.description || item.caption || 'Portfolio item'}
                     width={400}
                     height={400}
+                    unoptimized
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
