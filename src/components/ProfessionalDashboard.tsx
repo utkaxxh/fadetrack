@@ -89,6 +89,17 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileFormData, setProfileFormData] = useState<Partial<ProfessionalProfile>>({});
 
+  // Specialty option sets keyed by profession type
+  const specialtySets: Record<string, string[]> = {
+    makeup_artist: [
+      'Bridal Makeup','Sangeet Makeup','Engagement Makeup','Reception Makeup','Party / Casual Makeup','HD Makeup','Airbrush Makeup','Natural Glam','Full Glam','Editorial / Photoshoot','Runway / Fashion','Pre-Wedding Events'
+    ],
+    barber: ['Fades','Classic Cuts','Beard Trimming','Hot Towel Shaves','Line Ups','Texture / Perm','Kids Cuts'],
+    beautician: ['Facials','Skin Treatments','Threading','Waxing','Body Treatments','Brow Shaping'],
+    stylist: ['Hair Coloring','Highlights','Balayage','Hair Styling','Extensions','Color Correction','Keratin Treatments'],
+    salon: ['Hair Services','Makeup Services','Skin Care','Nails','Spa Treatments','Bridal Packages']
+  };
+
   const fetchProfile = useCallback(async () => {
     if (!user?.email) return;
     
@@ -324,15 +335,6 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
     setProfileFormData(prev => {
       if (field === 'profession_type') {
         // When profession changes, drop specialties not valid for new type (frontend consistency)
-        const specialtySets: Record<string, string[]> = {
-          makeup_artist: [
-            'Bridal Makeup','Sangeet Makeup','Engagement Makeup','Reception Makeup','Party / Casual Makeup','HD Makeup','Airbrush Makeup','Natural Glam','Full Glam','Editorial / Photoshoot','Runway / Fashion','Pre-Wedding Events'
-          ],
-          barber: ['Fades','Classic Cuts','Beard Trimming','Hot Towel Shaves','Line Ups','Texture / Perm','Kids Cuts'],
-          beautician: ['Facials','Skin Treatments','Threading','Waxing','Body Treatments','Brow Shaping'],
-          stylist: ['Hair Coloring','Highlights','Balayage','Hair Styling','Extensions','Color Correction','Keratin Treatments'],
-          salon: ['Hair Services','Makeup Services','Skin Care','Nails','Spa Treatments','Bridal Packages']
-        };
         const allowed = new Set(specialtySets[String(value)] || []);
         return {
           ...prev,
@@ -343,6 +345,17 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
       return {
         ...prev,
         [field]: value
+      };
+    });
+  };
+
+  const handleToggleSpecialty = (spec: string) => {
+    setProfileFormData(prev => {
+      const current = (prev.specialties || []) as string[];
+      const exists = current.includes(spec);
+      return {
+        ...prev,
+        specialties: exists ? current.filter(s => s !== spec) : [...current, spec]
       };
     });
   };
@@ -615,6 +628,42 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
                   style={{backgroundColor: isEditingProfile ? '#f1f5f9' : '#f8fafc', borderColor: 'rgba(17, 75, 95, 0.3)', color: '#114B5F'}}
                   placeholder="Tell customers about yourself and your experience..."
                 />
+              </div>
+
+              {/* Specialties Editor */}
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{color: '#114B5F'}}>Specialties</label>
+                {isEditingProfile ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {(specialtySets[(profileFormData.profession_type as string) || profile.profession_type] || []).map((spec) => {
+                      const selected = (profileFormData.specialties || profile.specialties || []).includes(spec);
+                      return (
+                        <label key={spec} className="flex items-center gap-2 text-sm cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4"
+                            checked={selected}
+                            onChange={() => handleToggleSpecialty(spec)}
+                            style={{accentColor: '#114B5F'}}
+                          />
+                          <span style={{color: '#114B5F'}}>{spec}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {profile.specialties.map((specialty, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-1 text-xs rounded-full"
+                        style={{backgroundColor: 'rgba(17, 75, 95, 0.1)', color: '#114B5F'}}
+                      >
+                        {specialty}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
