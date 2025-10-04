@@ -42,6 +42,8 @@ export default function AccountDropdown({ user, onAccountSettings }: AccountDrop
           localStorage.removeItem(`role-selected-${user.email}`);
           localStorage.removeItem(`cached-role-${user.email}`);
         }
+        // Mark this navigation as a post-signout flow to avoid role popup flicker
+        sessionStorage.setItem('just-signed-out', '1');
       } catch {/* ignore */}
 
       setIsOpen(false);

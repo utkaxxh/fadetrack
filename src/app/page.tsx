@@ -109,6 +109,12 @@ export default function HomePage() {
       try {
         const seen = localStorage.getItem(`role-selected-${user.email}`);
         const cached = localStorage.getItem(`cached-role-${user.email}`);
+        const justSignedOut = sessionStorage.getItem('just-signed-out');
+        if (justSignedOut) {
+          // Clear the flag and avoid showing role selection modal on first load after sign-out
+          sessionStorage.removeItem('just-signed-out');
+          return;
+        }
         // Only show if no prior selection cached AND current role is default customer
         if (!seen && !cached && role === 'customer') {
           setShowRoleSelection(true);
