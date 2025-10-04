@@ -70,7 +70,14 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 
   if (error) {
     console.error('Error creating portfolio item:', error);
-    return res.status(500).json({ error: 'Failed to create portfolio item' });
+    type SupaErr = { message: string; code?: string; hint?: string };
+    const err = error as SupaErr;
+    return res.status(500).json({ 
+      error: 'Failed to create portfolio item',
+      details: err.message,
+      code: err.code,
+      hint: err.hint
+    });
   }
 
   return res.status(201).json({ portfolioItem });

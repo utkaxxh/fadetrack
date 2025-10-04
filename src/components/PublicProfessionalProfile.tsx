@@ -323,7 +323,7 @@ export default function PublicProfessionalProfile({
                 )}
               </div>
               <div className="p-4">
-                <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.caption}</p>
+                <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.caption || ''}</p>
                 <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}>
                   {item.service_type}
                 </span>

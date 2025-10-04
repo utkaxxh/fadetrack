@@ -187,7 +187,8 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
       } else {
         const errorData = await response.json();
         console.error('Error saving portfolio item:', errorData);
-        alert('Failed to save portfolio item: ' + (errorData.error || 'Unknown error'));
+        const details = [errorData.error, errorData.details, errorData.hint].filter(Boolean).join(' - ');
+        alert('Failed to save portfolio item: ' + (details || 'Unknown error'));
       }
     } catch (err) {
       console.error('Error saving portfolio item:', err);

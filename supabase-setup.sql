@@ -207,3 +207,65 @@ BEGIN
             FOR INSERT WITH CHECK (true);
     END IF;
 END$$;
+
+-- =============================
+-- Portfolio (photos/media for professionals)
+-- =============================
+
+-- Create portfolio table used to store public media for professional profiles
+CREATE TABLE IF NOT EXISTS portfolio (
+    id SERIAL PRIMARY KEY,
+    professional_email VARCHAR(255) NOT NULL REFERENCES professional_profiles(user_email) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    description TEXT NOT NULL,
+    service_type VARCHAR(100) DEFAULT 'general',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for portfolio
+CREATE INDEX IF NOT EXISTS idx_portfolio_professional_email ON portfolio(professional_email);
+CREATE INDEX IF NOT EXISTS idx_portfolio_created_at ON portfolio(created_at);
+
+-- Enable RLS for portfolio
+ALTER TABLE portfolio ENABLE ROW LEVEL SECURITY;
+
+-- Public can read portfolio items
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'portfolio' AND policyname = 'Portfolio is viewable by everyone'
+    ) THEN
+        CREATE POLICY "Portfolio is viewable by everyone" ON portfolio
+            FOR SELECT USING (true);
+    END IF;
+END$$;
+
+-- Users can manage their own portfolio items (for anon key usage)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'portfolio' AND policyname = 'Users can insert own portfolio items'
+    ) THEN
+        CREATE POLICY "Users can insert own portfolio items" ON portfolio
+            FOR INSERT WITH CHECK (professional_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'portfolio' AND policyname = 'Users can update own portfolio items'
+    ) THEN
+        CREATE POLICY "Users can update own portfolio items" ON portfolio
+            FOR UPDATE USING (professional_email = current_setting('request.jwt.claims', true)::json->>'email')
+            WITH CHECK (professional_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE schemaname = 'public' AND tablename = 'portfolio' AND policyname = 'Users can delete own portfolio items'
+    ) THEN
+        CREATE POLICY "Users can delete own portfolio items" ON portfolio
+            FOR DELETE USING (professional_email = current_setting('request.jwt.claims', true)::json->>'email');
+    END IF;
+END$$;
