@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     } else {
       // Ensure bucket is public if it already existed
-      if (!(bucket as any).public) {
+      if (bucket?.public === false) {
         const { error: policyError } = await supabase.storage.updateBucket(STORAGE_BUCKET, { public: true });
         if (policyError) {
           console.warn('Warning: failed to set bucket public:', policyError);
