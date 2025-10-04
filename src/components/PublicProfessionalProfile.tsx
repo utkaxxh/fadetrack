@@ -40,7 +40,8 @@ interface Service {
 interface PortfolioItem {
   id: number;
   image_url: string;
-  caption: string;
+  caption?: string; // legacy
+  description?: string; // current DB field
   service_type: string;
   created_at: string;
 }
@@ -305,9 +306,10 @@ export default function PublicProfessionalProfile({
                 {item.image_url ? (
                   <Image
                     src={item.image_url}
-                    alt={item.caption}
+                    alt={item.description || item.caption || 'Portfolio item'}
                     width={400}
                     height={400}
+                    unoptimized
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
@@ -323,7 +325,7 @@ export default function PublicProfessionalProfile({
                 )}
               </div>
               <div className="p-4">
-                <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.caption || ''}</p>
+                <p className="text-sm mb-2" style={{color: '#114B5F'}}>{item.description || item.caption || ''}</p>
                 <span className="text-xs px-2 py-1 rounded" style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}>
                   {item.service_type}
                 </span>

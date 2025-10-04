@@ -60,7 +60,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Ensure bucket exists
     const { data: buckets } = await supabase.storage.listBuckets();
-    const bucketExists = buckets?.some(bucket => bucket.name === STORAGE_BUCKET);
+    const bucket = buckets?.find(b => b.name === STORAGE_BUCKET);
+    const bucketExists = !!bucket;
     
     if (!bucketExists) {
       const { error: createBucketError } = await supabase.storage.createBucket(STORAGE_BUCKET, {
@@ -72,6 +73,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (createBucketError) {
         console.error('Error creating bucket:', createBucketError);
         return res.status(500).json({ error: 'Failed to create storage bucket' });
+      }
+    } else {
+      // Ensure bucket is public if it already existed
+      if (!(bucket as any).public) {
+        const { error: policyError } = await supabase.storage.updateBucket(STORAGE_BUCKET, { public: true });
+        if (policyError) {
+          console.warn('Warning: failed to set bucket public:', policyError);
+        }
       }
     }
 
