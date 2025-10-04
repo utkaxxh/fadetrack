@@ -7,6 +7,7 @@ export function useUserRole(user: User | null) {
   const [role, setRole] = useState<UserRole>('customer');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasRecord, setHasRecord] = useState<boolean>(false);
 
   const fetchUserRole = async (userEmail: string) => {
     setIsLoading(true);
@@ -22,6 +23,7 @@ export function useUserRole(user: User | null) {
       if (response.ok) {
         const resolvedRole: UserRole = data.role || 'customer';
         setRole(resolvedRole);
+        setHasRecord(!!data.hasRecord);
         // Persist locally so future sessions don't flash modal while network fetch occurs
         try {
           localStorage.setItem(`cached-role-${userEmail}`, resolvedRole);
@@ -32,11 +34,13 @@ export function useUserRole(user: User | null) {
       } else {
         setError(data.error || 'Failed to fetch user role');
         setRole('customer'); // Default fallback
+        setHasRecord(false);
       }
     } catch (err) {
       console.error('useUserRole: Fetch error:', err);
       setError('Failed to fetch user role');
       setRole('customer'); // Default fallback
+      setHasRecord(false);
     } finally {
       setIsLoading(false);
     }
@@ -73,6 +77,7 @@ export function useUserRole(user: User | null) {
       if (response.ok) {
         console.log('useUserRole: Success, setting role to:', newRole);
         setRole(newRole);
+        setHasRecord(true);
         try {
           localStorage.setItem(`cached-role-${user.email}`, newRole);
           localStorage.setItem(`role-selected-${user.email}`, 'true');
@@ -112,6 +117,7 @@ export function useUserRole(user: User | null) {
     } else {
       setRole('customer');
       setError(null);
+      setHasRecord(false);
     }
   }, [user?.email]);
 
@@ -122,6 +128,7 @@ export function useUserRole(user: User | null) {
     updateUserRole,
     isProfessional: role === 'professional',
     isCustomer: role === 'customer',
+    hasRecord,
     refetch: () => user?.email && fetchUserRole(user.email)
   };
 }

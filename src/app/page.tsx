@@ -78,7 +78,7 @@ export default function HomePage() {
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   // Removed flip word animation state & interval
   const user = useSupabaseUser();
-  const { role, updateUserRole, isProfessional, isLoading: roleLoading } = useUserRole(user);
+  const { role, updateUserRole, isProfessional, isLoading: roleLoading, hasRecord } = useUserRole(user);
 
   // Set default tab based on user role (only once when role is known)
   const hasSetDefaultTabRef = useRef(false);
@@ -115,15 +115,15 @@ export default function HomePage() {
           sessionStorage.removeItem('just-signed-out');
           return;
         }
-        // Only show if no prior selection cached AND current role is default customer
-        if (!seen && !cached && role === 'customer') {
+        // Show only if there's truly no record in DB (first-time user) and role is default customer
+        if (!hasRecord && !seen && !cached && role === 'customer') {
           setShowRoleSelection(true);
         }
       } catch {
         if (role === 'customer') setShowRoleSelection(true);
       }
     }
-  }, [user, role, roleLoading]);
+  }, [user, role, roleLoading, hasRecord]);
 
   const handleRoleSelection = (selectedRole?: string) => {
     console.log('🔄 handleRoleSelection called with selectedRole:', selectedRole);
