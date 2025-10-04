@@ -505,12 +505,12 @@ export default function HomePage() {
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{color:'#f1f5f9', opacity:.9}}>
                 <p className="flex items-center gap-1">
-                  Made with <span className="mx-1">♥</span> in San Francisco
+                  Made with love in India
                 </p>
                 <div className="flex items-center gap-4">
                   <Link href="/privacy" className="hover:opacity-100 transition-opacity">Privacy</Link>
                   <Link href="/terms" className="hover:opacity-100 transition-opacity">Terms</Link>
-                  <a href="mailto:support@ratemymua.com" className="hover:opacity-100 transition-opacity">support@ratemymua.com</a>
+                  <a href="mailto:support@ratemymua.com" className="hover:opacity-100 transition-opacity">Support</a>
                   <a
                     href="https://docs.google.com/forms/d/e/1FAIpQLSdFg5beubYdZpjmjDkA2EBZboEZAZN1gCSmsdwX_XZ-KTBu2A/viewform"
                     target="_blank"
@@ -618,12 +618,12 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{color:'#114B5F'}}>
               <p className="flex items-center gap-1">
-                Made with <span className="mx-1">♥</span> in San Francisco
+                Made with love in India
               </p>
               <div className="flex items-center gap-4">
                 <Link href="/privacy" className="hover:opacity-80 transition-opacity">Privacy</Link>
                 <Link href="/terms" className="hover:opacity-80 transition-opacity">Terms</Link>
-                <a href="mailto:support@ratemymua.com" className="hover:opacity-80 transition-opacity">support@ratemymua.com</a>
+                <a href="mailto:support@ratemymua.com" className="hover:opacity-80 transition-opacity">Support</a>
                 <a
                   href="https://docs.google.com/forms/d/e/1FAIpQLSdFg5beubYdZpjmjDkA2EBZboEZAZN1gCSmsdwX_XZ-KTBu2A/viewform"
                   target="_blank"
