@@ -92,6 +92,17 @@ export default function HomePage() {
     hasSetDefaultTabRef.current = true;
   }, [isProfessional, roleLoading]);
 
+  // Compute a safe current tab for rendering to avoid blank state on refresh
+  // Professionals default to 'dashboard' unless they explicitly choose 'directory'
+  // Customers never render 'dashboard' and default to 'myreviews'
+  const currentTab: TabType = React.useMemo(() => {
+    if (isProfessional) {
+      return activeTab === 'directory' ? 'directory' : 'dashboard';
+    }
+    // Non-professionals: if state somehow is 'dashboard', map to 'myreviews'
+    return activeTab === 'dashboard' ? 'myreviews' : activeTab;
+  }, [activeTab, isProfessional]);
+
   // Check if new user needs role selection
   useEffect(() => {
     if (user && !roleLoading) {
@@ -541,12 +552,12 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
-          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} userRole={role} />
+          <TabNavigation activeTab={currentTab} setActiveTab={setActiveTab} userRole={role} />
           <div className="p-6" style={{backgroundColor: 'rgba(248, 250, 252, 0.3)'}}>
-            {activeTab === 'myreviews' && !isProfessional && <MyReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
-            {activeTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
-            {activeTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
-            {activeTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}
+            {currentTab === 'myreviews' && !isProfessional && <MyReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
+            {currentTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
+            {currentTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
+            {currentTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}
           </div>
         </div>
       </main>
