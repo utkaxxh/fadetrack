@@ -306,3 +306,29 @@ BEGIN
             FOR DELETE USING (professional_email = current_setting('request.jwt.claims', true)::json->>'email');
     END IF;
 END$$;
+
+-- Ensure legacy schemas are migrated: add missing columns and backfill
+DO $$
+BEGIN
+    -- Add description if missing, and backfill from caption if it exists
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'portfolio' AND column_name = 'description'
+    ) THEN
+        ALTER TABLE portfolio ADD COLUMN description TEXT;
+        IF EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_name = 'portfolio' AND column_name = 'caption'
+        ) THEN
+            UPDATE portfolio SET description = COALESCE(description, caption);
+        END IF;
+    END IF;
+
+    -- Add service_type if missing
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'portfolio' AND column_name = 'service_type'
+    ) THEN
+        ALTER TABLE portfolio ADD COLUMN service_type VARCHAR(100) DEFAULT 'general';
+    END IF;
+END$$;
