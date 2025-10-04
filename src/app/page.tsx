@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '../components/supabaseClient';
@@ -80,16 +80,17 @@ export default function HomePage() {
   const user = useSupabaseUser();
   const { role, updateUserRole, isProfessional, isLoading: roleLoading } = useUserRole(user);
 
-  // Set default tab based on user role
+  // Set default tab based on user role (only once when role is known)
+  const hasSetDefaultTabRef = useRef(false);
   useEffect(() => {
-    if (!roleLoading) {
-      if (isProfessional && activeTab !== 'dashboard') {
-        setActiveTab('dashboard');
-      } else if (!isProfessional && activeTab === 'dashboard') {
-        setActiveTab('myreviews');
-      }
+    if (roleLoading || hasSetDefaultTabRef.current) return;
+    if (isProfessional) {
+      setActiveTab('dashboard');
+    } else {
+      setActiveTab('myreviews');
     }
-  }, [isProfessional, roleLoading, activeTab]);
+    hasSetDefaultTabRef.current = true;
+  }, [isProfessional, roleLoading]);
 
   // Check if new user needs role selection
   useEffect(() => {
