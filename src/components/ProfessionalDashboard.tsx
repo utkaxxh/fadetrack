@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import type { User } from '@supabase/supabase-js';
-import ServiceModal from './ServiceModal';
+// Services UI removed
 import PortfolioModal from './PortfolioModal';
 
 interface ProfessionalProfile {
@@ -76,18 +76,33 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
   const [profile, setProfile] = useState<ProfessionalProfile | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState<'overview' | 'profile' | 'services' | 'portfolio' | 'reviews'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'profile' | 'portfolio' | 'reviews'>('overview');
   
   // Modal states
-  const [showServiceModal, setShowServiceModal] = useState(false);
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
-  const [editingService, setEditingService] = useState<Service | undefined>(undefined);
   const [editingPortfolioItem, setEditingPortfolioItem] = useState<PortfolioItem | undefined>(undefined);
   
   // Profile editing states
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileFormData, setProfileFormData] = useState<Partial<ProfessionalProfile>>({});
+
+  const PROFESSION_LABELS: Record<string, string> = {
+    makeup_artist: 'Makeup Artist',
+    barber: 'Barber',
+    beautician: 'Beautician',
+    stylist: 'Hair Stylist',
+    salon: 'Salon Owner'
+  };
+
+  const formatProfessionType = (value: string): string => {
+    if (!value) return '';
+    if (PROFESSION_LABELS[value]) return PROFESSION_LABELS[value];
+    return value
+      .split('_')
+      .map(w => (w ? w[0].toUpperCase() + w.slice(1) : w))
+      .join(' ');
+  };
 
   // Specialty option sets keyed by profession type
   const specialtySets: Record<string, string[]> = {
@@ -145,53 +160,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
     }
   }, [user?.email, fetchProfile, fetchReviews]);
 
-  const handleSaveService = async (serviceData: {
-    service_name: string;
-    description: string;
-    price_min: number;
-    price_max: number;
-    duration_minutes: number;
-    is_active: boolean;
-  }) => {
-    if (!profile?.id) return;
-
-    try {
-      const method = editingService ? 'PUT' : 'POST';
-      const body = editingService 
-        ? { ...serviceData, id: editingService.id }
-        : { ...serviceData, professionalId: profile.id };
-
-      const response = await fetch('/api/services', {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      if (response.ok) {
-        // Refresh profile to get updated services
-        await fetchProfile();
-        setEditingService(undefined);
-      }
-    } catch (err) {
-      console.error('Error saving service:', err);
-    }
-  };
-
-  const handleDeleteService = async (serviceId: number) => {
-    if (!confirm('Are you sure you want to delete this service?')) return;
-
-    try {
-      const response = await fetch(`/api/services?id=${serviceId}`, {
-        method: 'DELETE'
-      });
-
-      if (response.ok) {
-        await fetchProfile();
-      }
-    } catch (err) {
-      console.error('Error deleting service:', err);
-    }
-  };
+  // Services capability removed from dashboard UI
 
   const handleSavePortfolioItem = async (itemData: {
     image_url: string;
@@ -428,12 +397,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           </span>
         </div>
 
-        <div className="p-6 rounded-lg" style={{backgroundColor: 'rgba(17, 75, 95, 0.1)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
-          <h3 className="text-sm font-medium mb-2" style={{color: '#114B5F', opacity: 0.8}}>Services Offered</h3>
-          <span className="text-3xl font-bold" style={{color: '#114B5F'}}>
-            {profile.services?.length || 0}
-          </span>
-        </div>
+        {/* Services card removed */}
       </div>
 
       {/* Quick Actions */}
@@ -447,15 +411,6 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           >
             <h4 className="font-semibold" style={{color: '#114B5F'}}>Edit Profile</h4>
             <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>Update your business information</p>
-          </button>
-          
-          <button
-            onClick={() => setActiveSection('services')}
-            className="p-4 rounded-lg transition-all duration-200 text-left"
-            style={{backgroundColor: '#f1f5f9', border: '1px solid #114B5F'}}
-          >
-            <h4 className="font-semibold" style={{color: '#114B5F'}}>Manage Services</h4>
-            <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>Add or update your offerings</p>
           </button>
           
           <button
@@ -486,7 +441,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
             <h4 className="font-semibold mb-2" style={{color: '#114B5F'}}>{profile.business_name}</h4>
             <p className="text-sm mb-2" style={{color: '#114B5F', opacity: 0.8}}>{profile.display_name}</p>
             <p className="text-sm mb-2" style={{color: '#114B5F', opacity: 0.8}}>
-              {profile.profession_type.charAt(0).toUpperCase() + profile.profession_type.slice(1)}
+              {formatProfessionType(profile.profession_type)}
             </p>
             <p className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>
               {profile.city}, {profile.state}
@@ -773,95 +728,7 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
     </div>
   );
 
-  const renderServices = () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl font-semibold" style={{color: '#114B5F'}}>Service Management</h3>
-        <button
-          onClick={() => {
-            setEditingService(undefined);
-            setShowServiceModal(true);
-          }}
-          className="px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200"
-          style={{backgroundColor: '#114B5F'}}
-        >
-          Add New Service
-        </button>
-      </div>
-      
-      {profile?.services && profile.services.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {profile.services.map((service) => (
-            <div
-              key={service.id}
-              className="p-6 rounded-lg"
-              style={{backgroundColor: 'rgba(17, 75, 95, 0.05)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
-            >
-              <div className="flex justify-between items-start mb-4">
-                <h4 className="text-lg font-semibold" style={{color: '#114B5F'}}>{service.service_name}</h4>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => {
-                      setEditingService(service);
-                      setShowServiceModal(true);
-                    }}
-                    className="text-sm px-3 py-1 rounded" 
-                    style={{backgroundColor: '#f1f5f9', color: '#114B5F'}}
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDeleteService(service.id)}
-                    className="text-sm px-3 py-1 rounded text-red-600 bg-red-50"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-              
-              <p className="text-sm mb-3" style={{color: '#114B5F', opacity: 0.8}}>{service.description}</p>
-              
-              <div className="flex justify-between items-center text-sm">
-                <span style={{color: '#114B5F'}}>
-                  ${service.price_min} - ${service.price_max}
-                </span>
-                <span style={{color: '#114B5F', opacity: 0.8}}>
-                  {service.duration_minutes} min
-                </span>
-              </div>
-              
-              <div className="mt-3">
-                <span
-                  className={`text-xs px-2 py-1 rounded ${
-                    service.is_active 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {service.is_active ? 'Active' : 'Inactive'}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-12">
-          <h4 className="text-lg font-semibold mb-2" style={{color: '#114B5F'}}>No Services Added Yet</h4>
-          <p style={{color: '#114B5F', opacity: 0.8}} className="mb-4">Start by adding your first service to attract customers.</p>
-          <button
-            onClick={() => {
-              setEditingService(undefined);
-              setShowServiceModal(true);
-            }}
-            className="px-6 py-3 rounded-lg font-semibold text-white transition-all duration-200"
-            style={{backgroundColor: '#114B5F'}}
-          >
-            Add Your First Service
-          </button>
-        </div>
-      )}
-    </div>
-  );
+  // Services section removed
 
   const renderPortfolio = () => (
     <div className="space-y-6">
@@ -1075,13 +942,12 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
         {[
           { key: 'overview', label: 'Overview' },
           { key: 'profile', label: 'Profile' },
-          { key: 'services', label: 'Services' },
           { key: 'portfolio', label: 'Portfolio' },
           { key: 'reviews', label: 'Reviews' },
         ].map((section) => (
           <button
             key={section.key}
-            onClick={() => setActiveSection(section.key as 'overview' | 'profile' | 'services' | 'portfolio' | 'reviews')}
+            onClick={() => setActiveSection(section.key as 'overview' | 'profile' | 'portfolio' | 'reviews')}
             className={`px-4 py-2 rounded-lg transition-all duration-200 ${
               activeSection === section.key
                 ? 'font-semibold text-white'
@@ -1097,27 +963,15 @@ export default function ProfessionalDashboard({ user, onSetupProfile }: Professi
           </button>
         ))}
       </div>
-
       {/* Content */}
       <div>
         {activeSection === 'overview' && renderOverview()}
         {activeSection === 'profile' && renderProfile()}
-        {activeSection === 'services' && renderServices()}
         {activeSection === 'portfolio' && renderPortfolio()}
         {activeSection === 'reviews' && renderReviews()}
       </div>
 
       {/* Modals */}
-      <ServiceModal
-        isOpen={showServiceModal}
-        onClose={() => {
-          setShowServiceModal(false);
-          setEditingService(undefined);
-        }}
-        onSave={handleSaveService}
-        service={editingService}
-      />
-
       <PortfolioModal
         isOpen={showPortfolioModal}
         onClose={() => {

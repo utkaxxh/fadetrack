@@ -145,6 +145,24 @@ export default function PublicProfessionalProfile({
     );
   }
 
+  const PROFESSION_LABELS: Record<string, string> = {
+    makeup_artist: 'Makeup Artist',
+    barber: 'Barber',
+    beautician: 'Beautician',
+    stylist: 'Hair Stylist',
+    salon: 'Salon Owner'
+  };
+
+  const formatProfessionType = (value: string): string => {
+    if (!value) return '';
+    if (PROFESSION_LABELS[value]) return PROFESSION_LABELS[value];
+    // Fallback: convert snake_case to Title Case
+    return value
+      .split('_')
+      .map(w => (w ? w[0].toUpperCase() + w.slice(1) : w))
+      .join(' ');
+  };
+
   const renderAbout = () => (
     <div className="space-y-6">
       {/* Bio Section */}
@@ -416,7 +434,7 @@ export default function PublicProfessionalProfile({
           {profile.display_name}
         </p>
         <p className="text-sm mb-4" style={{color: '#114B5F', opacity: 0.8}}>
-          {profile.profession_type.charAt(0).toUpperCase() + profile.profession_type.slice(1)} • {profile.years_experience} years experience
+          {formatProfessionType(profile.profession_type)} • {profile.years_experience} years experience
         </p>
         
         {/* Rating */}
