@@ -322,9 +322,7 @@ export default function HomePage() {
                   Create Makeup Artist Profile
                 </Link>
               </div>
-              <div className="text-sm" style={{color: '#114B5F', opacity: 0.7}}>
-                Join thousands of makeup artists showcasing their work
-              </div>
+              {/* Removed promotional tagline per design update */}
             </div>
           </div>
           {/* Removed animation styles */}
@@ -504,9 +502,7 @@ export default function HomePage() {
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{color:'#f1f5f9', opacity:.9}}>
-                <p className="flex items-center gap-1">
-                  Made with love in India
-                </p>
+                <p className="flex items-center gap-1">Made with ♥ in India</p>
                 <div className="flex items-center gap-4">
                   <Link href="/privacy" className="hover:opacity-100 transition-opacity">Privacy</Link>
                   <Link href="/terms" className="hover:opacity-100 transition-opacity">Terms</Link>
@@ -617,9 +613,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="flex flex-col sm:flex-row items-center gap-4 text-sm" style={{color:'#114B5F'}}>
-              <p className="flex items-center gap-1">
-                Made with love in India
-              </p>
+              <p className="flex items-center gap-1">Made with ♥ in India</p>
               <div className="flex items-center gap-4">
                 <Link href="/privacy" className="hover:opacity-80 transition-opacity">Privacy</Link>
                 <Link href="/terms" className="hover:opacity-80 transition-opacity">Terms</Link>
