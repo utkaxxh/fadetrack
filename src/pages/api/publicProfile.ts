@@ -58,17 +58,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log('publicProfile API: Profile found:', profileData.business_name);
 
-    // Get services if profile exists
-    const { data: servicesData, error: servicesError } = await supabaseAdmin
-      .from('services')
-      .select('*')
-      .eq('professional_id', profileData.id)
-      .eq('is_active', true);
-
-    if (servicesError) {
-      console.warn('publicProfile API: Error fetching services:', servicesError);
-    }
-
     // Get portfolio if profile exists
     const { data: portfolioData, error: portfolioError } = await supabaseAdmin
       .from('portfolio')
@@ -82,11 +71,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Combine the data
     const profile = {
       ...profileData,
-      services: servicesData || [],
       portfolio: portfolioData || []
     };
 
-    console.log('publicProfile API: Returning profile with', profile.services.length, 'services and', profile.portfolio.length, 'portfolio items');
+    console.log('publicProfile API: Returning profile with', profile.portfolio.length, 'portfolio items');
 
     return res.status(200).json({ profile });
   } catch (error) {

@@ -23,18 +23,7 @@ interface ProfessionalProfile {
   is_active: boolean;
   average_rating: number;
   total_reviews: number;
-  services: Service[];
   portfolio: PortfolioItem[];
-}
-
-interface Service {
-  id: number;
-  service_name: string;
-  description: string;
-  price_min: number;
-  price_max: number;
-  duration_minutes: number;
-  is_active: boolean;
 }
 
 interface PortfolioItem {
@@ -77,7 +66,7 @@ export default function PublicProfessionalProfile({
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'about' | 'services' | 'portfolio' | 'reviews'>('about');
+  const [activeTab, setActiveTab] = useState<'about' | 'portfolio' | 'reviews'>('about');
 
   const fetchProfessionalProfile = useCallback(async () => {
     try {
@@ -244,51 +233,6 @@ export default function PublicProfessionalProfile({
     </div>
   );
 
-  const renderServices = () => (
-    <div className="space-y-6">
-      <h3 className="text-lg font-semibold" style={{color: '#114B5F'}}>Services Offered</h3>
-      
-      {profile.services && profile.services.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {profile.services.filter(service => service.is_active).map((service) => (
-            <div
-              key={service.id}
-              className="p-6 rounded-lg"
-              style={{backgroundColor: 'rgba(17, 75, 95, 0.05)', border: '1px solid rgba(17, 75, 95, 0.2)'}}
-            >
-              <h4 className="text-lg font-semibold mb-2" style={{color: '#114B5F'}}>{service.service_name}</h4>
-              <p className="text-sm mb-4" style={{color: '#114B5F', opacity: 0.8}}>{service.description}</p>
-              
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col">
-                  <span className="font-semibold" style={{color: '#114B5F'}}>
-                    ${service.price_min} - ${service.price_max}
-                  </span>
-                  <span className="text-sm" style={{color: '#114B5F', opacity: 0.8}}>
-                    {service.duration_minutes} minutes
-                  </span>
-                </div>
-                <button
-                  className="px-4 py-2 rounded-lg font-semibold text-white transition-all duration-200"
-                  style={{backgroundColor: '#114B5F'}}
-                  onClick={() => {
-                    // TODO: Implement booking functionality
-                    alert('Booking feature coming soon!');
-                  }}
-                >
-                  Book Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <p style={{color: '#114B5F', opacity: 0.8}}>No services listed yet.</p>
-        </div>
-      )}
-    </div>
-  );
 
   const renderPortfolio = () => (
     <div className="space-y-6">
@@ -475,13 +419,12 @@ export default function PublicProfessionalProfile({
       <div className="flex flex-wrap gap-2 justify-center mb-8">
         {[
           { key: 'about', label: 'About' },
-          { key: 'services', label: 'Services' },
           { key: 'portfolio', label: 'Portfolio' },
           { key: 'reviews', label: 'Reviews' },
         ].map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key as 'about' | 'services' | 'portfolio' | 'reviews')}
+            onClick={() => setActiveTab(tab.key as 'about' | 'portfolio' | 'reviews')}
             className={`px-4 py-2 rounded-lg transition-all duration-200 ${
               activeTab === tab.key
                 ? 'font-semibold text-white'
@@ -500,9 +443,8 @@ export default function PublicProfessionalProfile({
 
       {/* Content */}
       <div>
-        {activeTab === 'about' && renderAbout()}
-        {activeTab === 'services' && renderServices()}
-        {activeTab === 'portfolio' && renderPortfolio()}
+  {activeTab === 'about' && renderAbout()}
+  {activeTab === 'portfolio' && renderPortfolio()}
         {activeTab === 'reviews' && renderReviews()}
       </div>
     </div>
