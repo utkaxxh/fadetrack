@@ -332,3 +332,38 @@ BEGIN
         ALTER TABLE portfolio ADD COLUMN service_type VARCHAR(100) DEFAULT 'general';
     END IF;
 END$$;
+
+-- Make legacy professional_id nullable and keep both columns in sync via trigger
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'portfolio' AND column_name = 'professional_id' AND is_nullable = 'NO'
+    ) THEN
+        ALTER TABLE portfolio ALTER COLUMN professional_id DROP NOT NULL;
+    END IF;
+END$$;
+
+-- Create a trigger to sync professional_id and professional_email on insert/update
+CREATE OR REPLACE FUNCTION sync_portfolio_professional_columns()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- If professional_id missing, infer from professional_email
+    IF NEW.professional_id IS NULL AND NEW.professional_email IS NOT NULL THEN
+        SELECT id INTO NEW.professional_id FROM professional_profiles WHERE user_email = NEW.professional_email;
+    END IF;
+
+    -- If professional_email missing, infer from professional_id
+    IF NEW.professional_email IS NULL AND NEW.professional_id IS NOT NULL THEN
+        SELECT user_email INTO NEW.professional_email FROM professional_profiles WHERE id = NEW.professional_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_sync_portfolio_professional ON portfolio;
+CREATE TRIGGER trg_sync_portfolio_professional
+    BEFORE INSERT OR UPDATE ON portfolio
+    FOR EACH ROW
+    EXECUTE FUNCTION sync_portfolio_professional_columns();

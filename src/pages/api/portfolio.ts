@@ -57,20 +57,65 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const { data: portfolioItem, error } = await supabase
-    .from('portfolio')
-    .insert([{
-      professional_email: professionalEmail,
-      image_url,
-      description: caption, // Note: the DB field is 'description', not 'caption'
-      service_type: service_type || 'general'
-    }])
-    .select()
-    .single();
+  // Fetch professional profile ID for legacy schemas that still require professional_id
+  const { data: prof, error: profErr } = await supabase
+    .from('professional_profiles')
+    .select('id')
+    .eq('user_email', professionalEmail)
+    .maybeSingle();
+
+  if (profErr) {
+    console.error('Error fetching professional profile:', profErr);
+    return res.status(500).json({ error: 'Failed to create portfolio item', details: profErr.message });
+  }
+
+  if (!prof) {
+    return res.status(400).json({ error: 'Failed to create portfolio item', details: 'Professional profile not found for email' });
+  }
+
+  // Attempt insert including professional_id (for legacy schemas). If that column doesn't exist, fallback without it.
+  const insertWithId = {
+    professional_email: professionalEmail,
+    professional_id: prof.id,
+    image_url,
+    description: caption, // DB field is 'description'
+    service_type: service_type || 'general'
+  } as Record<string, unknown>;
+
+  let portfolioItem: unknown | null = null;
+  let error: unknown | null = null;
+
+  try {
+    const result = await supabase
+      .from('portfolio')
+      .insert([insertWithId])
+      .select()
+      .single();
+    portfolioItem = result.data;
+    error = result.error;
+  } catch (e) {
+    error = e;
+  }
+
+  // If error indicates undefined column (42703) for professional_id, retry without that column
+  type SupaErr = { message: string; code?: string; hint?: string };
+  if (error && (error as SupaErr).code === '42703') {
+    const { data: dataNoId, error: errNoId } = await supabase
+      .from('portfolio')
+      .insert([{
+        professional_email: professionalEmail,
+        image_url,
+        description: caption,
+        service_type: service_type || 'general'
+      }])
+      .select()
+      .single();
+    portfolioItem = dataNoId;
+    error = errNoId;
+  }
 
   if (error) {
     console.error('Error creating portfolio item:', error);
-    type SupaErr = { message: string; code?: string; hint?: string };
     const err = error as SupaErr;
     return res.status(500).json({ 
       error: 'Failed to create portfolio item',
