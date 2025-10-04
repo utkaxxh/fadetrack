@@ -511,17 +511,13 @@ export default function HomePage() {
                   <Link href="/privacy" className="hover:opacity-100 transition-opacity">Privacy</Link>
                   <Link href="/terms" className="hover:opacity-100 transition-opacity">Terms</Link>
                   <a href="mailto:support@ratemymua.com" className="hover:opacity-100 transition-opacity">support@ratemymua.com</a>
-                  <a 
-                    href="https://www.x.com/utkaxxh" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 transition-colors duration-200"
-                    style={{color: '#f1f5f9'}}
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSdFg5beubYdZpjmjDkA2EBZboEZAZN1gCSmsdwX_XZ-KTBu2A/viewform"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="hover:opacity-100 transition-opacity"
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                    @utkaxxh
+                    Give Feedback
                   </a>
                 </div>
               </div>
@@ -628,16 +624,13 @@ export default function HomePage() {
                 <Link href="/privacy" className="hover:opacity-80 transition-opacity">Privacy</Link>
                 <Link href="/terms" className="hover:opacity-80 transition-opacity">Terms</Link>
                 <a href="mailto:support@ratemymua.com" className="hover:opacity-80 transition-opacity">support@ratemymua.com</a>
-                <a 
-                  href="https://www.x.com/utkaxxh" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 transition-colors duration-200"
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdFg5beubYdZpjmjDkA2EBZboEZAZN1gCSmsdwX_XZ-KTBu2A/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="hover:opacity-80 transition-opacity"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                  @utkaxxh
+                  Give Feedback
                 </a>
               </div>
             </div>
