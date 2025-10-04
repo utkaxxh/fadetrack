@@ -23,9 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     if (req.method === 'GET') {
       const { email } = req.query;
-      console.log('professionalProfileSimple API: GET request for email:', email);
+      const emailStr = Array.isArray(email) ? email[0] : email;
+      console.log('professionalProfileSimple API: GET request for email:', emailStr);
 
-      if (!email) {
+      if (!emailStr) {
         return res.status(400).json({ error: 'Email parameter is required' });
       }
 
@@ -33,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { data: profile, error } = await supabaseAdmin
         .from('professional_profiles')
         .select('*')
-        .eq('user_email', email)
+        .eq('user_email', emailStr)
         .eq('is_active', true)
         .maybeSingle();
 
@@ -44,7 +45,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: 'Failed to fetch profile', details: error });
       }
 
-      return res.status(200).json({ profile: profile || null });
+      if (!profile) {
+        return res.status(200).json({ profile: null });
+      }
+
+      // Fetch portfolio separately by professional_email and attach (no DB join)
+      const { data: portfolio, error: portfolioError } = await supabaseAdmin
+        .from('portfolio')
+        .select('*')
+        .eq('professional_email', emailStr)
+        .order('created_at', { ascending: false });
+
+      if (portfolioError) {
+        console.warn('professionalProfileSimple API: portfolio fetch warning:', portfolioError);
+      }
+
+      return res.status(200).json({ profile: { ...profile, portfolio: portfolio || [] } });
     }
 
     if (req.method === 'POST') {
