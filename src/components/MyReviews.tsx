@@ -6,12 +6,15 @@ interface MyReviewsProps {
   reviews: Review[];
   user: User | null;
   onDeleteReview?: (reviewId: number) => Promise<void>;
+  onReviewUpdated?: () => Promise<void> | void; // ask parent to refetch after edit
 }
 
-export default function MyReviews({ reviews, user, onDeleteReview }: MyReviewsProps) {
+export default function MyReviews({ reviews, user, onDeleteReview, onReviewUpdated }: MyReviewsProps) {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'rating'>('newest');
   const [filterService, setFilterService] = useState<string>('');
+  const [editing, setEditing] = useState<Review | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const myReviews = useMemo(() => {
     const mine = reviews.filter(r => user && r.user_email === user.email);
@@ -38,6 +41,46 @@ export default function MyReviews({ reviews, user, onDeleteReview }: MyReviewsPr
       await onDeleteReview(reviewId);
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const openEdit = (review: Review) => setEditing(review);
+  const closeEdit = () => setEditing(null);
+
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editing || !user?.email) return;
+    setSaving(true);
+    const formData = new FormData(e.currentTarget);
+    const payload: any = {
+      id: editing.id,
+      user_email: user.email,
+      title: formData.get('title') as string,
+      review_text: formData.get('review_text') as string,
+      cost: formData.get('cost') as string,
+      service_type: formData.get('service_type') as string,
+      is_public: (formData.get('is_public') as string) === 'on',
+      rating: Number(formData.get('rating')),
+      date: formData.get('date') as string,
+    };
+    try {
+      const res = await fetch('/api/updateReview', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert('Failed to update review' + (err.error ? `: ${err.error}` : ''));
+        return;
+      }
+      if (onReviewUpdated) await onReviewUpdated();
+      closeEdit();
+    } catch (err) {
+      console.error('Update review error:', err);
+      alert('Failed to update review.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -105,18 +148,81 @@ export default function MyReviews({ reviews, user, onDeleteReview }: MyReviewsPr
           <p className="text-gray-800 leading-relaxed mb-4">{review.review_text}</p>
           <div className="flex justify-between items-center">
             <div className="text-xs text-gray-400">Created {new Date(review.created_at || review.date).toLocaleDateString()}</div>
-            {review.id && (
-              <button
-                onClick={() => handleDelete(review.id!)}
-                disabled={deletingId === review.id}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${deletingId === review.id ? 'bg-gray-200 text-gray-500' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
-              >
-                {deletingId === review.id ? 'Deleting…' : 'Delete'}
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              {review.id && (
+                <button
+                  onClick={() => openEdit(review)}
+                  className="px-3 py-1.5 text-xs font-medium rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200"
+                >
+                  Edit
+                </button>
+              )}
+              {review.id && (
+                <button
+                  onClick={() => handleDelete(review.id!)}
+                  disabled={deletingId === review.id}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors duration-200 ${deletingId === review.id ? 'bg-gray-200 text-gray-500' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
+                >
+                  {deletingId === review.id ? 'Deleting…' : 'Delete'}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       ))}
+
+      {editing && (
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) closeEdit(); }}
+        >
+          <div className="w-full max-w-xl rounded-lg bg-white shadow-xl border border-gray-200">
+            <div className="flex items-center justify-between px-4 py-3 border-b">
+              <h4 className="font-semibold text-gray-800">Edit Review</h4>
+              <button onClick={closeEdit} className="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+            <form onSubmit={handleSave} className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input name="title" defaultValue={editing.title} className="w-full border rounded-md px-3 py-2" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Rating (1-5)</label>
+                  <input name="rating" type="number" min={1} max={5} defaultValue={editing.rating} className="w-full border rounded-md px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                  <input name="date" type="date" defaultValue={editing.date.split('T')[0] || editing.date} className="w-full border rounded-md px-3 py-2" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+                  <input name="service_type" defaultValue={editing.service_type} className="w-full border rounded-md px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost</label>
+                  <input name="cost" defaultValue={editing.cost} className="w-full border rounded-md px-3 py-2" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Review</label>
+                <textarea name="review_text" defaultValue={editing.review_text} rows={5} className="w-full border rounded-md px-3 py-2" />
+              </div>
+              <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                <input type="checkbox" name="is_public" defaultChecked={editing.is_public} /> Make review public
+              </label>
+              <div className="flex justify-end gap-2 pt-2">
+                <button type="button" onClick={closeEdit} className="px-4 py-2 text-sm rounded-md border">Cancel</button>
+                <button type="submit" disabled={saving} className={`px-4 py-2 text-sm rounded-md text-white ${saving ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'}`}>
+                  {saving ? 'Saving…' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

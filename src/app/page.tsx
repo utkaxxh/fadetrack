@@ -73,7 +73,8 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<TabType>('myreviews');
   const [showAccountSettings, setShowAccountSettings] = useState(false);
   // Removed haircut state
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]); // public reviews for directory
+  const [myReviews, setMyReviews] = useState<Review[]>([]); // current user's reviews (public + private)
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   // Removed flip word animation state & interval
@@ -195,6 +196,25 @@ export default function HomePage() {
     fetchReviews();
   }, []);
 
+  // Fetch current user's reviews (all visibility)
+  const fetchMyReviews = async () => {
+    if (!user?.email) return;
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('user_email', user.email)
+      .order('created_at', { ascending: false });
+    if (!error && data) setMyReviews(data);
+  };
+
+  useEffect(() => {
+    if (user?.email) {
+      fetchMyReviews();
+    } else {
+      setMyReviews([]);
+    }
+  }, [user?.email]);
+
   // Removed handleLogHaircut
 
   function handleReviewSubmitted(data: Omit<Review, 'user_email'>) {
@@ -203,6 +223,7 @@ export default function HomePage() {
     if (reviewWithEmail.is_public) {
       setReviews([reviewWithEmail, ...reviews]);
     }
+    setMyReviews([reviewWithEmail, ...myReviews]);
   }
 
   async function handleDeleteReview(reviewId: number) {
@@ -222,7 +243,7 @@ export default function HomePage() {
 
       if (response.ok) {
         // Refetch reviews from database to ensure consistency
-        await fetchReviews();
+        await Promise.all([fetchReviews(), fetchMyReviews()]);
       } else {
         const errorData = await response.json();
         alert('Failed to delete review: ' + errorData.error);
@@ -231,6 +252,10 @@ export default function HomePage() {
       console.error('Error deleting review:', error);
       alert('Failed to delete review. Please try again.');
     }
+  }
+
+  async function handleReviewUpdated() {
+    await Promise.all([fetchMyReviews(), fetchReviews()]);
   }
 
   // Removed handleDeleteHaircut
@@ -552,7 +577,14 @@ export default function HomePage() {
         <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
           <TabNavigation activeTab={currentTab} setActiveTab={setActiveTab} userRole={role} />
           <div className="p-6" style={{backgroundColor: 'rgba(248, 250, 252, 0.3)'}}>
-            {currentTab === 'myreviews' && !isProfessional && <MyReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
+            {currentTab === 'myreviews' && !isProfessional && (
+              <MyReviews
+                reviews={myReviews}
+                user={user}
+                onDeleteReview={handleDeleteReview}
+                onReviewUpdated={handleReviewUpdated}
+              />
+            )}
             {currentTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
             {currentTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
             {currentTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}
