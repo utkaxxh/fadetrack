@@ -35,7 +35,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: 'Review not found or access denied' });
     }
 
-    const updates: Record<string, any> = {};
+    const updates: Partial<{
+      title: string;
+      review_text: string;
+      rating: number;
+      cost: string;
+      date: string;
+      service_type: string;
+      is_public: boolean;
+    }> = {};
     if (typeof title === 'string') updates.title = title;
     if (typeof review_text === 'string') updates.review_text = review_text;
     if (typeof rating === 'number') {

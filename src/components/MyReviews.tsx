@@ -52,7 +52,17 @@ export default function MyReviews({ reviews, user, onDeleteReview, onReviewUpdat
     if (!editing || !user?.email) return;
     setSaving(true);
     const formData = new FormData(e.currentTarget);
-    const payload: any = {
+    const payload: {
+      id?: number;
+      user_email: string;
+      title?: string;
+      review_text?: string;
+      cost?: string;
+      service_type?: string;
+      is_public?: boolean;
+      rating?: number;
+      date?: string;
+    } = {
       id: editing.id,
       user_email: user.email,
       title: formData.get('title') as string,

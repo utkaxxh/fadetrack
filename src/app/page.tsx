@@ -197,7 +197,7 @@ export default function HomePage() {
   }, []);
 
   // Fetch current user's reviews (all visibility)
-  const fetchMyReviews = async () => {
+  const fetchMyReviews = React.useCallback(async () => {
     if (!user?.email) return;
     const { data, error } = await supabase
       .from('reviews')
@@ -205,7 +205,7 @@ export default function HomePage() {
       .eq('user_email', user.email)
       .order('created_at', { ascending: false });
     if (!error && data) setMyReviews(data);
-  };
+  }, [user?.email]);
 
   useEffect(() => {
     if (user?.email) {
@@ -213,7 +213,7 @@ export default function HomePage() {
     } else {
       setMyReviews([]);
     }
-  }, [user?.email]);
+  }, [fetchMyReviews, user?.email]);
 
   // Removed handleLogHaircut
 
