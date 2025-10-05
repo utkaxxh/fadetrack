@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 
 interface Professional {
   id: string;
@@ -87,6 +88,22 @@ export default function ProfessionalDirectory() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {process.env.NODE_ENV === 'production' && (
+        <>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-3M0RLJTFCZ"
+            strategy="afterInteractive"
+          />
+          <Script id="gtag-init-directory" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-3M0RLJTFCZ');
+            `}
+          </Script>
+        </>
+      )}
       {/* Animated Background */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#f8fafc] via-[#f1f5f9] to-[#f8fafc]"></div>
@@ -138,7 +155,7 @@ export default function ProfessionalDirectory() {
               <span className="text-4xl md:text-5xl text-[#0d3a4a]">Beauty Professional</span>
             </h1>
             <p className="text-xl max-w-3xl mx-auto leading-relaxed mb-12" style={{color:'#114B5F'}}>
-              Discover talented makeup artists, barbers, stylists, and beauty professionals. Browse reviews, compare services, and book your next perfect appointment.
+              Discover talented makeup artists and beauty professionals. Browse reviews, compare services, and book your next perfect appointment. All for free.
             </p>
           </div>
         </div>
