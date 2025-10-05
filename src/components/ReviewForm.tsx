@@ -328,7 +328,7 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
 
           <div>
             <label htmlFor="cost" className="block text-sm font-medium text-gray-700 mb-2">
-              Cost
+              Cost <span className="text-gray-400 font-normal">(optional)</span>
             </label>
             <input
               id="cost"
@@ -336,7 +336,6 @@ export default function ReviewForm({ onSubmit, user }: ReviewFormProps) {
               type="text"
               value={form.cost}
               onChange={handleChange}
-              required
               placeholder="₹1500"
               className="block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />

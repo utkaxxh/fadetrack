@@ -143,7 +143,9 @@ export default function MyReviews({ reviews, user, onDeleteReview, onReviewUpdat
             <span>Venue: {review.shop_name}</span>
             <span>Service: {review.service_type.replace('_',' ')}</span>
             <span>Rating: {review.rating}★</span>
-            <span>Cost: {review.cost.startsWith('₹') ? review.cost : `₹${review.cost}`}</span>
+            {review.cost && review.cost.trim() !== '' && (
+              <span>Cost: {review.cost.startsWith('₹') ? review.cost : `₹${review.cost}`}</span>
+            )}
           </div>
           <p className="text-gray-800 leading-relaxed mb-4">{review.review_text}</p>
           <div className="flex justify-between items-center">

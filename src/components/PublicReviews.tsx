@@ -239,7 +239,9 @@ export default function PublicReviews({ reviews, user, onDeleteReview }: PublicR
                   <div className="flex items-center gap-4">
                     <span>📍 {review.location}</span>
                     <span>{getServiceEmoji(review.professional_type)} {getServiceTypeDisplay(review.service_type)}</span>
-                    <span>💰 {review.cost.startsWith('₹') ? review.cost : `₹${review.cost}`}</span>
+                    {review.cost && review.cost.trim() !== '' && (
+                      <span>💰 {review.cost.startsWith('₹') ? review.cost : `₹${review.cost}`}</span>
+                    )}
                   </div>
                 </div>
               </div>

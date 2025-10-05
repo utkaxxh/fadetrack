@@ -43,8 +43,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       is_public
     } = req.body;
 
-    // Validate required fields
-    if (!user_email || !barber_name || !shop_name || !location || !service_type || !rating || !cost || !date || !title || !review_text) {
+    // Validate required fields (cost is optional)
+    if (!user_email || !barber_name || !shop_name || !location || !service_type || !rating || !date || !title || !review_text) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -149,7 +149,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         place_id: place_id || null,
         service_type,
         rating,
-        cost,
+  cost: cost || '',
         date,
         title,
         review_text,
