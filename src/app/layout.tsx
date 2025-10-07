@@ -25,12 +25,11 @@ export const metadata: Metadata = {
   description: "Discover top makeup artists, share authentic reviews, and build professional profiles.",
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      // Use the new logo for app/browser icons
-  { url: "/ratemymua-logo.svg", type: "image/svg+xml" }
+      { url: "/favicon.png" },
+      { url: "/ratemymua-logo.png", type: "image/png" }
     ],
-    shortcut: ["/favicon.ico"],
-  apple: ["/ratemymua-logo.svg"],
+    shortcut: ["/favicon.png"],
+    apple: ["/ratemymua-logo.png"],
   },
   openGraph: {
     title: "RateMyMUA",
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
   siteName: "RateMyMUA",
     // Use the new logo for social previews as well
     images: [
-      { url: "/ratemymua-logo.svg", width: 1200, height: 630, alt: "RateMyMUA Social Preview" },
+      { url: "/ratemymua-logo.png", width: 1200, height: 630, alt: "RateMyMUA Social Preview" },
     ],
     locale: "en_US",
     type: "website",
@@ -48,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "RateMyMUA",
     description: "Discover and review makeup artists.",
-    images: ["/ratemymua-logo.svg"],
+    images: ["/ratemymua-logo.png"],
   },
 };
 
@@ -61,7 +60,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Primary favicon / app icon */}
-  <link rel="icon" href="/ratemymua-logo.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}

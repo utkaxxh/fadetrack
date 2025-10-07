@@ -118,15 +118,14 @@ export default function ProfessionalDirectory() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative">
-                <div className="absolute inset-0 rounded-xl blur opacity-60 group-hover:opacity-90 transition-opacity" style={{background:'linear-gradient(90deg,#114B5F,#0d3a4a)'}}></div>
-                <div className="relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg" style={{background:'linear-gradient(135deg,#114B5F,#0d3a4a)'}}>
-                  <span className="text-white font-bold text-xl">F</span>
-                </div>
-              </div>
-              <h1 className="text-2xl font-bold" style={{color:'#114B5F'}}>
-                RateMyMUA
-              </h1>
+              <Image 
+                src="/ratemymua-logo.png" 
+                alt="RateMyMUA Logo" 
+                width={120} 
+                height={32}
+                priority
+                className="transition-all duration-300 group-hover:scale-105"
+              />
             </Link>
             <Link
               href="/login"
@@ -336,13 +335,13 @@ export default function ProfessionalDirectory() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
             <div className="flex items-center gap-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur opacity-75"></div>
-                <div className="relative w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500 shadow-2xl">
-                  <span className="text-white font-black text-2xl">F</span>
-                </div>
-              </div>
-              <span className="text-3xl font-black text-white">RateMyMUA</span>
+              <Image 
+                src="/ratemymua-logo.png" 
+                alt="RateMyMUA Logo" 
+                width={150} 
+                height={40}
+                className="brightness-0 invert"
+              />
             </div>
             
             <div className="text-center">

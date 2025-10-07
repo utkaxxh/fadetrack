@@ -275,7 +275,7 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/ratemymua-logo.svg" 
+                    src="/ratemymua-logo.png" 
                     alt="RateMyMUA Logo" 
                     width={100} 
                     height={24}
@@ -518,7 +518,7 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <span className="logo-wrapper">
                   <Image 
-                    src="/ratemymua-logo.svg" 
+                    src="/ratemymua-logo.png" 
                     alt="RateMyMUA Logo" 
                     width={100} 
                     height={26}
@@ -557,7 +557,7 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <span className="logo-wrapper">
                 <Image 
-                  src="/ratemymua-logo.svg" 
+                  src="/ratemymua-logo.png" 
                   alt="RateMyMUA Logo" 
                   width={100} 
                   height={24}
