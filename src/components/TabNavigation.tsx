@@ -1,8 +1,8 @@
 import React from 'react';
 import { UserRole } from '../hooks/useUserRole';
 
-// Updated tab types: removed haircut & reminder related tabs, added myreviews
-export type TabType = 'myreviews' | 'reviews' | 'directory' | 'dashboard'; 
+// Updated tab types: removed haircut & reminder related tabs, added myreviews and aisearch
+export type TabType = 'myreviews' | 'aisearch' | 'reviews' | 'directory' | 'dashboard'; 
 interface TabNavigationProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
@@ -24,6 +24,7 @@ const getTabsForRole = (role: UserRole): { label: string; value: TabType }[] => 
   // Customer tabs (focused experience: creating & managing reviews)
   return [
     { label: 'My Reviews', value: 'myreviews' as TabType },
+    { label: 'AI Search', value: 'aisearch' as TabType },
     { label: 'Write Review', value: 'reviews' as TabType },
     ...commonTabs,
   ];

@@ -17,6 +17,7 @@ import UserRoleSelection from '../components/UserRoleSelection';
 import ProfessionalProfileSetup from '../components/ProfessionalProfileSetup';
 import ProfessionalDashboard from '../components/ProfessionalDashboard';
 import MyReviews from '../components/MyReviews';
+import AISearchChat from '../components/AISearchChat';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 import { useUserRole } from '../hooks/useUserRole';
 
@@ -585,6 +586,7 @@ export default function HomePage() {
                 onReviewUpdated={handleReviewUpdated}
               />
             )}
+            {currentTab === 'aisearch' && !isProfessional && <AISearchChat user={user} />}
             {currentTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
             {currentTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
             {currentTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}
