@@ -71,7 +71,11 @@ export type Haircut = {
 // Removed rotating hero word animation; keeping file lean
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<TabType>('myreviews');
+  // Initialize from URL ?tab= to support subdomain routing via middleware
+  const initialTab = (typeof window !== 'undefined')
+    ? (new URLSearchParams(window.location.search).get('tab') as TabType | null)
+    : null;
+  const [activeTab, setActiveTab] = useState<TabType>(initialTab || 'myreviews');
   const [showAccountSettings, setShowAccountSettings] = useState(false);
   // Removed haircut state
   const [reviews, setReviews] = useState<Review[]>([]); // public reviews for directory
@@ -86,12 +90,15 @@ export default function HomePage() {
   const hasSetDefaultTabRef = useRef(false);
   useEffect(() => {
     if (roleLoading || hasSetDefaultTabRef.current) return;
-    if (isProfessional) {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    } else if (isProfessional) {
       setActiveTab('dashboard');
     } else {
       setActiveTab('myreviews');
     }
     hasSetDefaultTabRef.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isProfessional, roleLoading]);
 
   // Compute a safe current tab for rendering to avoid blank state on refresh
