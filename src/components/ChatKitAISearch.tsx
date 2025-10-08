@@ -16,36 +16,50 @@ export default function ChatKitAISearch({ user }: Props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // On mount, load the web component script if not already loaded
-    const id = 'openai-chatkit-script';
-    if (!document.getElementById(id)) {
-      const s = document.createElement('script');
-      s.id = id;
-      s.type = 'module';
-      s.src = 'https://cdn.jsdelivr.net/npm/@openai/chatkit@latest/dist/chatkit.js';
-      document.head.appendChild(s);
-    }
-    // Detect when the custom element is defined; set a timeout fallback
     let cancelled = false;
-    const t = setTimeout(() => {
-      if (!cancelled) setKitReady(false);
-    }, 1500);
-    if (window?.customElements?.whenDefined) {
-      window.customElements.whenDefined('openai-chatkit')
-        .then(() => {
-          if (!cancelled) {
-            clearTimeout(t);
-            setKitReady(true);
-          }
-        })
-        .catch(() => {
-          if (!cancelled) setKitReady(false);
-        });
+    const markReady = () => { if (!cancelled) setKitReady(true); };
+
+    // If already defined, mark ready immediately
+    if (typeof window !== 'undefined' && window.customElements?.get('openai-chatkit')) {
+      markReady();
+      return () => { cancelled = true; };
     }
-    return () => {
-      cancelled = true;
-      clearTimeout(t);
-    };
+
+    // Inject CDN script if not present
+    const id = 'openai-chatkit-script';
+    let script = document.getElementById(id) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = id;
+      script.type = 'module';
+      script.src = 'https://cdn.jsdelivr.net/npm/@openai/chatkit@latest/dist/chatkit.js';
+      script.onload = async () => {
+        try {
+          if (window.customElements?.whenDefined) {
+            await window.customElements.whenDefined('openai-chatkit');
+          }
+        } finally {
+          markReady();
+        }
+      };
+      script.onerror = () => {
+        // Even on error, show fallback UI
+        if (!cancelled) setKitReady(false);
+      };
+      document.head.appendChild(script);
+    } else {
+      // If script exists, wait for element definition or fallback after 1s
+      const timeout = setTimeout(markReady, 1000);
+      window.customElements?.whenDefined?.('openai-chatkit').then(() => {
+        clearTimeout(timeout);
+        markReady();
+      }).catch(() => {
+        clearTimeout(timeout);
+        if (!cancelled) setKitReady(false);
+      });
+    }
+
+    return () => { cancelled = true; };
   }, []);
 
   if (!user) {
