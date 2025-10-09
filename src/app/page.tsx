@@ -115,16 +115,20 @@ export default function HomePage() {
 
   // Set default tab based on user role (only once when role is known)
   const hasSetDefaultTabRef = useRef(false);
+  // Track if the user has manually chosen a tab to avoid overriding their choice
+  const userSelectedTabRef = useRef(false);
   useEffect(() => {
     if (roleLoading || hasSetDefaultTabRef.current) return;
     // If URL encodes a tab, use it (respect role constraints)
     const routeTab = pathname ? pathToTab(pathname) : undefined;
-    if (isProfessional) {
-      const nextTab = routeTab === 'directory' ? 'directory' : 'dashboard';
-      setActiveTab(nextTab);
-    } else {
-      const nextTab = routeTab && routeTab !== 'dashboard' ? routeTab : 'myreviews';
-      setActiveTab(nextTab);
+    if (!userSelectedTabRef.current) {
+      if (isProfessional) {
+        const nextTab = routeTab === 'directory' ? 'directory' : 'dashboard';
+        setActiveTab(nextTab);
+      } else {
+        const nextTab = routeTab && routeTab !== 'dashboard' ? routeTab : 'myreviews';
+        setActiveTab(nextTab);
+      }
     }
     hasSetDefaultTabRef.current = true;
   }, [isProfessional, roleLoading, pathname]);
@@ -143,7 +147,8 @@ export default function HomePage() {
   // Keep URL in sync with active tab (pretty routes). Avoid pushing during SSR.
   const lastSyncedPathRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!hasSetDefaultTabRef.current) return;
+    // Allow URL sync either after initial defaulting or after a user tab click
+    if (!hasSetDefaultTabRef.current && !userSelectedTabRef.current) return;
     const desired = TAB_PATH_MAP[currentTab];
     if (!desired) return;
     if (lastSyncedPathRef.current === desired) return;
@@ -152,6 +157,12 @@ export default function HomePage() {
     }
     lastSyncedPathRef.current = desired;
   }, [currentTab, pathname, router]);
+
+  // Wrap setter to record user intent and allow URL sync instantly
+  const handleSetActiveTab = (tab: TabType) => {
+    userSelectedTabRef.current = true;
+    setActiveTab(tab);
+  };
 
   // Keep a role cookie for middleware routing decisions
   useEffect(() => {
@@ -636,7 +647,7 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="backdrop-blur-sm rounded-xl shadow-lg overflow-hidden" style={{backgroundColor: 'rgba(248, 250, 252, 0.8)', border: '1px solid rgba(17, 75, 95, 0.2)'}}>
-          <TabNavigation activeTab={currentTab} setActiveTab={setActiveTab} userRole={role} />
+          <TabNavigation activeTab={currentTab} setActiveTab={handleSetActiveTab} userRole={role} />
           <div className="p-6" style={{backgroundColor: 'rgba(248, 250, 252, 0.3)'}}>
             {currentTab === 'myreviews' && !isProfessional && (
               <MyReviews
