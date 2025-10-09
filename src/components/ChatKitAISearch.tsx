@@ -1,64 +1,156 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
-import { ChatKit, useChatKit } from '@openai/chatkit-react';
 
 type Props = { user: User | null };
 
 type ChatMessage = { role: 'user' | 'assistant'; content: string };
 
 export default function ChatKitAISearch({ user }: Props) {
+  const chatKitRef = useRef<HTMLElement | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [showFallback, setShowFallback] = useState(false);
   const [fallbackMsg, setFallbackMsg] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Set up ChatKit with proper session handling
-  const { control } = useChatKit({
-    api: {
-      async getClientSecret(existingClientSecret?: string) {
-        // If we have an existing client secret, implement session refresh
-        if (existingClientSecret) {
-          // For now, just create a new session
-          // In production, you might want to implement proper session refresh
+  useEffect(() => {
+    if (!user) return;
+
+    let mounted = true;
+
+    // Load ChatKit script
+    const loadChatKit = async () => {
+      try {
+        // Inject script if not already present
+        if (!document.getElementById('chatkit-script')) {
+          const script = document.createElement('script');
+          script.id = 'chatkit-script';
+          script.src = 'https://cdn.platform.openai.com/deployments/chatkit/chatkit.js';
+          script.async = true;
+          
+          script.onload = () => {
+            if (mounted) {
+              initializeChatKit();
+            }
+          };
+          
+          script.onerror = () => {
+            console.error('Failed to load ChatKit script');
+            if (mounted) {
+              setIsLoading(false);
+              setShowFallback(true);
+            }
+          };
+          
+          document.head.appendChild(script);
+        } else {
+          // Script already exists, initialize
+          initializeChatKit();
+        }
+      } catch (error) {
+        console.error('Error loading ChatKit:', error);
+        if (mounted) {
+          setIsLoading(false);
+          setShowFallback(true);
+        }
+      }
+    };
+
+    const initializeChatKit = async () => {
+      try {
+        // Wait for custom element to be defined
+        if (window.customElements) {
+          await window.customElements.whenDefined('openai-chatkit');
         }
 
-        try {
-          const res = await fetch('/api/chatkit/session', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
+        if (!mounted || !chatKitRef.current) return;
+
+        // Set options on the web component
+        const element = chatKitRef.current as HTMLElement & {
+          setOptions: (options: {
+            apiURL: string;
+            theme?: { colorScheme: string };
+            composer?: { placeholder: string };
+            newThreadView?: { greeting: string; prompts?: Array<{ label: string; prompt: string }> };
+          }) => void;
+        };
+
+        if (element.setOptions) {
+          element.setOptions({
+            apiURL: '/api/chatkit',
+            theme: {
+              colorScheme: 'light',
+            },
+            composer: {
+              placeholder: 'Search for makeup artists...',
+            },
+            newThreadView: {
+              greeting: 'What city are you looking for a MUA?',
+              prompts: [
+                {
+                  label: 'Find MUAs in New York',
+                  prompt: 'Show me makeup artists in New York',
+                },
+                {
+                  label: 'Find MUAs in Los Angeles',
+                  prompt: 'Show me makeup artists in Los Angeles',
+                },
+              ],
             },
           });
 
-          if (!res.ok) {
-            throw new Error(`Session creation failed: ${res.status}`);
-          }
-
-          const { client_secret } = await res.json();
-          return client_secret;
-        } catch (error) {
-          console.error('Failed to get ChatKit client secret:', error);
-          setShowFallback(true);
-          throw error;
+          setIsLoading(false);
+        } else {
+          throw new Error('setOptions method not available');
         }
-      },
-    },
-  });
+      } catch (error) {
+        console.error('Error initializing ChatKit:', error);
+        if (mounted) {
+          setIsLoading(false);
+          setShowFallback(true);
+        }
+      }
+    };
+
+    loadChatKit();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
 
   if (!user) {
     return <div className="text-sm text-gray-500">Please sign in to use AI Search.</div>;
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-[600px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading AI Search...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Primary: ChatKit widget using React bindings */}
       {!showFallback ? (
         <div className="chatkit-container">
-          <ChatKit 
-            control={control} 
-            className="h-[600px] w-full border rounded-lg shadow-sm"
+          {/* @ts-expect-error - Custom element provided by ChatKit */}
+          <openai-chatkit 
+            ref={chatKitRef}
+            style={{ 
+              display: 'block',
+              height: '600px',
+              width: '100%',
+              border: '1px solid #e5e7eb',
+              borderRadius: '0.5rem',
+              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            }}
           />
         </div>
       ) : (
