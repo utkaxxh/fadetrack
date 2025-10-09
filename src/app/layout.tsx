@@ -61,6 +61,11 @@ export default function RootLayout({
       <head>
         {/* Primary favicon / app icon */}
         <link rel="icon" href="/favicon.png" type="image/png" />
+        {/* ChatKit Script */}
+        <script
+          src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
+          async
+        ></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
