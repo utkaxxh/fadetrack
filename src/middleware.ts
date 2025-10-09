@@ -1,53 +1,61 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
-// Map subdomains to tab values used in the app UI
-const SUBDOMAIN_TAB_MAP: Record<string, 'myreviews' | 'aisearch' | 'reviews' | 'directory' | 'dashboard'> = {
-  my: 'myreviews',
-  ai: 'aisearch',
-  write: 'reviews',
-  browse: 'directory',
-  pro: 'dashboard',
-};
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
 
-export function middleware(req: NextRequest) {
-  const { pathname, searchParams, origin } = new URL(req.url);
-  const host = req.headers.get('host') || '';
+  // Get Supabase session (reads cookies set by Supabase)
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name) {
+          return req.cookies.get(name)?.value;
+        },
+        set(name, value, options) {
+          res.cookies.set({ name, value, ...options });
+        },
+        remove(name, options) {
+          res.cookies.set({ name, value: '', ...options });
+        },
+      },
+    }
+  );
+  // Use getUser in middleware to refresh tokens and validate session on the auth server
+  const { data: { user } } = await supabase.auth.getUser();
 
-  // Skip Next internals and API routes
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/robots.txt') ||
-    pathname.startsWith('/sitemap.xml')
-  ) {
-    return NextResponse.next();
+  const url = req.nextUrl;
+  const path = url.pathname;
+
+  if (!user) {
+    // If not logged in, no redirect; allow public routes as-is
+    return res;
   }
 
-  // Extract subdomain: e.g., ai.example.com -> ai
-  const hostParts = host.split(':')[0].split('.'); // strip port
-  const sub = hostParts.length > 2 ? hostParts[0] : '';
+  // Determine default route from a lightweight cookie set client-side when role is known
+  const roleCookie = req.cookies.get('rm_role')?.value;
+  const isPro = roleCookie === 'professional';
+  const defaultPath = isPro ? '/dashboard' : '/myreviews';
 
-  const tab = SUBDOMAIN_TAB_MAP[sub];
-  if (!tab) {
-    return NextResponse.next();
+  // Redirect logged-in users from / or /login to their default pretty route
+  if (path === '/' || path === '/login') {
+    const target = url.clone();
+    target.pathname = defaultPath;
+    return NextResponse.redirect(target);
   }
 
-  // Only rewrite the root path to avoid breaking other routes
-  if (pathname === '/') {
-    const url = new URL(origin);
-    url.pathname = '/';
-    // Preserve existing queries and set tab
-    searchParams.forEach((v, k) => url.searchParams.set(k, v));
-    url.searchParams.set('tab', tab);
-    return NextResponse.rewrite(url);
+  // Optional guard: prevent customers from hitting /dashboard directly
+  if (path === '/dashboard' && !isPro) {
+    const target = url.clone();
+    target.pathname = '/myreviews';
+    return NextResponse.redirect(target);
   }
 
-  return NextResponse.next();
+  return res;
 }
 
-// Run on all paths so we can catch root; static and api are skipped above
 export const config = {
-  matcher: ['/((?!.*).*)'],
+  matcher: ['/', '/login', '/dashboard'],
 };

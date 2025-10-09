@@ -2,6 +2,7 @@ import type { ChatKitOptions } from "@openai/chatkit";
 
 // Note: The API urls below point to our Next.js API routes. The session endpoint
 // will mint a client secret server-side and ensure the Workflow ID is used.
+// Base options for the ChatKit web component; runtime assigns api.url and workflow
 export const chatkitOptions: ChatKitOptions = {
   api: {
     // Your Next.js API integration

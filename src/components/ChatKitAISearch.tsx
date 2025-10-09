@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import chatkitOptions from './chatkitOptions';
 
@@ -15,6 +15,19 @@ export default function ChatKitAISearch({ user }: Props) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Build options once; React won't properly pass object props to Custom Elements as properties,
+  // so we assign via ref below once the element is defined.
+  const options = useMemo(() => ({
+    ...(chatkitOptions as unknown as Record<string, unknown>),
+    api: {
+      ...((chatkitOptions as unknown as { api?: Record<string, unknown> }).api || {}),
+      url: '/api/chatkit',
+    },
+    // Hint to the widget that we're using a workflow-backed session; the server
+    // returns the actual workflow id from env in /api/chatkit/session
+    workflow: { id: 'server-provided' },
+  }), []);
+
   useEffect(() => {
     let cancelled = false;
     const markReady = () => { if (!cancelled) setKitReady(true); };
@@ -28,7 +41,7 @@ export default function ChatKitAISearch({ user }: Props) {
     // Inject CDN script if not present
     const id = 'openai-chatkit-script';
     let script = document.getElementById(id) as HTMLScriptElement | null;
-    if (!script) {
+  if (!script) {
       script = document.createElement('script');
       script.id = id;
       script.type = 'module';
@@ -49,7 +62,12 @@ export default function ChatKitAISearch({ user }: Props) {
       document.head.appendChild(script);
     } else {
       // If script exists, wait for element definition or fallback after 1s
-      const timeout = setTimeout(markReady, 1000);
+      const timeout = setTimeout(() => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('openai-chatkit element not defined in time; showing fallback');
+        }
+        markReady();
+      }, 1200);
       window.customElements?.whenDefined?.('openai-chatkit').then(() => {
         clearTimeout(timeout);
         markReady();
@@ -62,27 +80,30 @@ export default function ChatKitAISearch({ user }: Props) {
     return () => { cancelled = true; };
   }, []);
 
+  // Once the custom element is defined and the ref is set, assign options as a property.
+  useEffect(() => {
+    if (!kitReady) return;
+    const el = ref.current as unknown as { options?: unknown } | null;
+    if (el) {
+      try {
+        // Assign options property for the web component
+        (el as unknown as { options: unknown }).options = options;
+      } catch (e) {
+        // best-effort only; fallback UI will still be available
+        console.warn('Failed to assign ChatKit options:', e);
+      }
+    }
+  }, [kitReady, options]);
+
   if (!user) {
     return <div className="text-sm text-gray-500">Please sign in to use AI Search.</div>;
   }
 
-  // Provide the API base url and ensure our session endpoint is reachable.
-  const options: unknown = {
-    ...(chatkitOptions as unknown as Record<string, unknown>),
-    api: {
-      ...((chatkitOptions as unknown as { api?: Record<string, unknown> }).api || {}),
-      url: '/api/chatkit',
-    },
-    // Hint to the widget that we're using a workflow-backed session; the server
-    // returns the actual workflow id from env in /api/chatkit/session
-    workflow: { id: 'server-provided' },
-  };
-
   return (
     <div className="max-w-2xl mx-auto">
       {/* Primary: ChatKit widget */}
-      {/* @ts-expect-error - Custom element provided by ChatKit */}
-      <openai-chatkit ref={ref} options={options} style={{ display: kitReady ? 'block' : 'none' }}></openai-chatkit>
+  {/* @ts-expect-error - Custom element provided by ChatKit */}
+  <openai-chatkit ref={ref} style={{ display: kitReady ? 'block' : 'none' }}></openai-chatkit>
 
       {/* Fallback: simple one-shot search UI using our existing API */}
       {!kitReady && (

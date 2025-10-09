@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabase } from '../components/supabaseClient';
@@ -20,6 +21,32 @@ import MyReviews from '../components/MyReviews';
 import ChatKitAISearch from '../components/ChatKitAISearch';
 import { useSupabaseUser } from '../components/useSupabaseUser';
 import { useUserRole } from '../hooks/useUserRole';
+
+// Pretty route mapping per tab (module scope so it's stable)
+const TAB_PATH_MAP = {
+  myreviews: '/myreviews',
+  aisearch: '/aisearch',
+  reviews: '/writereview',
+  directory: '/browsereviews',
+  dashboard: '/dashboard',
+} as const;
+
+const pathToTab = (path: string) => {
+  switch (path) {
+    case '/myreviews':
+      return 'myreviews' as const;
+    case '/aisearch':
+      return 'aisearch' as const;
+    case '/writereview':
+      return 'reviews' as const;
+    case '/browsereviews':
+      return 'directory' as const;
+    case '/dashboard':
+      return 'dashboard' as const;
+    default:
+      return undefined;
+  }
+};
 
 export type Barber = {
   id?: number;
@@ -71,11 +98,7 @@ export type Haircut = {
 // Removed rotating hero word animation; keeping file lean
 
 export default function HomePage() {
-  // Initialize from URL ?tab= to support subdomain routing via middleware
-  const initialTab = (typeof window !== 'undefined')
-    ? (new URLSearchParams(window.location.search).get('tab') as TabType | null)
-    : null;
-  const [activeTab, setActiveTab] = useState<TabType>(initialTab || 'myreviews');
+  const [activeTab, setActiveTab] = useState<TabType>('myreviews');
   const [showAccountSettings, setShowAccountSettings] = useState(false);
   // Removed haircut state
   const [reviews, setReviews] = useState<Review[]>([]); // public reviews for directory
@@ -85,21 +108,26 @@ export default function HomePage() {
   // Removed flip word animation state & interval
   const user = useSupabaseUser();
   const { role, updateUserRole, isProfessional, isLoading: roleLoading, hasRecord } = useUserRole(user);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Mapping moved to module scope
 
   // Set default tab based on user role (only once when role is known)
   const hasSetDefaultTabRef = useRef(false);
   useEffect(() => {
     if (roleLoading || hasSetDefaultTabRef.current) return;
-    if (initialTab) {
-      setActiveTab(initialTab);
-    } else if (isProfessional) {
-      setActiveTab('dashboard');
+    // If URL encodes a tab, use it (respect role constraints)
+    const routeTab = pathname ? pathToTab(pathname) : undefined;
+    if (isProfessional) {
+      const nextTab = routeTab === 'directory' ? 'directory' : 'dashboard';
+      setActiveTab(nextTab);
     } else {
-      setActiveTab('myreviews');
+      const nextTab = routeTab && routeTab !== 'dashboard' ? routeTab : 'myreviews';
+      setActiveTab(nextTab);
     }
     hasSetDefaultTabRef.current = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isProfessional, roleLoading]);
+  }, [isProfessional, roleLoading, pathname]);
 
   // Compute a safe current tab for rendering to avoid blank state on refresh
   // Professionals default to 'dashboard' unless they explicitly choose 'directory'
@@ -111,6 +139,31 @@ export default function HomePage() {
     // Non-professionals: if state somehow is 'dashboard', map to 'myreviews'
     return activeTab === 'dashboard' ? 'myreviews' : activeTab;
   }, [activeTab, isProfessional]);
+
+  // Keep URL in sync with active tab (pretty routes). Avoid pushing during SSR.
+  const lastSyncedPathRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!hasSetDefaultTabRef.current) return;
+    const desired = TAB_PATH_MAP[currentTab];
+    if (!desired) return;
+    if (lastSyncedPathRef.current === desired) return;
+    if (pathname !== desired) {
+      router.replace(desired);
+    }
+    lastSyncedPathRef.current = desired;
+  }, [currentTab, pathname, router]);
+
+  // Keep a role cookie for middleware routing decisions
+  useEffect(() => {
+    if (!roleLoading && role) {
+      try {
+        // 30 days
+        document.cookie = `rm_role=${role}; path=/; max-age=2592000`;
+      } catch {
+        // ignore cookie errors
+      }
+    }
+  }, [role, roleLoading]);
 
   // Check if new user needs role selection
   useEffect(() => {
