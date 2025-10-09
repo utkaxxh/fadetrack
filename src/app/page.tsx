@@ -136,7 +136,7 @@ export default function HomePage() {
     setActiveTab(initialTab);
     hasSetDefaultTabRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roleLoading, isProfessional]); // Only depend on role loading/change, not pathname
+  }, [roleLoading]); // Only depend on roleLoading - run once when role is ready
 
   // Compute a safe current tab for rendering to avoid blank state on refresh
   // Professionals default to 'dashboard' unless they explicitly choose 'directory'
@@ -158,12 +158,11 @@ export default function HomePage() {
     if (!desired) return;
     if (lastSyncedPathRef.current === desired) return;
     
-    // Only update URL if it differs from what we expect
-    if (pathname !== desired) {
-      router.replace(desired);
-      lastSyncedPathRef.current = desired;
-    }
-  }, [currentTab, pathname, router]);
+    // Update URL to match current tab
+    router.replace(desired);
+    lastSyncedPathRef.current = desired;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTab]); // Only sync when currentTab changes, not on pathname changes
 
   // Wrap setter to record user intent
   const handleSetActiveTab = (tab: TabType) => {
