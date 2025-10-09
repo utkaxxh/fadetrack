@@ -1,221 +1,54 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { User } from '@supabase/supabase-js';
 
 type Props = { user: User | null };
 
-type ChatMessage = { role: 'user' | 'assistant'; content: string };
+type ChatMessage = { 
+  role: 'user' | 'assistant'; 
+  content: string;
+  timestamp: Date;
+};
 
 export default function ChatKitAISearch({ user }: Props) {
-  const chatKitRef = useRef<HTMLElement | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [showFallback, setShowFallback] = useState(false);
-  const [fallbackMsg, setFallbackMsg] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    if (!user) return;
-
-    let mounted = true;
-
-    // Load ChatKit script
-    const loadChatKit = async () => {
-      try {
-        // Inject script if not already present
-        if (!document.getElementById('chatkit-script')) {
-          const script = document.createElement('script');
-          script.id = 'chatkit-script';
-          script.src = 'https://cdn.platform.openai.com/deployments/chatkit/chatkit.js';
-          script.async = true;
-          
-          script.onload = () => {
-            if (mounted) {
-              initializeChatKit();
-            }
-          };
-          
-          script.onerror = () => {
-            console.error('Failed to load ChatKit script');
-            if (mounted) {
-              setIsLoading(false);
-              setShowFallback(true);
-            }
-          };
-          
-          document.head.appendChild(script);
-        } else {
-          // Script already exists, initialize
-          initializeChatKit();
-        }
-      } catch (error) {
-        console.error('Error loading ChatKit:', error);
-        if (mounted) {
-          setIsLoading(false);
-          setShowFallback(true);
-        }
-      }
-    };
-
-    const initializeChatKit = async () => {
-      try {
-        // Wait for custom element to be defined
-        if (window.customElements) {
-          await window.customElements.whenDefined('openai-chatkit');
-        }
-
-        if (!mounted || !chatKitRef.current) return;
-
-        // Set options on the web component
-        const element = chatKitRef.current as HTMLElement & {
-          setOptions: (options: {
-            apiURL: string;
-            theme?: { colorScheme: string };
-            composer?: { placeholder: string };
-            newThreadView?: { greeting: string; prompts?: Array<{ label: string; prompt: string }> };
-          }) => void;
-        };
-
-        if (element.setOptions) {
-          element.setOptions({
-            apiURL: '/api/chatkit',
-            theme: {
-              colorScheme: 'light',
-            },
-            composer: {
-              placeholder: 'Search for makeup artists...',
-            },
-            newThreadView: {
-              greeting: 'What city are you looking for a MUA?',
-              prompts: [
-                {
-                  label: 'Find MUAs in New York',
-                  prompt: 'Show me makeup artists in New York',
-                },
-                {
-                  label: 'Find MUAs in Los Angeles',
-                  prompt: 'Show me makeup artists in Los Angeles',
-                },
-              ],
-            },
-          });
-
-          setIsLoading(false);
-        } else {
-          throw new Error('setOptions method not available');
-        }
-      } catch (error) {
-        console.error('Error initializing ChatKit:', error);
-        if (mounted) {
-          setIsLoading(false);
-          setShowFallback(true);
-        }
-      }
-    };
-
-    loadChatKit();
-
-    return () => {
-      mounted = false;
-    };
-  }, [user]);
+    scrollToBottom();
+  }, [messages]);
 
   if (!user) {
     return <div className="text-sm text-gray-500">Please sign in to use AI Search.</div>;
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-[600px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading AI Search...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-4xl mx-auto">
-      {!showFallback ? (
-        <div className="chatkit-container">
-          {/* @ts-expect-error - Custom element provided by ChatKit */}
-          <openai-chatkit 
-            ref={chatKitRef}
-            style={{ 
-              display: 'block',
-              height: '600px',
-              width: '100%',
-              border: '1px solid #e5e7eb',
-              borderRadius: '0.5rem',
-              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-            }}
-          />
-        </div>
-      ) : (
-        /* Fallback: simple one-shot search UI using our existing API */
-        <div className="border rounded-lg p-4 bg-white shadow-sm">
-          <p className="text-sm text-gray-600 mb-3">
-            AI Search is temporarily unavailable. Use this quick search instead:
-          </p>
-          <div className="space-y-3">
-            {fallbackMsg.map((m, i) => (
-              <div key={i} className={m.role === 'user' ? 'text-right' : 'text-left'}>
-                <span 
-                  className={`inline-block px-3 py-2 rounded-md text-sm ${
-                    m.role === 'user' 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {m.content}
-                </span>
-              </div>
-            ))}
-            <div className="flex gap-2">
-              <input
-                className="flex-1 border rounded-md px-3 py-2"
-                placeholder="Search for makeup artists..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !loading) {
-                    e.preventDefault();
-                    handleSearch();
-                  }
-                }}
-              />
-              <button
-                onClick={handleSearch}
-                disabled={loading || !input.trim()}
-                className={`px-4 py-2 rounded-md text-white ${
-                  loading || !input.trim()
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-blue-600 hover:bg-blue-700'
-                }`}
-              >
-                {loading ? 'Searching…' : 'Search'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
-  async function handleSearch() {
+  const handleSearch = async () => {
     if (!input.trim() || loading) return;
-    const q = input.trim();
+    
+    const userMessage = input.trim();
     setInput('');
     setLoading(true);
-    setFallbackMsg((prev) => [...prev, { role: 'user', content: q }]);
+    
+    // Add user message
+    const newUserMessage: ChatMessage = {
+      role: 'user',
+      content: userMessage,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, newUserMessage]);
     
     try {
       const res = await fetch('/api/aiSearch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: q }),
+        body: JSON.stringify({ query: userMessage }),
       });
       
       const data: unknown = await res.json().catch(() => ({}));
@@ -228,14 +61,140 @@ export default function ChatKitAISearch({ user }: Props) {
         ? (data as { text: string }).text
         : 'No results found.';
       
-      setFallbackMsg((prev) => [...prev, { role: 'assistant', content: text }]);
-    } catch {
-      setFallbackMsg((prev) => [
-        ...prev, 
-        { role: 'assistant', content: 'Sorry, failed to fetch results.' }
-      ]);
+      // Add assistant message
+      const assistantMessage: ChatMessage = {
+        role: 'assistant',
+        content: text,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error('Search error:', error);
+      const errorMessage: ChatMessage = {
+        role: 'assistant',
+        content: 'Sorry, failed to fetch results. Please try again.',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto h-[600px] flex flex-col border rounded-lg shadow-sm bg-white">
+      {/* Header */}
+      <div className="border-b px-4 py-3 bg-gray-50 rounded-t-lg">
+        <h3 className="font-semibold text-gray-800">AI Search</h3>
+        <p className="text-sm text-gray-600">Ask me about makeup artists in any city</p>
+      </div>
+
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 ? (
+          <div className="text-center text-gray-500 mt-8">
+            <div className="mb-4">
+              <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              </svg>
+            </div>
+            <p className="text-lg font-medium mb-2">Start a conversation</p>
+            <p className="text-sm">Try asking:</p>
+            <div className="mt-4 space-y-2">
+              <button
+                onClick={() => setInput('Show me makeup artists in New York')}
+                className="block w-full max-w-md mx-auto px-4 py-2 text-left bg-blue-50 hover:bg-blue-100 rounded-md text-blue-700 text-sm"
+              >
+                💄 Show me makeup artists in New York
+              </button>
+              <button
+                onClick={() => setInput('Find MUAs in Los Angeles')}
+                className="block w-full max-w-md mx-auto px-4 py-2 text-left bg-blue-50 hover:bg-blue-100 rounded-md text-blue-700 text-sm"
+              >
+                ✨ Find MUAs in Los Angeles
+              </button>
+              <button
+                onClick={() => setInput('Best rated makeup artists near me')}
+                className="block w-full max-w-md mx-auto px-4 py-2 text-left bg-blue-50 hover:bg-blue-100 rounded-md text-blue-700 text-sm"
+              >
+                ⭐ Best rated makeup artists near me
+              </button>
+            </div>
+          </div>
+        ) : (
+          messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                  message.role === 'user'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-800'
+                }`}
+              >
+                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className={`text-xs mt-1 ${
+                  message.role === 'user' ? 'text-blue-200' : 'text-gray-500'
+                }`}>
+                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
+            </div>
+          ))
+        )}
+        {loading && (
+          <div className="flex justify-start">
+            <div className="bg-gray-100 rounded-lg px-4 py-2">
+              <div className="flex space-x-2">
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              </div>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input Area */}
+      <div className="border-t p-4 bg-gray-50 rounded-b-lg">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Search for makeup artists..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !loading && input.trim()) {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
+            disabled={loading}
+          />
+          <button
+            onClick={handleSearch}
+            disabled={loading || !input.trim()}
+            className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+              loading || !input.trim()
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            {loading ? (
+              <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              'Send'
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
