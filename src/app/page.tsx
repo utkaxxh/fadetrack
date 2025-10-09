@@ -117,21 +117,26 @@ export default function HomePage() {
   const hasSetDefaultTabRef = useRef(false);
   // Track if the user has manually chosen a tab to avoid overriding their choice
   const userSelectedTabRef = useRef(false);
+  
+  // Single effect to initialize tab from URL on first load (runs once after role loads)
   useEffect(() => {
     if (roleLoading || hasSetDefaultTabRef.current) return;
-    // If URL encodes a tab, use it (respect role constraints)
+    
     const routeTab = pathname ? pathToTab(pathname) : undefined;
-    if (!userSelectedTabRef.current) {
-      if (isProfessional) {
-        const nextTab = routeTab === 'directory' ? 'directory' : 'dashboard';
-        setActiveTab(nextTab);
-      } else {
-        const nextTab = routeTab && routeTab !== 'dashboard' ? routeTab : 'myreviews';
-        setActiveTab(nextTab);
-      }
+    let initialTab: TabType;
+    
+    if (isProfessional) {
+      // Professionals: use URL tab if it's directory, else default to dashboard
+      initialTab = routeTab === 'directory' ? 'directory' : 'dashboard';
+    } else {
+      // Customers: use URL tab if valid for customers, else default to myreviews
+      initialTab = routeTab && routeTab !== 'dashboard' ? routeTab : 'myreviews';
     }
+    
+    setActiveTab(initialTab);
     hasSetDefaultTabRef.current = true;
-  }, [isProfessional, roleLoading, pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roleLoading, isProfessional]); // Only depend on role loading/change, not pathname
 
   // Compute a safe current tab for rendering to avoid blank state on refresh
   // Professionals default to 'dashboard' unless they explicitly choose 'directory'
@@ -144,21 +149,23 @@ export default function HomePage() {
     return activeTab === 'dashboard' ? 'myreviews' : activeTab;
   }, [activeTab, isProfessional]);
 
-  // Keep URL in sync with active tab (pretty routes). Avoid pushing during SSR.
+  // Keep URL in sync with active tab (pretty routes) - only update when currentTab changes
   const lastSyncedPathRef = useRef<string | null>(null);
   useEffect(() => {
-    // Allow URL sync either after initial defaulting or after a user tab click
-    if (!hasSetDefaultTabRef.current && !userSelectedTabRef.current) return;
+    if (!hasSetDefaultTabRef.current) return; // Wait for initial tab to be set
+    
     const desired = TAB_PATH_MAP[currentTab];
     if (!desired) return;
     if (lastSyncedPathRef.current === desired) return;
+    
+    // Only update URL if it differs from what we expect
     if (pathname !== desired) {
       router.replace(desired);
+      lastSyncedPathRef.current = desired;
     }
-    lastSyncedPathRef.current = desired;
   }, [currentTab, pathname, router]);
 
-  // Wrap setter to record user intent and allow URL sync instantly
+  // Wrap setter to record user intent
   const handleSetActiveTab = (tab: TabType) => {
     userSelectedTabRef.current = true;
     setActiveTab(tab);
