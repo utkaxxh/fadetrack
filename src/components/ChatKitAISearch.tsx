@@ -30,6 +30,9 @@ export default function ChatKitAISearch({ user }: Props) {
             headers: {
               'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+              user: user?.email || 'anonymous',
+            }),
           });
 
           console.log('ChatKit: Session response status:', res.status);

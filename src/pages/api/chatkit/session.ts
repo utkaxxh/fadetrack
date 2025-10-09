@@ -20,6 +20,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    // Generate a unique user identifier (you can customize this based on your auth system)
+    const userId = req.body?.user || `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    console.log('Creating ChatKit session for user:', userId);
+    
     // Call OpenAI's ChatKit session API to create a new session
     const response = await fetch('https://api.openai.com/v1/chatkit/sessions', {
       method: 'POST',
@@ -30,8 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       body: JSON.stringify({
         workflow: { id: workflowId },
-        // Optionally include user identifier for tracking
-        // user: req.body?.user || 'anonymous',
+        user: userId, // Required parameter
       }),
     });
 
