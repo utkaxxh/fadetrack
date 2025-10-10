@@ -71,17 +71,60 @@ export default function ChatKitAISearch({ user }: Props) {
   // Set up ChatKit with stable options
   const { control } = useChatKit(chatKitOptions);
 
+  // Log control state
+  useEffect(() => {
+    console.log('🎮 ChatKit control state:', {
+      hasControl: !!control,
+      controlType: typeof control,
+      controlValue: control
+    });
+  }, [control]);
+
+  // Monitor ChatKit DOM presence
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const chatKitElements = document.querySelectorAll('openai-chatkit, [class*="chatkit"]');
+      console.log('🔍 ChatKit DOM check:', {
+        found: chatKitElements.length,
+        elements: Array.from(chatKitElements).map(el => ({
+          tag: el.tagName,
+          visible: el.clientHeight > 0,
+          height: el.clientHeight,
+          display: window.getComputedStyle(el).display
+        }))
+      });
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   if (!user) {
     return <div className="text-sm text-gray-500">Please sign in to use AI Search.</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="chatkit-wrapper" style={{ height: '600px', width: '100%' }}>
-        <ChatKit 
-          control={control}
-          className="h-full w-full"
-        />
+      <div 
+        className="chatkit-wrapper border-2 border-blue-500" 
+        style={{ 
+          height: '600px', 
+          width: '100%',
+          minHeight: '600px',
+          display: 'block',
+          position: 'relative',
+          backgroundColor: '#f9fafb'
+        }}
+      >
+        <div style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
+          <p className="text-sm text-gray-600">ChatKit Status: Session created, loading interface...</p>
+        </div>
+        <div style={{ height: 'calc(100% - 60px)', position: 'relative' }}>
+          <ChatKit 
+            control={control}
+            className="h-full w-full"
+            style={{ minHeight: '500px', display: 'block' }}
+          />
+        </div>
       </div>
     </div>
   );
