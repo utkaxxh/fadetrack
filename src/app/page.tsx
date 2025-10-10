@@ -122,6 +122,9 @@ export default function HomePage() {
   useEffect(() => {
     if (roleLoading || hasSetDefaultTabRef.current) return;
     
+    // Don't initialize tabs if we're on the root path (landing page)
+    if (pathname === '/') return;
+    
     const routeTab = pathname ? pathToTab(pathname) : undefined;
     let initialTab: TabType;
     
@@ -136,7 +139,7 @@ export default function HomePage() {
     setActiveTab(initialTab);
     hasSetDefaultTabRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roleLoading]); // Only depend on roleLoading - run once when role is ready
+  }, [roleLoading, pathname]); // Depend on pathname to detect root route
 
   // Compute a safe current tab for rendering to avoid blank state on refresh
   // Professionals default to 'dashboard' unless they explicitly choose 'directory'
@@ -154,6 +157,9 @@ export default function HomePage() {
   useEffect(() => {
     if (!hasSetDefaultTabRef.current) return; // Wait for initial tab to be set
     
+    // Don't sync URL if we're on the root path (landing page)
+    if (pathname === '/') return;
+    
     const desired = TAB_PATH_MAP[currentTab];
     if (!desired) return;
     if (lastSyncedPathRef.current === desired) return;
@@ -162,7 +168,7 @@ export default function HomePage() {
     router.replace(desired);
     lastSyncedPathRef.current = desired;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTab]); // Only sync when currentTab changes, not on pathname changes
+  }, [currentTab, pathname]); // Only sync when currentTab changes, not on pathname changes
 
   // Wrap setter to record user intent
   const handleSetActiveTab = (tab: TabType) => {
@@ -342,8 +348,9 @@ export default function HomePage() {
     setShowAccountSettings(true);
   }
 
-  if (!user) {
-    // Landing page for non-authenticated users
+  // Show landing page for all users on root path
+  if (!user || pathname === '/') {
+    // Landing page
     return (
       <div className="min-h-screen font-inter" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
         {/* Header */}
