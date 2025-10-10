@@ -12,7 +12,7 @@ export default function LoginPage() {
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       if (session && session.user) {
-        router.replace("/");
+        router.replace("/myreviews");
       }
     });
     return () => {
@@ -29,7 +29,7 @@ export default function LoginPage() {
           appearance={{ theme: ThemeSupa }}
           providers={['google']}
           theme="dark"
-          redirectTo={typeof window !== 'undefined' ? `${window.location.origin}/` : '/'}
+          redirectTo={typeof window !== 'undefined' ? `${window.location.origin}/myreviews` : '/myreviews'}
         />
       </div>
     </div>
