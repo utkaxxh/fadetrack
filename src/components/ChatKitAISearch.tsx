@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useEffect, useMemo, useCallback, useRef, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { ChatKit, useChatKit } from '@openai/chatkit-react';
+import ChatKitUsageDisplay from './ChatKitUsageDisplay';
 
 type Props = { user: User | null };
 
 export default function ChatKitAISearch({ user }: Props) {
   const userEmail = user?.email || 'anonymous';
   const hasInitialized = useRef(false);
+  const [usageLimitError, setUsageLimitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!hasInitialized.current) {
@@ -47,13 +49,21 @@ export default function ChatKitAISearch({ user }: Props) {
       console.log('ChatKit: Session response status:', res.status);
 
       if (!res.ok) {
-        const errorText = await res.text();
-        console.error('ChatKit session error response:', errorText);
-        throw new Error(`Session creation failed: ${res.status} - ${errorText}`);
+        const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('ChatKit session error response:', errorData);
+        
+        // Handle usage limit errors
+        if (res.status === 429) {
+          setUsageLimitError(errorData.message || 'Usage limit exceeded');
+          throw new Error(errorData.message || 'Usage limit exceeded');
+        }
+        
+        throw new Error(`Session creation failed: ${res.status} - ${errorData.error}`);
       }
 
       const data = await res.json();
       console.log('ChatKit: Session created successfully, received client_secret');
+      setUsageLimitError(null); // Clear any previous errors
       return data.client_secret;
     } catch (error) {
       console.error('ChatKit: Failed to get client secret:', error);
@@ -75,7 +85,7 @@ export default function ChatKitAISearch({ user }: Props) {
       }
     },
     composer: {
-      placeholder: 'Name a city',
+      placeholder: 'eg: Delhi, Jaipur, Mumbai...',
       attachments: {
         enabled: false
       },
@@ -122,6 +132,23 @@ export default function ChatKitAISearch({ user }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Usage Display */}
+      {user.email && <ChatKitUsageDisplay userEmail={user.email} />}
+
+      {/* Usage Limit Error */}
+      {usageLimitError && (
+        <div className="mb-4 p-4 rounded-lg border-2 border-red-500 bg-red-50">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">⚠️</span>
+            <div>
+              <h3 className="font-semibold text-red-800 mb-1">Usage Limit Reached</h3>
+              <p className="text-sm text-red-700">{usageLimitError}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ChatKit Interface */}
       <div 
         className="chatkit-wrapper" 
         style={{ 
