@@ -66,6 +66,24 @@ export default function ChatKitAISearch({ user }: Props) {
     api: {
       getClientSecret,
     },
+    theme: {
+      colorScheme: 'light' as const,
+      radius: 'pill' as const,
+      density: 'normal' as const,
+      typography: {
+        baseSize: 16
+      }
+    },
+    composer: {
+      placeholder: 'Name a city',
+      attachments: {
+        enabled: false
+      },
+    },
+    startScreen: {
+      greeting: 'What city are you looking for a MUA?',
+      prompts: [],
+    },
   }), [getClientSecret]);
 
   // Set up ChatKit with stable options
