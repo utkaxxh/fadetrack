@@ -663,7 +663,12 @@ export default function HomePage() {
                 onReviewUpdated={handleReviewUpdated}
               />
             )}
-            {currentTab === 'aisearch' && !isProfessional && <ChatKitAISearch user={user} />}
+            {currentTab === 'aisearch' && !isProfessional && (
+              <>
+                {console.log('🎨 Rendering ChatKit: currentTab=', currentTab, 'isProfessional=', isProfessional, 'roleLoading=', roleLoading)}
+                <ChatKitAISearch key="chatkit-stable" user={user} />
+              </>
+            )}
             {currentTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}
             {currentTab === 'directory' && <PublicReviews reviews={reviews} user={user} onDeleteReview={handleDeleteReview} />}
             {currentTab === 'dashboard' && isProfessional && <ProfessionalDashboard user={user} onSetupProfile={handleOpenProfileSetup} />}

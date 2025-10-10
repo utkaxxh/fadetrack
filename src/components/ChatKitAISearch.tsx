@@ -15,6 +15,11 @@ export default function ChatKitAISearch({ user }: Props) {
       console.log('ChatKit component mounted, user:', userEmail);
       hasInitialized.current = true;
     }
+    
+    // Return cleanup function to log unmounting
+    return () => {
+      console.log('⚠️ ChatKit component is unmounting!');
+    };
   }, [userEmail]);
 
   // Memoize the getClientSecret function to prevent re-creation on every render
