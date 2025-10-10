@@ -105,26 +105,20 @@ export default function ChatKitAISearch({ user }: Props) {
   return (
     <div className="max-w-4xl mx-auto">
       <div 
-        className="chatkit-wrapper border-2 border-blue-500" 
+        className="chatkit-wrapper" 
         style={{ 
           height: '600px', 
           width: '100%',
           minHeight: '600px',
           display: 'block',
-          position: 'relative',
-          backgroundColor: '#f9fafb'
+          position: 'relative'
         }}
       >
-        <div style={{ padding: '1rem', borderBottom: '1px solid #e5e7eb' }}>
-          <p className="text-sm text-gray-600">ChatKit Status: Session created, loading interface...</p>
-        </div>
-        <div style={{ height: 'calc(100% - 60px)', position: 'relative' }}>
-          <ChatKit 
-            control={control}
-            className="h-full w-full"
-            style={{ minHeight: '500px', display: 'block' }}
-          />
-        </div>
+        <ChatKit 
+          control={control}
+          className="h-full w-full"
+          style={{ height: '100%', display: 'block' }}
+        />
       </div>
     </div>
   );
