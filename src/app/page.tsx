@@ -666,7 +666,7 @@ export default function HomePage() {
             {currentTab === 'aisearch' && !isProfessional && (
               <>
                 {console.log('🎨 Rendering ChatKit: currentTab=', currentTab, 'isProfessional=', isProfessional, 'roleLoading=', roleLoading)}
-                <ChatKitAISearch key="chatkit-stable" user={user} />
+                <ChatKitAISearch key={user?.email || 'chatkit'} user={user} />
               </>
             )}
             {currentTab === 'reviews' && !isProfessional && <ReviewForm onSubmit={handleReviewSubmitted} user={user} />}

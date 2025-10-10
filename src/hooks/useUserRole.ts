@@ -109,16 +109,24 @@ export function useUserRole(user: User | null) {
       // First seed from cache to avoid UI flicker
       try {
         const cached = localStorage.getItem(`cached-role-${user.email}`) as UserRole | null;
+        const hasSelected = localStorage.getItem(`role-selected-${user.email}`);
         if (cached) {
           setRole(cached);
+          setHasRecord(!!hasSelected);
         }
-  } catch { /* ignore */ }
-      fetchUserRole(user.email);
+      } catch { /* ignore */ }
+      
+      // Only fetch if we don't have cached data
+      const hasCached = localStorage.getItem(`cached-role-${user.email}`);
+      if (!hasCached) {
+        fetchUserRole(user.email);
+      }
     } else {
       setRole('customer');
       setError(null);
       setHasRecord(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.email]);
 
   return {
