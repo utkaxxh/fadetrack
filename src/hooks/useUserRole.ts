@@ -124,8 +124,7 @@ export function useUserRole(user: User | null) {
       setError(null);
       setHasRecord(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.email]);
+  }, [user?.email]); // fetchUserRole is stable, no need to disable eslint
 
   return {
     role,

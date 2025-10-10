@@ -20,7 +20,7 @@ const MONTHLY_LIMIT = 100; // Sessions per month
 async function checkAndUpdateUsage(userEmail: string) {
   try {
     // Get or create user usage record
-    let { data: usage, error } = await supabase
+    const { data: usage, error } = await supabase
       .from('chatkit_usage')
       .select('*')
       .eq('user_email', userEmail)

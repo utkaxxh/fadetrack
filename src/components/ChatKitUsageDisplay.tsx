@@ -48,7 +48,6 @@ export default function ChatKitUsageDisplay({ userEmail, dailyLimit = 20, monthl
   }
 
   const dailyRemaining = Math.max(0, dailyLimit - usage.daily_sessions);
-  const monthlyRemaining = Math.max(0, monthlyLimit - usage.monthly_sessions);
   const dailyPercentage = (usage.daily_sessions / dailyLimit) * 100;
 
   return (
