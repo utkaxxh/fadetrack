@@ -1,0 +1,16 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow authentication and private pages
+Disallow: /login
+Disallow: /myreviews
+Disallow: /dashboard
+Disallow: /writereview
+Disallow: /aisearch
+
+# Disallow API endpoints
+Disallow: /api/
+
+# Point to sitemap for faster indexing
+Sitemap: https://ratemymua.com/sitemap.xml
