@@ -18,15 +18,11 @@ export default function UserRoleSelection({ currentRole, onRoleUpdate, onComplet
       currentRole 
     });
     
-    if (selectedRole === currentRole) {
-      console.log('UserRoleSelection: Role unchanged, completing with selectedRole:', selectedRole);
-      onComplete(selectedRole);
-      return;
-    }
-
     setIsSubmitting(true);
     setError('');
 
+    // Always save to database, even if role hasn't changed
+    // This ensures first-time users get their default selection saved
     console.log('UserRoleSelection: Calling onRoleUpdate with role:', selectedRole);
     const success = await onRoleUpdate(selectedRole);
     console.log('UserRoleSelection: Role update result:', success);
