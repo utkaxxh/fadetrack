@@ -39,8 +39,8 @@ export async function middleware(req: NextRequest) {
   const isPro = roleCookie === 'professional';
   const defaultPath = isPro ? '/dashboard' : '/myreviews';
 
-  // Redirect logged-in users from / or /login to their default pretty route
-  if (path === '/' || path === '/login') {
+  // Redirect logged-in users from /login to their default pretty route
+  if (path === '/login') {
     const target = url.clone();
     target.pathname = defaultPath;
     return NextResponse.redirect(target);
@@ -57,5 +57,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/login', '/dashboard'],
+  matcher: ['/login', '/dashboard'],
 };
