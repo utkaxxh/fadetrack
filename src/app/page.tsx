@@ -98,7 +98,25 @@ export type Haircut = {
 // Removed rotating hero word animation; keeping file lean
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<TabType>('myreviews');
+  const user = useSupabaseUser();
+  const { role, updateUserRole, isProfessional, isLoading: roleLoading, hasRecord } = useUserRole(user);
+  const pathname = usePathname();
+  const router = useRouter();
+  
+  // Initialize activeTab based on role to prevent flickering
+  const [activeTab, setActiveTab] = useState<TabType>(() => {
+    // Check cached role to set initial tab correctly
+    if (typeof window !== 'undefined' && user?.email) {
+      try {
+        const cachedRole = localStorage.getItem(`cached-role-${user.email}`);
+        return cachedRole === 'professional' ? 'dashboard' : 'myreviews';
+      } catch {
+        return 'myreviews';
+      }
+    }
+    return 'myreviews';
+  });
+  
   const [showAccountSettings, setShowAccountSettings] = useState(false);
   // Removed haircut state
   const [reviews, setReviews] = useState<Review[]>([]); // public reviews for directory
@@ -106,10 +124,6 @@ export default function HomePage() {
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [showProfileSetup, setShowProfileSetup] = useState(false);
   // Removed flip word animation state & interval
-  const user = useSupabaseUser();
-  const { role, updateUserRole, isProfessional, isLoading: roleLoading, hasRecord } = useUserRole(user);
-  const pathname = usePathname();
-  const router = useRouter();
 
   // Mapping moved to module scope
 
@@ -136,10 +150,13 @@ export default function HomePage() {
       initialTab = routeTab && routeTab !== 'dashboard' ? routeTab : 'myreviews';
     }
     
-    setActiveTab(initialTab);
+    // Only update if the tab actually needs to change
+    if (activeTab !== initialTab) {
+      setActiveTab(initialTab);
+    }
     hasSetDefaultTabRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roleLoading, pathname]); // Depend on pathname to detect root route
+  }, [roleLoading, pathname, isProfessional]); // Add isProfessional to dependencies
 
   // Compute a safe current tab for rendering to avoid blank state on refresh
   // Professionals default to 'dashboard' unless they explicitly choose 'directory'
