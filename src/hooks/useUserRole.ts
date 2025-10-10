@@ -106,7 +106,7 @@ export function useUserRole(user: User | null) {
 
   useEffect(() => {
     if (user?.email) {
-      // First seed from cache to avoid UI flicker
+      // First seed from cache to avoid UI flicker while fetching from DB
       try {
         const cached = localStorage.getItem(`cached-role-${user.email}`) as UserRole | null;
         const hasSelected = localStorage.getItem(`role-selected-${user.email}`);
@@ -116,11 +116,9 @@ export function useUserRole(user: User | null) {
         }
       } catch { /* ignore */ }
       
-      // Only fetch if we don't have cached data
-      const hasCached = localStorage.getItem(`cached-role-${user.email}`);
-      if (!hasCached) {
-        fetchUserRole(user.email);
-      }
+      // ALWAYS fetch from database to ensure we have the latest role
+      // This ensures role persists across browsers and devices
+      fetchUserRole(user.email);
     } else {
       setRole('customer');
       setError(null);
