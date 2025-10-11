@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 import PublicProfessionalProfile from '../../components/PublicProfessionalProfile';
 import Link from 'next/link';
 
@@ -16,17 +17,27 @@ export default function ProfessionalProfilePage() {
 
   if (!isReady) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <>
+        <Head>
+          <title>Makeup Artist Profile | RateMyMUA</title>
+          <meta name="description" content="Explore professional makeup artist profiles, portfolios, and client reviews on RateMyMUA." />
+        </Head>
+        <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-4" style={{borderColor: '#114B5F'}}></div>
           <p style={{color: '#114B5F'}}>Loading...</p>
         </div>
       </div>
+      </>
     );
   }
 
   return (
     <div className="min-h-screen" style={{background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9, #f8fafc)'}}>
+      <Head>
+        <title>Makeup Artist Profile | RateMyMUA</title>
+        <meta name="description" content="View this makeup artist's portfolio, specialties, and client reviews on RateMyMUA." />
+      </Head>
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md" style={{backgroundColor: 'rgba(241, 245, 249, 0.85)', borderBottom: '1px solid rgba(17, 75, 95, 0.15)'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

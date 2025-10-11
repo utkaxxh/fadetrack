@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
+import Head from 'next/head';
 
 interface Professional {
   id: string;
@@ -88,6 +89,13 @@ export default function ProfessionalDirectory() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      <Head>
+        <title>Browse Makeup Artist Reviews & Profiles | RateMyMUA</title>
+        <meta
+          name="description"
+          content="Read authentic reviews and explore professional profiles of makeup artists by city, style, and occasion on RateMyMUA."
+        />
+      </Head>
       {process.env.NODE_ENV === 'production' && (
         <>
           <Script
